@@ -136,6 +136,127 @@
       "Contract Signature": "CONCLUDED",
       "General Status": "CONCLUDED",
       "Overall Progression": 1
+    },
+    {
+      "Supplier": "ANEXO-A",
+      "Contract Number": "196824",
+      "Creation Date": "2025-07-22",
+      "Expiration Date": "2028-02-06",
+      "Renew in E-LAW": "2027-07-22",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "BORKAR",
+      "Contract Number": "193310",
+      "Creation Date": "2025-07-02",
+      "Expiration Date": "2028-06-19",
+      "Renew in E-LAW": "2027-07-02",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "EQMAX",
+      "Contract Number": "193321",
+      "Creation Date": "2025-07-02",
+      "Expiration Date": "2028-05-08",
+      "Renew in E-LAW": "2027-07-02",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "KITOPLASTIC",
+      "Contract Number": "193408",
+      "Creation Date": "2025-07-04",
+      "Expiration Date": "2028-04-13",
+      "Renew in E-LAW": "2027-07-04",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "PRODUFLEX",
+      "Contract Number": "196825",
+      "Creation Date": "2025-07-22",
+      "Expiration Date": "2026-01-31",
+      "Renew in E-LAW": "2027-07-22",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "TECNOFIX / MCGARD",
+      "Contract Number": "196823",
+      "Creation Date": "2025-07-22",
+      "Expiration Date": "2028-06-11",
+      "Renew in E-LAW": "2027-07-22",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "QUANTUM",
+      "Contract Number": "193410",
+      "Creation Date": "2025-07-04",
+      "Expiration Date": "2028-07-07",
+      "Renew in E-LAW": "2027-07-04",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "TRBR",
+      "Contract Number": "193416",
+      "Creation Date": "2025-07-04",
+      "Expiration Date": "",
+      "Renew in E-LAW": "2027-07-04",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "VUTEQ",
+      "Contract Number": "193412",
+      "Creation Date": "2025-07-04",
+      "Expiration Date": "",
+      "Renew in E-LAW": "2027-07-04",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "WASCO",
+      "Contract Number": "196622",
+      "Creation Date": "2025-07-22",
+      "Expiration Date": "2028-02-23",
+      "Renew in E-LAW": "2027-07-22",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    },
+    {
+      "Supplier": "YAZAKI",
+      "Contract Number": "193415",
+      "Creation Date": "2025-07-04",
+      "Expiration Date": "",
+      "Renew in E-LAW": "2027-07-04",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
     }
   ],
   "distrato": [
