@@ -1,0 +1,47 @@
+{
+  "comodato": [
+    {
+      "Project": "3UT",
+      "Supplier": "FORNECEDOR EXEMPLO",
+      "Tooling Loan Agreement ID": "214822",
+      "Total Agreement Value": 176619.43,
+      "Creation Date": "2026-05-14",
+      "Expiration Date": "2027-05-14",
+      "Renew in E-LAW": "2027-04-14",
+      "Custody Certificate Status": "CONCLUDED",
+      "Sales Invoice Status": "CONCLUDED",
+      "Tooling Loan Invoice Status": "CONCLUDED",
+      "Supplier Validation": "CONCLUDED",
+      "Agreement Invoice Signature Status": "CONCLUDED",
+      "Tooling Loan Agreement Signature Status": "PENDING",
+      "General Status": "ON GOING",
+      "Overall Progression": 0.8
+    }
+  ],
+  "fornecimento": [
+    {
+      "Supplier": "FORNECEDOR EXEMPLO",
+      "Contract Number": 193308,
+      "Creation Date": "2025-07-01",
+      "Expiration Date": "2027-07-01",
+      "Renew in E-LAW": "2027-06-01",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    }
+  ],
+  "distrato": [
+    {
+      "Supplier": "FORNECEDOR EXEMPLO",
+      "Contract Termination Number": 196830,
+      "Creation Date": "2021-08-12",
+      "Expiration Date": "2025-07-31",
+      "Termination Date": "2025-07-31",
+      "Supplier Validation": "CONCLUDED",
+      "Contract Termination Signature": "CONCLUDED",
+      "General Status": "CONCLUDED",
+      "Overall Progression": 1
+    }
+  ]
+}
