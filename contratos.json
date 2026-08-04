@@ -3,8 +3,8 @@
     {
       "Project": "3UT",
       "Supplier": "ANEXO-A",
-      "Tooling Loan Agreement ID": 214822,
-      "Total Agreement Value": 176619.43000000002,
+      "Tooling Loan Agreement ID": "214822",
+      "Total Agreement Value": 176619.43,
       "Creation Date": "2026-05-14",
       "Expiration Date": "2027-05-14",
       "Renew in E-LAW": "",
@@ -20,8 +20,8 @@
     {
       "Project": "3UT",
       "Supplier": "EQMAX",
-      "Tooling Loan Agreement ID": "216044 ",
-      "Total Agreement Value": "1982-11-02",
+      "Tooling Loan Agreement ID": "216044",
+      "Total Agreement Value": 30257,
       "Creation Date": "2026-06-16",
       "Expiration Date": "2027-06-16",
       "Renew in E-LAW": "",
@@ -37,7 +37,7 @@
     {
       "Project": "3GN",
       "Supplier": "KITOPLASTIC",
-      "Tooling Loan Agreement ID": 216146,
+      "Tooling Loan Agreement ID": "216146",
       "Total Agreement Value": 88856.45,
       "Creation Date": "2026-06-23",
       "Expiration Date": "2027-06-23",
@@ -54,8 +54,8 @@
     {
       "Project": "3UT",
       "Supplier": "KITOPLASTIC",
-      "Tooling Loan Agreement ID": 216139,
-      "Total Agreement Value": 505404.16000000003,
+      "Tooling Loan Agreement ID": "216139",
+      "Total Agreement Value": 505404.16,
       "Creation Date": "2026-06-23",
       "Expiration Date": "2027-06-23",
       "Renew in E-LAW": "",
@@ -71,7 +71,7 @@
     {
       "Project": "3UT",
       "Supplier": "PRODUFLEX",
-      "Tooling Loan Agreement ID": 209122,
+      "Tooling Loan Agreement ID": "209122",
       "Total Agreement Value": 243489.93,
       "Creation Date": "2026-03-31",
       "Expiration Date": "2027-03-31",
@@ -88,8 +88,8 @@
     {
       "Project": "3UT",
       "Supplier": "BORKAR",
-      "Tooling Loan Agreement ID": 216035,
-      "Total Agreement Value": "2050-06-18",
+      "Tooling Loan Agreement ID": "216035",
+      "Total Agreement Value": 54957.34,
       "Creation Date": "2026-06-15",
       "Expiration Date": "2027-06-15",
       "Renew in E-LAW": "",
@@ -105,8 +105,8 @@
   ],
   "fornecimento": [
     {
-      "Supplier": "ARNIFLEX ",
-      "Contract Number": 193308,
+      "Supplier": "ARNIFLEX",
+      "Contract Number": "193308",
       "Creation Date": "2025-07-01",
       "Expiration Date": "2027-07-01",
       "Renew in E-LAW": "2027-07-01",
@@ -117,7 +117,7 @@
     },
     {
       "Supplier": "N.A. DE SANTANA (NP ADESIVOS)",
-      "Contract Number": 193413,
+      "Contract Number": "193413",
       "Creation Date": "2025-07-04",
       "Expiration Date": "2028-07-04",
       "Renew in E-LAW": "2027-07-04",
@@ -128,7 +128,7 @@
     },
     {
       "Supplier": "INFERTEQ",
-      "Contract Number": 193417,
+      "Contract Number": "193417",
       "Creation Date": "2025-07-04",
       "Expiration Date": "2028-07-04",
       "Renew in E-LAW": "2027-07-04",
@@ -141,23 +141,23 @@
   "distrato": [
     {
       "Supplier": "PLAST VAC",
-      "Contract Termination Number": 196830,
+      "Contract Termination Number": "196830",
       "Creation Date": "2021-08-12",
       "Expiration Date": "2025-07-31",
       "Termination Date": "",
       "Supplier Validation": "CONCLUDED",
-      "Contract Termination Signature": "",
+      "Contract Termination Signature": "CONCLUDED",
       "General Status": "CONCLUDED",
       "Overall Progression": 1
     },
     {
       "Supplier": "TG POLI",
-      "Contract Termination Number": 196829,
+      "Contract Termination Number": "196829",
       "Creation Date": "2018-01-26",
       "Expiration Date": "2025-07-31",
       "Termination Date": "",
       "Supplier Validation": "CONCLUDED",
-      "Contract Termination Signature": "",
+      "Contract Termination Signature": "CONCLUDED",
       "General Status": "CONCLUDED",
       "Overall Progression": 1
     }
