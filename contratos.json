@@ -47,8 +47,8 @@
       "Tooling Loan Invoice Status": "CONCLUDED",
       "Supplier Validation": "CONCLUDED",
       "Agreement Invoice Signature Status": "CONCLUDED",
-      "Tooling Loan Agreement Signature Status": "PENDING",
-      "General Status": "ON GOING",
+      "Tooling Loan Agreement Signature Status": "CONCLUDED",
+      "General Status": "FINISHED",
       "Overall Progression": 0.8
     },
     {
