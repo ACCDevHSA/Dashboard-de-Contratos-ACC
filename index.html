@@ -98,7 +98,36 @@ const schemas={
   ]}
 };
 const statusOptions=['','PENDING','ON GOING','CONCLUDED','CANCELLED','ARCHIVED','N/A'];
-const state={active:'comodato',data:{comodato:[],fornecimento:[],distrato:[]},filtered:[],editing:null,deleting:null,loading:false};
+const state={active:'comodato',data:{comodato:[],fornecimento:[],distrato:[]},filtered:[],editing:null,deleting:null,loading:false,preferencesReady:false};
+const PREFERENCES_KEY='contractManagementPreferencesV1';
+const DEFAULT_FILTERS={search:'',supplier:'',status:'',sort:'created_desc'};
+function readPreferences(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(PREFERENCES_KEY)||'null');
+    return {
+      active:schemas[saved?.active]?saved.active:'comodato',
+      filtersByCategory:saved?.filtersByCategory&&typeof saved.filtersByCategory==='object'?saved.filtersByCategory:{}
+    };
+  }catch(error){
+    console.warn('Preferências locais inválidas; usando o padrão.',error);
+    localStorage.removeItem(PREFERENCES_KEY);
+    return {active:'comodato',filtersByCategory:{}};
+  }
+}
+function getSavedFilters(category){
+  const saved=readPreferences().filtersByCategory?.[category]||{};
+  return {...DEFAULT_FILTERS,...saved};
+}
+function savePreferences(){
+  if(!state.preferencesReady)return;
+  const saved=readPreferences();
+  saved.active=state.active;
+  saved.filtersByCategory[state.active]=captureFilters();
+  localStorage.setItem(PREFERENCES_KEY,JSON.stringify(saved));
+}
+function resetAllPreferences(){
+  localStorage.removeItem(PREFERENCES_KEY);
+}
 const $=id=>document.getElementById(id);
 const norm=v=>String(v??'').replace(/[\u00A0\u200B-\u200D\uFEFF]/g,' ').replace(/\s+/g,' ').trim();
 const esc=v=>norm(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -111,13 +140,13 @@ function initTheme(){setTheme(localStorage.getItem('contractTheme')||(matchMedia
 function setSync(loading,text){$('syncDot').classList.toggle('loading',loading);$('syncText').textContent=text}
 function optionList(values,label){return `<option value="">${label}</option>`+[...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b)).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')}
 function captureFilters(){return {search:$('search').value,supplier:$('supplier').value,status:$('status').value,sort:$('sort').value}}
-function restoreFilters(f){$('search').value=f.search;$('supplier').value=[...$('supplier').options].some(o=>o.value===f.supplier)?f.supplier:'';$('status').value=[...$('status').options].some(o=>o.value===f.status)?f.status:'';$('sort').value=f.sort}
+function restoreFilters(f={}){$('search').value=f.search||'';$('supplier').value=[...$('supplier').options].some(o=>o.value===f.supplier)?f.supplier:'';$('status').value=[...$('status').options].some(o=>o.value===f.status)?f.status:'';$('sort').value=[...$('sort').options].some(o=>o.value===f.sort)?f.sort:'created_desc'}
 function populateFilters(){const rows=state.data[state.active];$('supplier').innerHTML=optionList(rows.map(r=>norm(r.Supplier)),'All suppliers');$('status').innerHTML=optionList(rows.map(r=>norm(r['General Status'])),'All statuses')}
 function applyFilters(){const schema=schemas[state.active],q=norm($('search').value).toLowerCase();state.filtered=state.data[state.active].filter(r=>{const hay=schema.fields.map(([name])=>r[name]).join(' ').toLowerCase();return(!q||hay.includes(q))&&(!$('supplier').value||norm(r.Supplier)===$('supplier').value)&&(!$('status').value||norm(r['General Status'])===$('status').value)});const ts=(r,k)=>parseDate(r[k])?.getTime()||0,sorters={created_desc:(a,b)=>ts(b,'Creation Date')-ts(a,'Creation Date'),created_asc:(a,b)=>ts(a,'Creation Date')-ts(b,'Creation Date'),expiry_asc:(a,b)=>ts(a,'Expiration Date')-ts(b,'Expiration Date'),progress_desc:(a,b)=>pct(b['Overall Progression'])-pct(a['Overall Progression']),supplier_asc:(a,b)=>norm(a.Supplier).localeCompare(norm(b.Supplier))};state.filtered.sort(sorters[$('sort').value]||sorters.created_desc);render()}
 function displayValue(row,name){if(name.includes('Date'))return fmtDate(row[name]);if(name==='Overall Progression')return pct(row[name])+'%';if(name==='Total Agreement Value'){const n=Number(row[name]);return Number.isFinite(n)?n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}):'-'}return norm(row[name])||'-'}
 function pillClass(v){const s=norm(v).toUpperCase();return s==='PENDING'?'pending':s==='ON GOING'?'ongoing':''}
 function render(){const schema=schemas[state.active],rows=state.filtered,contracts=new Set(rows.map(r=>norm(r[schema.number])).filter(Boolean));$('kpiRecords').textContent=rows.length;$('kpiContracts').textContent=contracts.size;$('kpiSuppliers').textContent=new Set(rows.map(r=>norm(r.Supplier)).filter(Boolean)).size;$('kpiProgress').textContent=(rows.length?Math.round(rows.reduce((a,r)=>a+pct(r['Overall Progression']),0)/rows.length):0)+'%';$('tableCount').textContent=rows.length+' rows';const visible=schema.fields.map(x=>x[0]).filter(x=>x!=='Attachment URL');$('thead').innerHTML='<tr>'+visible.map(x=>`<th>${esc(x)}</th>`).join('')+'<th>Attachment</th><th>Ações</th></tr>';$('tbody').innerHTML=rows.length?rows.map(row=>{const cells=visible.map(name=>{const value=displayValue(row,name);if(name==='Overall Progression')return `<td><strong>${value}</strong><div class="progress"><i style="width:${pct(row[name])}%"></i></div></td>`;if(name.includes('Status')||name.includes('Validation')||name.includes('Signature'))return `<td><span class="pill ${pillClass(row[name])}">${esc(value)}</span></td>`;return `<td>${esc(value)}</td>`}).join('');const url=norm(row['Attachment URL']);const attachment=url?`<a class="attachment-btn" href="${esc(url)}" target="_blank" rel="noopener noreferrer">↗ Open</a>`:'<span class="attachment-btn disabled">No file</span>';return `<tr>${cells}<td>${attachment}</td><td><div class="actions"><button class="action-btn" data-edit="${esc(row.id)}">✎ Editar</button><button class="action-btn delete" data-delete="${esc(row.id)}">🗑 Excluir</button></div></td></tr>`}).join(''):`<tr><td class="empty" colspan="${visible.length+2}">No data found.</td></tr>`;document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>openDelete(b.dataset.delete))}
-function switchTab(tab,preserve=false){state.active=tab;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('pageTitle').textContent=schemas[tab].title;const f=preserve?captureFilters():{search:'',supplier:'',status:'',sort:'created_desc'};populateFilters();restoreFilters(f);applyFilters()}
+function switchTab(tab,preserve=false){state.active=tab;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('pageTitle').textContent=schemas[tab].title;const f=preserve?captureFilters():getSavedFilters(tab);populateFilters();restoreFilters(f);applyFilters();savePreferences()}
 async function loadDatabase({preserve=true,notify=false}={}){if(state.loading)return;state.loading=true;setSync(true,'Atualizando...');const active=state.active,filters=preserve?captureFilters():null;try{const [a,b,c]=await Promise.all([supabaseClient.from('comodato').select('*').order('created_at',{ascending:false}),supabaseClient.from('fornecimento').select('*').order('created_at',{ascending:false}),supabaseClient.from('distrato').select('*').order('created_at',{ascending:false})]);const failed=[a,b,c].find(x=>x.error);if(failed)throw failed.error;state.data={comodato:a.data??[],fornecimento:b.data??[],distrato:c.data??[]};state.active=active;populateFilters();if(filters)restoreFilters(filters);applyFilters();const total=state.data.comodato.length+state.data.fornecimento.length+state.data.distrato.length,time=new Intl.DateTimeFormat('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date());$('loadInfo').textContent=`Database loaded • ${total} total rows • source: Supabase • updated ${time}`;setSync(false,'Online • atualização automática');if(notify)toast('Base online carregada com sucesso.')}catch(error){console.error(error);$('loadInfo').textContent='Supabase load failed: '+error.message;setSync(false,'Erro de conexão');toast('Não foi possível carregar a base. Verifique RLS e permissões.')}finally{state.loading=false}}
 function fieldId(name){return 'f_'+name.toLowerCase().replace(/[^a-z0-9]+/g,'_')}
 function renderFormFields(category,row={}){const fields=schemas[category].fields;$('dynamicFields').innerHTML=fields.map(([name,type,required])=>{const id=fieldId(name),value=row[name]??'';let control;if(type==='select')control=`<select id="${id}" data-column="${esc(name)}" ${required?'required':''}>${statusOptions.map(x=>`<option value="${esc(x)}" ${norm(value)===x?'selected':''}>${x||'Select...'}</option>`).join('')}</select>`;else if(type==='progress')control=`<input id="${id}" data-column="${esc(name)}" type="number" min="0" max="100" step="1" value="${pct(value)}">`;else control=`<input id="${id}" data-column="${esc(name)}" type="${type}" ${type==='number'?'step="0.01" min="0"':''} value="${esc(value)}" ${required?'required':''} ${type==='url'?'placeholder="https://..."':''}>`;return `<div class="field ${name==='Attachment URL'?'full':''}"><label class="${required?'required':''}" for="${id}">${esc(name)}</label>${control}</div>`}).join('')}
@@ -132,9 +161,9 @@ function openDelete(id){const row=state.data[state.active].find(r=>r.id===id);if
 function closeDelete(){$('deleteOverlay').classList.add('hidden');state.deleting=null}
 async function confirmDelete(){if(!state.deleting)return;const button=$('confirmDelete');button.disabled=true;button.textContent='Excluindo...';try{const result=await supabaseClient.from(state.deleting.category).delete().eq('id',state.deleting.id);if(result.error)throw result.error;closeDelete();await loadDatabase({preserve:true});toast('Registro excluído do Supabase.')}catch(error){console.error(error);toast(humanDatabaseError(error))}finally{button.disabled=false;button.textContent='Excluir definitivamente'}}
 
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
-['search','supplier','status','sort'].forEach(id=>$(id).addEventListener('input',applyFilters));
-$('clearFilters').onclick=()=>{['search','supplier','status'].forEach(id=>$(id).value='');$('sort').value='created_desc';applyFilters()};
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{savePreferences();switchTab(b.dataset.tab)});
+['search','supplier','status','sort'].forEach(id=>$(id).addEventListener('input',()=>{applyFilters();savePreferences()}));
+$('clearFilters').onclick=()=>{['search','supplier','status'].forEach(id=>$(id).value='');$('sort').value='created_desc';applyFilters();savePreferences();toast('Filtros redefinidos nesta categoria.')};
 $('themeToggle').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
 $('newRecord').onclick=openNew;$('topNewRecord').onclick=openNew;
 $('recordCategory').onchange=e=>renderFormFields(e.target.value);
@@ -143,7 +172,20 @@ $('closeDelete').onclick=closeDelete;$('cancelDelete').onclick=closeDelete;$('co
 $('recordOverlay').addEventListener('click',e=>{if(e.target===$('recordOverlay'))closeRecord()});
 $('deleteOverlay').addEventListener('click',e=>{if(e.target===$('deleteOverlay'))closeDelete()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRecord();closeDelete()}});
-window.addEventListener('load',async()=>{initTheme();await loadDatabase({preserve:false,notify:true});setInterval(()=>{if(!document.hidden)loadDatabase({preserve:true})},AUTO_REFRESH_MS)});
+window.addEventListener('load',async()=>{
+  initTheme();
+  const preferences=readPreferences();
+  state.active=preferences.active;
+  await loadDatabase({preserve:false,notify:true});
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.active));
+  $('pageTitle').textContent=schemas[state.active].title;
+  populateFilters();
+  restoreFilters(getSavedFilters(state.active));
+  applyFilters();
+  state.preferencesReady=true;
+  savePreferences();
+  setInterval(()=>{if(!document.hidden)loadDatabase({preserve:true})},AUTO_REFRESH_MS)
+});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDatabase({preserve:true})});
 </script>
 </body>
