@@ -1,0 +1,260 @@
+/* Compact layout for Expiration Timelines
+   Load this file AFTER contract-timeline.css. */
+
+/* Use the available screen area more efficiently */
+#timelineView.timeline-view.active {
+  margin-top: 0;
+}
+
+#timelineView .timeline-view-head {
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+#timelineView .timeline-view-head h2 {
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.05;
+}
+
+#timelineView .timeline-view-head p {
+  margin-top: 3px;
+  font-size: .72rem;
+}
+
+/* Compact panel header and filters */
+#timelineView .timeline-header {
+  align-items: center;
+  gap: 12px;
+  padding: 9px 11px;
+}
+
+#timelineView .timeline-header h3 {
+  font-size: .92rem;
+  line-height: 1.1;
+}
+
+#timelineView .timeline-header p {
+  margin-top: 2px;
+  font-size: .68rem;
+  line-height: 1.2;
+}
+
+#timelineView .timeline-controls {
+  grid-template-columns: minmax(190px, 1.3fr) repeat(3, minmax(135px, 1fr));
+  gap: 7px;
+  width: min(840px, 100%);
+}
+
+#timelineView .field label {
+  margin-bottom: 3px;
+  font-size: .58rem;
+}
+
+#timelineView .field input,
+#timelineView .field select,
+#timelineView .timeline-multi-button {
+  height: 32px;
+  min-height: 32px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-size: .72rem;
+}
+
+#timelineView .timeline-multi-menu {
+  top: calc(100% + 3px);
+  padding: 5px;
+}
+
+#timelineView .timeline-check {
+  gap: 7px;
+  padding: 6px;
+  font-size: .72rem;
+}
+
+#timelineView .timeline-check input {
+  width: 14px;
+  height: 14px;
+}
+
+#timelineView .timeline-filter-actions {
+  padding-top: 5px;
+}
+
+#timelineView .timeline-filter-action {
+  padding: 5px;
+  font-size: .64rem;
+}
+
+/* Summary cards in one short strip */
+#timelineView .timeline-summary {
+  grid-template-columns: repeat(4, minmax(110px, 1fr));
+  gap: 7px;
+  padding: 7px 11px;
+}
+
+#timelineView .timeline-summary-card {
+  min-height: 38px;
+  gap: 8px;
+  padding: 6px 9px;
+  border-radius: 9px;
+}
+
+#timelineView .timeline-summary-card strong {
+  font-size: .9rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-summary-card small {
+  margin-top: 1px;
+  font-size: .59rem;
+  line-height: 1;
+}
+
+#timelineView .summary-dot {
+  width: 9px;
+  height: 9px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 14%, transparent);
+}
+
+/* Compact table header */
+#timelineView .timeline-table-head,
+#timelineView .timeline-row {
+  grid-template-columns: minmax(185px, .95fr) minmax(440px, 4.6fr) minmax(155px, .8fr);
+}
+
+#timelineView .timeline-table-head {
+  min-width: 820px;
+  font-size: .61rem;
+}
+
+#timelineView .timeline-table-head > div {
+  padding: 6px 8px;
+}
+
+#timelineView .timeline-body {
+  min-width: 820px;
+}
+
+/* Main density improvement: rows reduced from about 113px to about 62px */
+#timelineView .timeline-row {
+  min-height: 62px;
+}
+
+#timelineView .timeline-contract,
+#timelineView .timeline-lifetime,
+#timelineView .timeline-alert {
+  padding: 6px 8px;
+}
+
+#timelineView .timeline-contract-number {
+  font-size: .76rem;
+  line-height: 1.05;
+}
+
+#timelineView .timeline-supplier {
+  margin-top: 2px;
+  font-size: .63rem;
+  line-height: 1.05;
+}
+
+/* Project is the second muted line. Keep it visible but very compact. */
+#timelineView .timeline-contract .timeline-supplier + .timeline-supplier {
+  display: none;
+}
+
+#timelineView .timeline-category {
+  margin-top: 4px;
+  padding: 2px 5px;
+  font-size: .50rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-date-row {
+  min-height: 12px;
+  margin-bottom: 5px;
+  font-size: .61rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-track {
+  height: 15px;
+  border-radius: 6px;
+}
+
+#timelineView .timeline-elapsed {
+  top: 3px;
+  bottom: 3px;
+}
+
+#timelineView .timeline-today-marker {
+  top: -5px;
+  bottom: -5px;
+}
+
+#timelineView .timeline-today-marker::before {
+  top: -14px;
+  padding: 1px 3px;
+  font-size: .53rem;
+}
+
+#timelineView .timeline-expiry-marker {
+  top: -2px;
+  bottom: -2px;
+}
+
+#timelineView .timeline-duration-info {
+  margin-top: 4px;
+  font-size: .56rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-alert strong {
+  font-size: .70rem;
+  line-height: 1.05;
+}
+
+#timelineView .timeline-alert span {
+  margin-top: 2px;
+  font-size: .58rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-empty {
+  padding: 20px 12px;
+  font-size: .75rem;
+}
+
+/* Keep the special indefinite-contract label readable */
+#timelineView .timeline-row.valid-until-terminated .timeline-today-marker::before {
+  top: -15px;
+  font-size: .52rem;
+}
+
+/* Tablet: preserve density using two filter columns */
+@media (max-width: 1200px) {
+  #timelineView .timeline-header {
+    align-items: stretch;
+  }
+
+  #timelineView .timeline-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+}
+
+/* Mobile: compact but touch-friendly */
+@media (max-width: 800px) {
+  #timelineView .timeline-controls {
+    grid-template-columns: 1fr;
+  }
+
+  #timelineView .timeline-summary {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+
+  #timelineView .field input,
+  #timelineView .field select,
+  #timelineView .timeline-multi-button {
+    height: 36px;
+  }
+}
