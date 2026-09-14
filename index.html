@@ -110,6 +110,8 @@ $('recordOverlay').addEventListener('click',e=>{if(e.target===$('recordOverlay')
 window.addEventListener('load',async()=>{initTheme();const preferences=readPreferences();state.active=preferences.active;await loadDatabase({preserve:false,notify:true});document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.active));$('pageTitle').textContent=schemas[state.active].title;populateFilters();restoreFilters(getSavedFilters(state.active));applyFilters();state.preferencesReady=true;savePreferences();setInterval(()=>{if(!document.hidden)loadDatabase({preserve:true})},AUTO_REFRESH_MS)});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDatabase({preserve:true})});
 </script>
+<script src="contract-timeline.css"></script>
+<script src="contract-timeline-compact.css"></script>
 <script src="contract-timeline.js"></script>
 <script src="contract-timeline-rules.js"></script>
 </body>
