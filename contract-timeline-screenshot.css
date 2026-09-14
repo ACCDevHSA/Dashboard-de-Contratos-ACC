@@ -1,0 +1,333 @@
+/* Expiration Timelines - Screenshot Mode
+   Load AFTER contract-timeline.css and contract-timeline-compact.css.
+   Designed to fit at least 20 rows on a typical 1080p full-screen display. */
+
+/* Maximize usable page width and height */
+body.timeline-screenshot-mode .main,
+body:has(#timelineView.active) .main {
+  padding: 8px 10px;
+}
+
+#timelineView.timeline-view.active {
+  margin: 0;
+}
+
+/* One-line page title */
+#timelineView .timeline-view-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 24px;
+  margin: 0 0 4px;
+}
+
+#timelineView .timeline-view-head h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-view-head p {
+  display: none;
+}
+
+#timelineView .timeline-section {
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+/* Filters reduced to a single short horizontal bar */
+#timelineView .timeline-header {
+  display: block;
+  padding: 4px 6px;
+}
+
+#timelineView .timeline-header > div:first-child {
+  display: none;
+}
+
+#timelineView .timeline-controls {
+  display: grid;
+  grid-template-columns: minmax(180px,1.25fr) repeat(3,minmax(125px,1fr));
+  gap: 4px;
+  width: 100%;
+}
+
+#timelineView .field label {
+  display: none;
+}
+
+#timelineView .field input,
+#timelineView .field select,
+#timelineView .timeline-multi-button {
+  height: 25px;
+  min-height: 25px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: .63rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-multi-menu {
+  top: calc(100% + 2px);
+  padding: 4px;
+  border-radius: 7px;
+}
+
+#timelineView .timeline-check {
+  gap: 5px;
+  padding: 4px;
+  font-size: .65rem;
+}
+
+#timelineView .timeline-check input {
+  width: 12px;
+  height: 12px;
+}
+
+#timelineView .timeline-filter-actions {
+  padding-top: 3px;
+  margin-top: 2px;
+}
+
+#timelineView .timeline-filter-action {
+  padding: 3px;
+  font-size: .58rem;
+}
+
+/* Summary becomes a thin inline strip */
+#timelineView .timeline-summary {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 0;
+  padding: 2px 6px;
+}
+
+#timelineView .timeline-summary-card {
+  justify-content: center;
+  min-height: 19px;
+  gap: 4px;
+  padding: 1px 5px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+#timelineView .timeline-summary-card:last-child {
+  border-right: 0;
+}
+
+#timelineView .timeline-summary-card strong,
+#timelineView .timeline-summary-card small {
+  display: inline;
+  margin: 0;
+  font-size: .56rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-summary-card strong {
+  font-size: .67rem;
+}
+
+#timelineView .summary-dot {
+  width: 6px;
+  height: 6px;
+  box-shadow: none;
+}
+
+/* Short table header */
+#timelineView .timeline-table-head,
+#timelineView .timeline-row {
+  grid-template-columns: minmax(170px,.95fr) minmax(390px,4.7fr) minmax(140px,.8fr);
+}
+
+#timelineView .timeline-table-head {
+  min-width: 740px;
+  font-size: .52rem;
+  line-height: 1;
+}
+
+#timelineView .timeline-table-head > div {
+  padding: 4px 6px;
+}
+
+#timelineView .timeline-body {
+  min-width: 740px;
+}
+
+/* Approximately 33 px per contract row */
+#timelineView .timeline-row {
+  min-height: 33px;
+  height: 33px;
+}
+
+#timelineView .timeline-contract,
+#timelineView .timeline-lifetime,
+#timelineView .timeline-alert {
+  position: relative;
+  padding: 3px 6px;
+  overflow: hidden;
+}
+
+/* Contract information kept on one horizontal line */
+#timelineView .timeline-contract {
+  display: grid;
+  grid-template-columns: minmax(54px,.75fr) minmax(70px,1.25fr);
+  grid-template-rows: 14px 10px;
+  align-content: center;
+  column-gap: 5px;
+}
+
+#timelineView .timeline-contract-number {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: .63rem;
+  line-height: 14px;
+}
+
+#timelineView .timeline-contract > .timeline-supplier:first-of-type {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  font-size: .54rem;
+  line-height: 14px;
+}
+
+/* Hide project line to preserve row height */
+#timelineView .timeline-contract .timeline-supplier + .timeline-supplier {
+  display: none;
+}
+
+#timelineView .timeline-category {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: center;
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 1px 4px;
+  border-width: 1px;
+  font-size: .42rem;
+  line-height: 7px;
+}
+
+/* Dates and bar share the same compact cell */
+#timelineView .timeline-lifetime {
+  display: grid;
+  grid-template-columns: minmax(150px,1.15fr) minmax(180px,2.85fr);
+  align-items: center;
+  gap: 7px;
+}
+
+#timelineView .timeline-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-height: 0;
+  margin: 0;
+  font-size: .50rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+#timelineView .timeline-track {
+  height: 9px;
+  margin: 0;
+  border-radius: 4px;
+}
+
+#timelineView .timeline-elapsed {
+  top: 2px;
+  bottom: 2px;
+  min-width: 4px;
+}
+
+#timelineView .timeline-today-marker {
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+}
+
+#timelineView .timeline-today-marker::before {
+  top: -9px;
+  padding: 0 2px;
+  font-size: .40rem;
+  line-height: 7px;
+}
+
+#timelineView .timeline-expiry-marker {
+  top: -1px;
+  bottom: -1px;
+  width: 1px;
+}
+
+/* Duration is secondary and omitted in screenshot mode */
+#timelineView .timeline-duration-info {
+  display: none;
+}
+
+#timelineView .timeline-alert {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#timelineView .timeline-alert strong {
+  overflow: hidden;
+  font-size: .59rem;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#timelineView .timeline-alert span {
+  overflow: hidden;
+  margin-top: 2px;
+  font-size: .48rem;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#timelineView .timeline-empty {
+  padding: 12px 8px;
+  font-size: .65rem;
+}
+
+/* Indefinite contract keeps full bar and compact label */
+#timelineView .timeline-row.valid-until-terminated .timeline-today-marker::before {
+  top: -9px;
+  max-width: 92px;
+  overflow: hidden;
+  font-size: .38rem;
+  text-overflow: ellipsis;
+}
+
+/* Full-screen browser mode: hide the sidebar only while printing/capturing if
+   the optional class below is added to body. This yields additional width. */
+body.timeline-screenshot-mode .app {
+  grid-template-columns: 1fr;
+}
+
+body.timeline-screenshot-mode .side {
+  display: none;
+}
+
+/* Print to PDF or browser print screenshot */
+@media print {
+  @page { size: landscape; margin: 5mm; }
+  body { background: #fff !important; }
+  .side { display: none !important; }
+  .app { display: block !important; }
+  .main { padding: 0 !important; }
+  #timelineView .timeline-view-head { margin-bottom: 3px; }
+  #timelineView .timeline-row { break-inside: avoid; }
+}
+
+@media(max-width:900px) {
+  #timelineView .timeline-controls {
+    grid-template-columns: repeat(4,minmax(110px,1fr));
+  }
+}
