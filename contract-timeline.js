@@ -76,25 +76,13 @@
             </div>
 
             <div class="timeline-controls">
-              <div class="field timeline-multi-filter">
-                <label>Contract types</label>
-                <button id="timelineCategoryButton" class="timeline-multi-button" type="button" aria-expanded="false">
-                  <span id="timelineCategoryLabel">All contract types</span>
-                </button>
-                <div id="timelineCategoryMenu" class="timeline-multi-menu">
-                  <label class="timeline-check">
-                    <input class="timeline-category-check" type="checkbox" value="comodato" checked>
-                    <span>Tooling Loan Agreements</span>
-                  </label>
-                  <label class="timeline-check">
-                    <input class="timeline-category-check" type="checkbox" value="fornecimento" checked>
-                    <span>Supply Agreements</span>
-                  </label>
-                  <div class="timeline-filter-actions">
-                    <button id="timelineSelectAll" class="timeline-filter-action" type="button">Select all</button>
-                    <button id="timelineClearTypes" class="timeline-filter-action" type="button">Clear</button>
-                  </div>
-                </div>
+              <div class="field">
+                <label>Contract type</label>
+                <select id="timelineCategory">
+                  <option value="all">All contract types</option>
+                  <option value="comodato">Tooling Loan Agreements</option>
+                  <option value="fornecimento">Supply Agreements</option>
+                </select>
               </div>
 
               <div class="field">
@@ -149,57 +137,15 @@
   }
 
   function selectedCategories() {
-    return [...document.querySelectorAll('.timeline-category-check:checked')].map(input => input.value);
+    const category = byId('timelineCategory')?.value || 'all';
+    return category === 'all' ? [...allowedCategories] : [category];
   }
-
-  function updateCategoryLabel() {
-    const selected = selectedCategories();
-    const label = byId('timelineCategoryLabel');
-    if (!label) return;
-    if (selected.length === 2) label.textContent = 'All contract types';
-    else if (selected.length === 1) label.textContent = labels[selected[0]];
-    else label.textContent = 'No contract type selected';
-  }
-
   function bindEvents() {
-    const button = byId('timelineCategoryButton');
-    const menu = byId('timelineCategoryMenu');
-
-    button.addEventListener('click', event => {
-      event.stopPropagation();
-      const open = menu.classList.toggle('open');
-      button.setAttribute('aria-expanded', String(open));
+    ['timelineCategory', 'timelinePeriod', 'timelineSort'].forEach(id => {
+      byId(id)?.addEventListener('change', render);
     });
-
-    menu.addEventListener('click', event => event.stopPropagation());
-    document.addEventListener('click', () => {
-      menu.classList.remove('open');
-      button.setAttribute('aria-expanded', 'false');
-    });
-
-    document.querySelectorAll('.timeline-category-check').forEach(input => {
-      input.addEventListener('change', () => {
-        updateCategoryLabel();
-        render();
-      });
-    });
-
-    byId('timelineSelectAll').addEventListener('click', () => {
-      document.querySelectorAll('.timeline-category-check').forEach(input => input.checked = true);
-      updateCategoryLabel();
-      render();
-    });
-
-    byId('timelineClearTypes').addEventListener('click', () => {
-      document.querySelectorAll('.timeline-category-check').forEach(input => input.checked = false);
-      updateCategoryLabel();
-      render();
-    });
-
-    ['timelinePeriod', 'timelineSort'].forEach(id => byId(id).addEventListener('change', render));
-    byId('timelineSearch').addEventListener('input', render);
+    byId('timelineSearch')?.addEventListener('input', render);
   }
-
   function dashboardNodes() {
     return [
       document.querySelector('.top'),
@@ -265,12 +211,12 @@
   }
 
   function filterItems(items, today) {
-    const selected = selectedCategories();
+    const selected = new Set(selectedCategories());
     const period = byId('timelinePeriod').value;
     const query = clean(byId('timelineSearch').value).toLowerCase();
 
     return items.filter(item => {
-      if (!selected.includes(item.category)) return false;
+      if (!selected.has(item.category)) return false;
 
       const searchable = [item.number, item.supplier, item.project, item.row['General Status']]
         .map(clean).join(' ').toLowerCase();
