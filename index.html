@@ -45,6 +45,171 @@ html[data-theme="light"]{--bg:#f4f7fb;--bg2:#e6edf7;--side:rgba(255,255,255,.97)
 <link rel="stylesheet" href="contract-timeline.css">
 <link rel="stylesheet" href="contract-timeline-compact.css">
 <link rel="stylesheet" href="contract-timeline-screenshot.css">
+
+<style id="pp-fleet-contract-style-v1">
+/* Visual adaptation inspired by PP Fleet HUB. Functional structure and scripts remain unchanged. */
+:root,
+html[data-theme="light"]{
+  --bg:#f5f6f8;
+  --bg2:#eef1f4;
+  --side:#8f0f1b;
+  --surface:#ffffff;
+  --solid:#ffffff;
+  --input:#f3f4f6;
+  --text:#1f2937;
+  --muted:#778197;
+  --line:#e5e7eb;
+  --primary:#c8102e;
+  --primary2:#272d3e;
+  --purple:#8f0f1b;
+  --warning:#d99016;
+  --success:#4f9d30;
+  --danger:#c8102e;
+  --header:#272d3e;
+  --shadow:0 1px 3px rgba(30,36,52,.08);
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --bg:#111827;
+  --bg2:#0f172a;
+  --side:#750d17;
+  --surface:#182235;
+  --solid:#182235;
+  --input:#222f43;
+  --text:#f8fafc;
+  --muted:#aeb8c8;
+  --line:#334155;
+  --primary:#ef4056;
+  --primary2:#e5e7eb;
+  --purple:#ef4056;
+  --warning:#e5a52f;
+  --success:#72b64e;
+  --danger:#ff6b7f;
+  --header:#272d3e;
+  --shadow:0 4px 14px rgba(0,0,0,.18);
+  color-scheme:dark;
+}
+body{
+  background:var(--bg2);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+}
+.app{grid-template-columns:238px minmax(0,1fr);transition:grid-template-columns .25s ease}
+.side{
+  width:238px;
+  padding:18px 14px;
+  background:var(--side);
+  color:#fff;
+  border-right:0;
+  box-shadow:none;
+  transition:width .25s ease,padding .25s ease,opacity .2s ease,transform .25s ease;
+}
+.brand{height:48px;margin:0 0 30px;padding:0 7px;gap:11px}
+.brand-logo{width:42px;height:42px;min-width:42px;border-radius:50%;padding:3px;border:0;box-shadow:none}
+.brand h1{color:#fff;font-size:13px}
+.brand p{color:#dac0c4;font-size:10px}
+.theme-row{
+  margin:0 0 18px;
+  padding:8px 10px;
+  border-color:rgba(255,255,255,.20);
+  border-radius:8px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+.theme-row #themeLabel{font-size:.72rem;font-weight:700}
+.theme-toggle{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.18)}
+.theme-toggle i{background:#fff}
+.side>.muted{color:#e2c6ca;font-size:.62rem;font-weight:800;letter-spacing:.08em}
+.nav{gap:5px;margin:8px 0 14px}
+.nav button,.timeline-nav-btn{
+  min-height:40px;
+  padding:10px 12px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:#e6cfd3;
+  font-size:12px;
+  font-weight:700;
+}
+.nav button:hover,.nav button.active,.timeline-nav-btn:hover{
+  background:rgba(255,255,255,.13);
+  color:#fff;
+}
+.nav button.active{box-shadow:none}
+.nav-separator{background:rgba(255,255,255,.18)}
+.side .sync-dot{box-shadow:0 0 0 3px rgba(255,255,255,.10)}
+.side #syncText{color:#e2c6ca}
+.main{padding:24px 28px;background:var(--bg2)}
+.dashboard-tools{margin-bottom:14px}
+.menu-toggle{
+  width:38px;height:38px;flex-basis:38px;
+  border-radius:8px;
+  background:var(--solid);
+  box-shadow:var(--shadow);
+  font-size:1.05rem;
+}
+.menu-toggle:hover{background:var(--input);transform:none}
+.floating-logo{width:42px;height:42px;border-radius:50%;padding:3px;box-shadow:var(--shadow)}
+.top{align-items:center}
+.top h2{font-size:25px;line-height:1.2}
+.top p{margin:5px 0 14px}
+.section-head{margin:3px 0 14px}
+.section-head hr{display:none}
+.section-head h2{font-size:1.25rem}
+.btn{
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:9px 12px;
+  background:var(--input);
+  color:var(--text);
+  box-shadow:none;
+}
+.btn:hover{filter:brightness(.98)}
+.btn-primary{
+  border-color:var(--primary2);
+  background:var(--primary2);
+  color:#fff;
+}
+html[data-theme="dark"] .btn-primary{background:#e5e7eb;color:#111827;border-color:#e5e7eb}
+.btn-danger{border-color:color-mix(in srgb,var(--danger) 34%,var(--line));background:color-mix(in srgb,var(--danger) 10%,var(--solid));color:var(--danger)}
+.kpis{gap:11px;margin:0}
+.card,.table-section,.filter-panel{border:1px solid var(--line);border-radius:11px;background:var(--solid);box-shadow:var(--shadow)}
+.kpis .card{min-height:86px;padding:14px 16px;border-radius:11px;box-shadow:var(--shadow)}
+.kpis .card p{font-size:.72rem}
+.kpis .card h3{font-size:1.45rem}
+.kpi-icon{width:38px;height:38px;border-radius:9px;font-size:1rem;color:#fff}
+.records{background:#c8102e}.contracts{background:#272d3e}.suppliers{background:#8f0f1b}.progress-icon{background:#d99016}
+html[data-theme="dark"] .records{background:#ef4056}
+.table-section{padding:16px;margin-top:16px}
+.title{margin-bottom:14px}
+.title h3{font-size:1rem}.title span{color:var(--primary)}
+.filter-panel{padding:13px;background:var(--solid);box-shadow:none}
+.field label{font-size:.65rem;color:var(--muted)}
+.field input,.field select,.field textarea{border-radius:8px;background:var(--input)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 12%,transparent)}
+.wrap{border-radius:9px;background:var(--solid)}
+table{background:var(--solid)}
+th,td{padding:10px 9px}
+th{background:var(--header);color:#fff;font-size:.68rem}
+tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
+.pill{background:color-mix(in srgb,var(--primary) 10%,transparent);color:var(--primary)}
+.progress{height:6px}.progress i{background:var(--primary)}
+.attachment-btn,.action-btn{border-radius:7px;background:var(--input)}
+.attachment-btn{border-color:var(--line)}
+.action-btn:hover,.attachment-btn:hover{border-color:var(--primary)}
+.toast{border-radius:10px;background:var(--solid);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.overlay{background:rgba(7,17,31,.80);backdrop-filter:blur(5px)}
+.dialog{border-radius:14px;background:var(--solid);box-shadow:0 24px 70px rgba(0,0,0,.30)}
+.dialog-head,.form-actions{background:var(--solid)}
+.close-btn{border-radius:8px;background:var(--input)}
+.app.sidebar-collapsed{grid-template-columns:0 minmax(0,1fr)}
+.app.sidebar-collapsed .side{width:0}
+@media(max-width:800px){
+  .main{padding:16px 12px}
+  .side,.app.sidebar-collapsed .side{width:min(288px,88vw);padding:18px 14px;background:var(--side)}
+  .top{align-items:flex-start}.top h2{font-size:1.45rem}
+  .table-section{padding:11px}.filter-panel{padding:10px}
+}
+</style>
 </head>
 <body>
 <div class="app" id="app">
