@@ -53,7 +53,14 @@
       .timeline-supplier{font-size:.65rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
       .timeline-category{font-size:.55rem!important;padding:2px 5px!important;width:max-content!important}
       .timeline-date-row,.timeline-duration-info{font-size:.6rem!important}
-      .timeline-track{margin:5px 0!important;height:8px!important}
+      .timeline-track-dates{display:flex!important;justify-content:space-between!important;align-items:center!important;width:82%!important;margin:0 auto 3px!important;font-size:.58rem!important;color:var(--muted)!important;line-height:1.1!important}
+      .timeline-track-dates span{min-width:0!important;white-space:nowrap!important}
+      .timeline-track-dates span:last-child{text-align:right!important}
+      .timeline-track-dates strong{color:var(--text)!important;font-weight:800!important}
+      .timeline-track{width:82%!important;margin:3px auto 4px!important;height:6px!important}
+      .timeline-track-background{height:6px!important}
+      .timeline-elapsed{height:6px!important}
+      .timeline-today-marker,.timeline-expiry-marker{top:50%!important}
       .timeline-alert{padding:7px!important;border-radius:8px!important;min-width:0!important;text-align:center!important;justify-content:center!important}
       .timeline-alert strong{font-size:.7rem!important;white-space:nowrap!important}
       .timeline-alert span{display:none!important}
@@ -351,7 +358,7 @@
             <span class="timeline-category ${item.category}">${labels[item.category]}</span>
           </div>
           <div class="timeline-lifetime">
-            <div class="timeline-date-row"><span>Creation: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>Not provided</strong></span></div>
+            <div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>Not provided</strong></span></div>
             <div class="timeline-track"></div>
             <div class="timeline-duration-info">Add an expiration date to display the contract lifetime.</div>
           </div>
@@ -377,7 +384,7 @@
           <span class="timeline-category ${item.category}">${labels[item.category]}</span>
         </div>
         <div class="timeline-lifetime">
-          <div class="timeline-date-row"><span>Creation: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>${safe(dateText(item.expires))}</strong></span></div>
+          <div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>${safe(dateText(item.expires))}</strong></span></div>
           <div class="timeline-track">
             <div class="timeline-track-background"><div class="timeline-elapsed ${position.cssClass}" style="width:${position.width}%"></div></div>
             <span class="timeline-today-marker" style="left:${position.today}%"></span>
