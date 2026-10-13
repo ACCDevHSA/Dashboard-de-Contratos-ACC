@@ -29,9 +29,37 @@
       .timeline-check input{width:16px;height:16px;accent-color:var(--primary2)}
       .timeline-filter-actions{display:flex;gap:6px;padding-top:7px;margin-top:4px;border-top:1px solid var(--line)}
       .timeline-filter-action{flex:1;border:1px solid var(--line);border-radius:8px;padding:7px;background:var(--surface);color:var(--text);font-size:.7rem;font-weight:800;cursor:pointer}
-      .timeline-controls{grid-template-columns:repeat(3,minmax(180px,1fr))}
-      @media(max-width:1200px){.timeline-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
-      @media(max-width:800px){.timeline-controls{grid-template-columns:1fr}}
+      /* Compact layout: optimized for a single-screen capture */
+      .timeline-view{padding:12px 16px!important}
+      .timeline-view-head{margin-bottom:10px!important}
+      .timeline-view-head h2{font-size:1.35rem!important;margin-bottom:2px!important}
+      .timeline-view-head p,.timeline-header p{font-size:.72rem!important;margin:2px 0 0!important}
+      .timeline-section{padding:12px!important;border-radius:14px!important}
+      .timeline-header{gap:10px!important;margin-bottom:10px!important}
+      .timeline-header h3{font-size:1rem!important;margin:0!important}
+      .timeline-controls{grid-template-columns:repeat(6,minmax(110px,1fr))!important;gap:7px!important;width:100%!important}
+      .timeline-controls .field{gap:3px!important;min-width:0!important}
+      .timeline-controls label{font-size:.62rem!important}
+      .timeline-controls select,.timeline-controls input{height:32px!important;min-height:32px!important;padding:5px 8px!important;border-radius:7px!important;font-size:.7rem!important;min-width:0!important}
+      .timeline-summary{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important;margin:8px 0!important}
+      .timeline-summary-card{padding:8px 10px!important;min-height:48px!important;border-radius:9px!important}
+      .timeline-summary-card strong{font-size:1rem!important}
+      .timeline-summary-card small{font-size:.62rem!important}
+      .timeline-table-head,.timeline-row{grid-template-columns:minmax(165px,.85fr) minmax(360px,2fr) minmax(115px,.55fr)!important;gap:8px!important}
+      .timeline-table-head{padding:7px 10px!important;font-size:.62rem!important}
+      .timeline-row{padding:7px 10px!important;min-height:62px!important}
+      .timeline-contract{gap:2px!important;min-width:0!important}
+      .timeline-contract-number{font-size:.75rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+      .timeline-supplier{font-size:.65rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+      .timeline-category{font-size:.55rem!important;padding:2px 5px!important;width:max-content!important}
+      .timeline-date-row,.timeline-duration-info{font-size:.6rem!important}
+      .timeline-track{margin:5px 0!important;height:8px!important}
+      .timeline-alert{padding:7px!important;border-radius:8px!important;min-width:0!important;text-align:center!important;justify-content:center!important}
+      .timeline-alert strong{font-size:.7rem!important;white-space:nowrap!important}
+      .timeline-alert span{display:none!important}
+      @media(max-width:1200px){.timeline-controls{grid-template-columns:repeat(3,minmax(130px,1fr))!important}}
+      @media(max-width:800px){.timeline-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important}.timeline-table{overflow-x:auto}.timeline-table-head,.timeline-row{min-width:720px}}
+      @media(max-width:520px){.timeline-controls{grid-template-columns:1fr!important}}
     `;
     document.head.appendChild(style);
   }
@@ -227,10 +255,7 @@
   }
 
   function alertText(days) {
-    const absolute = Math.abs(days);
-    if (days < 0) return `Expired ${absolute} day${absolute === 1 ? '' : 's'} ago`;
-    if (days === 0) return 'Expires today';
-    return `${days} day${days === 1 ? '' : 's'} remaining`;
+    return `${days} Day${Math.abs(days) === 1 ? '' : 's'} Remaining`;
   }
 
   function timelinePosition(created, expires, today) {
@@ -330,7 +355,7 @@
             <div class="timeline-track"></div>
             <div class="timeline-duration-info">Add an expiration date to display the contract lifetime.</div>
           </div>
-          <div class="timeline-alert warning"><strong>No expiration date</strong><span>${safe(status)}</span></div>
+          <div class="timeline-alert warning"><strong>N/A</strong></div>
         </div>`;
       }
 
@@ -360,7 +385,7 @@
           </div>
           <div class="timeline-duration-info">${durationText}</div>
         </div>
-        <div class="timeline-alert ${level}"><strong>${safe(alertText(days))}</strong><span>${safe(status)}</span></div>
+        <div class="timeline-alert ${level}"><strong>${safe(alertText(days))}</strong></div>
       </div>`;
     }).join('');
   }
