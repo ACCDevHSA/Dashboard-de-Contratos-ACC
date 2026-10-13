@@ -47,12 +47,12 @@
       .timeline-summary-card small{font-size:.62rem!important}
       .timeline-table-head,.timeline-row{grid-template-columns:minmax(165px,.85fr) minmax(360px,2fr) minmax(115px,.55fr)!important;gap:8px!important}
       .timeline-table-head{padding:7px 10px!important;font-size:.62rem!important}
-      .timeline-row{padding:7px 10px!important;min-height:62px!important}
-      .timeline-contract{gap:2px!important;min-width:0!important}
-      .timeline-contract-number{font-size:.75rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-      .timeline-supplier{font-size:.65rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+      .timeline-row{padding:4px 10px!important;min-height:46px!important}
+      .timeline-contract{gap:1px!important;min-width:0!important}
+      .timeline-contract-number{font-size:.7rem!important;line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+      .timeline-supplier{font-size:.6rem!important;line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
       .timeline-category{font-size:.55rem!important;padding:2px 5px!important;width:max-content!important}
-      .timeline-date-row,.timeline-duration-info{font-size:.6rem!important}
+      .timeline-date-row,.timeline-duration-info{font-size:.56rem!important;line-height:1.05!important}
       .timeline-track-dates{display:flex!important;justify-content:space-between!important;align-items:center!important;width:82%!important;margin:0 auto 3px!important;font-size:.58rem!important;color:var(--muted)!important;line-height:1.1!important}
       .timeline-track-dates span{min-width:0!important;white-space:nowrap!important}
       .timeline-track-dates span:last-child{text-align:right!important}
@@ -64,6 +64,11 @@
       .timeline-alert{padding:7px!important;border-radius:8px!important;min-width:0!important;text-align:center!important;justify-content:center!important}
       .timeline-alert strong{font-size:.7rem!important;white-space:nowrap!important}
       .timeline-alert span{display:none!important}
+      .timeline-category{display:none!important}
+      .timeline-category-header{display:flex!important;align-items:center!important;gap:8px!important;padding:5px 10px!important;margin:3px 0 1px!important;background:color-mix(in srgb,var(--primary) 10%,var(--solid))!important;border-top:1px solid color-mix(in srgb,var(--primary) 38%,var(--line))!important;border-bottom:1px solid var(--line)!important;color:var(--text)!important;font-size:.64rem!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.045em!important}
+      .timeline-category-header::before{content:'';width:4px;height:14px;border-radius:3px;background:var(--primary)}
+      .timeline-category-header.fornecimento::before{background:var(--primary2)}
+      .timeline-category-count{margin-left:auto;color:var(--muted);font-size:.58rem;font-weight:800;text-transform:none;letter-spacing:0}
       @media(max-width:1200px){.timeline-controls{grid-template-columns:repeat(3,minmax(130px,1fr))!important}}
       @media(max-width:800px){.timeline-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important}.timeline-table{overflow-x:auto}.timeline-table-head,.timeline-row{min-width:720px}}
       @media(max-width:520px){.timeline-controls{grid-template-columns:1fr!important}}
@@ -347,7 +352,7 @@
       return;
     }
 
-    body.innerHTML = items.map(item => {
+    const renderItem = item => {
       const status = clean(item.row['General Status']) || 'Status not provided';
 
       if (!item.expires) {
@@ -355,7 +360,6 @@
           <div class="timeline-contract">
             <span class="timeline-contract-number">${safe(item.number)}</span>
             <span class="timeline-supplier">${safe(item.supplier)}</span>
-            <span class="timeline-category ${item.category}">${labels[item.category]}</span>
           </div>
           <div class="timeline-lifetime">
             <div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>Not provided</strong></span></div>
@@ -381,7 +385,6 @@
           <span class="timeline-contract-number" title="${safe(item.number)}">${safe(item.number)}</span>
           <span class="timeline-supplier" title="${safe(item.supplier)}">${safe(item.supplier)}</span>
           ${item.project ? `<span class="timeline-supplier">${safe(item.project)}</span>` : ''}
-          <span class="timeline-category ${item.category}">${labels[item.category]}</span>
         </div>
         <div class="timeline-lifetime">
           <div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>${safe(dateText(item.expires))}</strong></span></div>
@@ -394,6 +397,14 @@
         </div>
         <div class="timeline-alert ${level}"><strong>${safe(alertText(days))}</strong></div>
       </div>`;
+    };
+    const categoryOrder = allowedCategories.filter(category => items.some(item => item.category === category));
+    body.innerHTML = categoryOrder.map(category => {
+      const categoryItems = items.filter(item => item.category === category);
+      return `<div class="timeline-category-header ${category}">
+        <span>${safe(labels[category])}</span>
+        <span class="timeline-category-count">${categoryItems.length} contract${categoryItems.length === 1 ? '' : 's'}</span>
+      </div>` + categoryItems.map(renderItem).join('');
     }).join('');
   }
 
