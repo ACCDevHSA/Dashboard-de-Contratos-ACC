@@ -29,7 +29,7 @@
       .timeline-check input{width:16px;height:16px;accent-color:var(--primary2)}
       .timeline-filter-actions{display:flex;gap:6px;padding-top:7px;margin-top:4px;border-top:1px solid var(--line)}
       .timeline-filter-action{flex:1;border:1px solid var(--line);border-radius:8px;padding:7px;background:var(--surface);color:var(--text);font-size:.7rem;font-weight:800;cursor:pointer}
-      .timeline-controls{grid-template-columns:minmax(220px,1.25fr) repeat(3,minmax(150px,1fr))}
+      .timeline-controls{grid-template-columns:repeat(3,minmax(180px,1fr))}
       @media(max-width:1200px){.timeline-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
       @media(max-width:800px){.timeline-controls{grid-template-columns:1fr}}
     `;
@@ -86,6 +86,14 @@
               </div>
 
               <div class="field">
+                <label>Supplier</label>
+                <select id="timelineSupplier"><option value="">All suppliers</option></select>
+              </div>
+              <div class="field">
+                <label>Contract</label>
+                <select id="timelineContract"><option value="">All contracts</option></select>
+              </div>
+              <div class="field">
                 <label>Expiration period</label>
                 <select id="timelinePeriod">
                   <option value="all">All dates</option>
@@ -140,12 +148,36 @@
     const category = byId('timelineCategory')?.value || 'all';
     return category === 'all' ? [...allowedCategories] : [category];
   }
+  function setSelectOptions(select, values, allLabel, selectedValue) {
+    if (!select) return;
+    const options = [...new Set(values.map(clean).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+    select.innerHTML = `<option value="">${safe(allLabel)}</option>` + options
+      .map(value => `<option value="${safe(value)}">${safe(value)}</option>`).join('');
+    select.value = options.includes(selectedValue) ? selectedValue : '';
+  }
+
+  function populateTimelineFilters(items = getItems()) {
+    const categories = new Set(selectedCategories());
+    const categoryItems = items.filter(item => categories.has(item.category));
+    const supplierSelect = byId('timelineSupplier');
+    const contractSelect = byId('timelineContract');
+    const selectedSupplier = clean(supplierSelect?.value);
+    const selectedContract = clean(contractSelect?.value);
+    setSelectOptions(supplierSelect, categoryItems.map(item => item.supplier), 'All suppliers', selectedSupplier);
+    const supplierItems = selectedSupplier
+      ? categoryItems.filter(item => clean(item.supplier) === selectedSupplier)
+      : categoryItems;
+    setSelectOptions(contractSelect, supplierItems.map(item => item.number), 'All contracts', selectedContract);
+  }
+
   function bindEvents() {
-    ['timelineCategory', 'timelinePeriod', 'timelineSort'].forEach(id => {
-      byId(id)?.addEventListener('change', render);
-    });
+    byId('timelineCategory')?.addEventListener('change', () => { populateTimelineFilters(); render(); });
+    byId('timelineSupplier')?.addEventListener('change', () => { populateTimelineFilters(); render(); });
+    ['timelineContract', 'timelinePeriod', 'timelineSort'].forEach(id => byId(id)?.addEventListener('change', render));
     byId('timelineSearch')?.addEventListener('input', render);
   }
+
   function dashboardNodes() {
     return [
       document.querySelector('.top'),
@@ -213,10 +245,14 @@
   function filterItems(items, today) {
     const selected = new Set(selectedCategories());
     const period = byId('timelinePeriod').value;
+    const supplier = clean(byId('timelineSupplier')?.value);
+    const contract = clean(byId('timelineContract')?.value);
     const query = clean(byId('timelineSearch').value).toLowerCase();
 
     return items.filter(item => {
       if (!selected.has(item.category)) return false;
+      if (supplier && clean(item.supplier) !== supplier) return false;
+      if (contract && clean(item.number) !== contract) return false;
 
       const searchable = [item.number, item.supplier, item.project, item.row['General Status']]
         .map(clean).join(' ').toLowerCase();
@@ -265,6 +301,7 @@
 
     const today = startOfDay();
     const allItems = getItems();
+    populateTimelineFilters(allItems);
     updateSummary(allItems, today);
     const items = sortItems(filterItems(allItems, today));
 
