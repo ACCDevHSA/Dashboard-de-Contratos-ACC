@@ -41,10 +41,6 @@ html[data-theme="light"]{--bg:#f4f7fb;--bg2:#e6edf7;--side:rgba(255,255,255,.97)
 @media(prefers-reduced-motion:reduce){.app,.side,.main,.menu-toggle,.floating-logo{transition:none!important}}
 
 </style>
-<!-- Timeline CSS files must be loaded as stylesheets, in this order -->
-<link rel="stylesheet" href="contract-timeline.css">
-<link rel="stylesheet" href="contract-timeline-compact.css">
-<link rel="stylesheet" href="contract-timeline-screenshot.css">
 
 <style id="pp-fleet-contract-style-v1">
 /* Visual adaptation inspired by PP Fleet HUB. Functional structure and scripts remain unchanged. */
@@ -210,6 +206,38 @@ tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
   .table-section{padding:11px}.filter-panel{padding:10px}
 }
 </style>
+<style id="integrated-expiration-timeline">
+/* Integrated Expiration Timelines */
+.timeline-view{display:none}.timeline-view.active{display:block}
+.timeline-view-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:0 0 10px}
+.timeline-view-head h2,.timeline-view-head p,.timeline-header h3,.timeline-header p{margin:0}
+.timeline-view-head h2{font-size:1.35rem}.timeline-view-head p,.timeline-header p{margin-top:3px;color:var(--muted);font-size:.7rem}
+.timeline-section{overflow:hidden;border:1px solid var(--line);border-radius:11px;background:var(--solid);box-shadow:var(--shadow)}
+.timeline-header{padding:12px;border-bottom:1px solid var(--line)}
+.timeline-header h3{font-size:1rem}.timeline-controls{display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));gap:7px;margin-top:10px}
+.timeline-controls .field label{font-size:.6rem}.timeline-controls select,.timeline-controls input{height:32px;padding:5px 8px;font-size:.69rem}
+.timeline-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.timeline-summary-card{display:flex;align-items:center;gap:8px;min-height:46px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--input)}
+.timeline-summary-card strong,.timeline-summary-card small{display:block}.timeline-summary-card strong{font-size:1rem}.timeline-summary-card small{color:var(--muted);font-size:.59rem}
+.summary-dot{width:8px;height:8px;flex:0 0 8px;border-radius:50%}.summary-dot.expired{background:var(--danger)}.summary-dot.critical{background:#f97316}.summary-dot.warning{background:var(--warning)}.summary-dot.safe{background:var(--success)}
+.timeline-table{overflow-x:auto}.timeline-table-head,.timeline-row{display:grid;grid-template-columns:minmax(165px,.85fr) minmax(360px,2fr) minmax(115px,.55fr);min-width:680px}
+.timeline-table-head{background:var(--header);color:#fff;font-size:.6rem;font-weight:900;text-transform:uppercase}.timeline-table-head>div{padding:7px 10px}
+.timeline-category-header{display:flex;align-items:center;gap:8px;min-width:680px;padding:5px 10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--primary) 8%,var(--solid));font-size:.63rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.timeline-category-header:before{content:'';width:4px;height:14px;border-radius:3px;background:var(--primary)}.timeline-category-header.fornecimento:before{background:var(--primary2)}
+.timeline-category-count{margin-left:auto;color:var(--muted);font-size:.57rem;text-transform:none;letter-spacing:0}
+.timeline-row{min-height:54px;border-bottom:1px solid var(--line)}.timeline-row:hover{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
+.timeline-contract,.timeline-lifetime,.timeline-alert{min-width:0;padding:6px 10px}.timeline-contract,.timeline-lifetime{display:flex;flex-direction:column;justify-content:center}.timeline-lifetime{border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.timeline-contract-number,.timeline-supplier{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.timeline-contract-number{font-size:.69rem;font-weight:900}.timeline-supplier{margin-top:2px;color:var(--muted);font-size:.59rem}
+.timeline-track-dates{display:flex;justify-content:space-between;align-items:center;width:82%;margin:0 auto 3px;color:var(--muted);font-size:.56rem;line-height:1}.timeline-track-dates span{white-space:nowrap}.timeline-track-dates strong{color:var(--text)}
+.timeline-track{position:relative;width:82%;height:6px;margin:3px auto 4px}.timeline-track-background{position:absolute;inset:0;height:6px;overflow:hidden;border-radius:999px;background:var(--line)}.timeline-elapsed{height:100%;min-width:2px;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary2))}.timeline-elapsed.expired{background:var(--danger)}.timeline-elapsed.not-started{background:var(--muted)}.timeline-elapsed.invalid{background:repeating-linear-gradient(45deg,var(--danger),var(--danger) 4px,transparent 4px,transparent 8px)}
+.timeline-today-marker,.timeline-expiry-marker{position:absolute;z-index:2;top:50%;width:2px;transform:translate(-50%,-50%);border-radius:2px}.timeline-today-marker{height:18px;background:var(--text)}.timeline-today-marker:before{content:'Today';position:absolute;left:50%;bottom:14px;transform:translateX(-50%);padding:1px 4px;border-radius:4px;background:var(--text);color:var(--solid);font-size:.52rem;font-weight:900;white-space:nowrap}.timeline-expiry-marker{height:12px;background:var(--danger)}
+.timeline-duration-info{text-align:center;color:var(--muted);font-size:.54rem;line-height:1}.timeline-alert{display:flex;align-items:center;justify-content:center;text-align:center}.timeline-alert strong{font-size:.67rem;white-space:nowrap}.timeline-alert.expired{color:var(--danger)}.timeline-alert.critical{color:#f97316}.timeline-alert.warning{color:var(--warning)}.timeline-alert.safe{color:var(--success)}
+.timeline-empty{padding:28px;text-align:center;color:var(--muted);font-size:.76rem}
+@media(max-width:1200px){.timeline-controls{grid-template-columns:repeat(3,minmax(130px,1fr))}}
+@media(max-width:800px){.timeline-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.timeline-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.timeline-controls{grid-template-columns:1fr}.timeline-summary{grid-template-columns:1fr 1fr}}
+
+</style>
 </head>
 <body>
 <div class="app" id="app">
@@ -244,6 +272,30 @@ tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
     </div></div>
     <div class="wrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
   </section>
+  <section id="timelineView" class="timeline-view" aria-labelledby="timelineTitle">
+    <div class="timeline-view-head"><div><h2 id="timelineTitle">Expiration Timelines</h2><p>Consolidated and validated contract expiration view.</p></div></div>
+    <div class="timeline-section">
+      <div class="timeline-header">
+        <div><h3>Contract Expiration Timeline</h3><p>One consolidated line per contract. Terminations are excluded.</p></div>
+        <div class="timeline-controls">
+          <div class="field"><label for="timelineCategory">Contract type</label><select id="timelineCategory"><option value="all">All contract types</option><option value="comodato">Tooling Loan Agreements</option><option value="fornecimento">Supply Agreements</option></select></div>
+          <div class="field"><label for="timelineSupplier">Supplier</label><select id="timelineSupplier"><option value="">All suppliers</option></select></div>
+          <div class="field"><label for="timelineContract">Contract</label><select id="timelineContract"><option value="">All contracts</option></select></div>
+          <div class="field"><label for="timelinePeriod">Expiration period</label><select id="timelinePeriod"><option value="all">All dates</option><option value="expired">Expired</option><option value="30">Next 30 days</option><option value="60">Next 60 days</option><option value="90">Next 90 days</option><option value="180">Next 180 days</option><option value="365">Next 12 months</option><option value="missing">Missing expiration date</option></select></div>
+          <div class="field"><label for="timelineSort">Sort by</label><select id="timelineSort"><option value="expiry_asc">Expiration: nearest</option><option value="expiry_desc">Expiration: farthest</option><option value="supplier_asc">Supplier A-Z</option><option value="contract_asc">Contract A-Z</option></select></div>
+          <div class="field"><label for="timelineSearch">Search</label><input id="timelineSearch" type="search" placeholder="Contract, supplier, or project"></div>
+        </div>
+      </div>
+      <div class="timeline-summary">
+        <div class="timeline-summary-card"><span class="summary-dot expired"></span><div><strong id="timelineExpired">0</strong><small>Expired</small></div></div>
+        <div class="timeline-summary-card"><span class="summary-dot critical"></span><div><strong id="timelineCritical">0</strong><small>Within 30 days</small></div></div>
+        <div class="timeline-summary-card"><span class="summary-dot warning"></span><div><strong id="timelineWarning">0</strong><small>31 to 90 days</small></div></div>
+        <div class="timeline-summary-card"><span class="summary-dot safe"></span><div><strong id="timelineSafe">0</strong><small>More than 90 days</small></div></div>
+      </div>
+      <div class="timeline-table"><div class="timeline-table-head"><div>Contract</div><div>Contract lifetime</div><div>Expiration alert</div></div><div id="timelineBody" class="timeline-body"></div></div>
+    </div>
+  </section>
+
 </main>
 </div>
 <div id="toast" class="toast"></div>
@@ -336,8 +388,58 @@ initSidebar();
 
 window.addEventListener('load',async()=>{initTheme();const p=readPreferences();state.active=p.active;await loadDatabase({preserve:false,notify:true});document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.active));$('pageTitle').textContent=schemas[state.active].title;populateFilters();restoreFilters(getSavedFilters(state.active));applyFilters();state.preferencesReady=true;savePreferences();setInterval(()=>{if(!document.hidden)loadDatabase({preserve:true})},AUTO_REFRESH_MS)});document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDatabase({preserve:true})});
 </script>
-<!-- Timeline JS files must be loaded after the main application, in this order -->
-<script src="contract-timeline.js"></script>
-<script src="contract-timeline-rules.js"></script>
+<script id="integrated-expiration-timeline-script">
+(function(){
+'use strict';
+const el=id=>document.getElementById(id), clean=v=>window.norm?window.norm(v):String(v??'').trim(), safe=v=>window.esc?window.esc(v):String(v??''), parse=v=>window.parseDate?window.parseDate(v):(v?new Date(v):null);
+const labels={comodato:'Tooling Loan Agreements',fornecimento:'Supply Agreements'}, categories=['comodato','fornecimento'];
+const dayStart=(d=new Date())=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const dayDiff=(a,b)=>(Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/86400000;
+const dateText=v=>{const d=v instanceof Date?v:parse(v);return !d||Number.isNaN(d.getTime())?'Not provided':new Intl.DateTimeFormat('en-US',{month:'short',day:'2-digit',year:'numeric'}).format(d)};
+const field=(row,name)=>{if(!row)return'';if(Object.prototype.hasOwnProperty.call(row,name))return row[name];const key=Object.keys(row).find(k=>clean(k).toLowerCase()===name.toLowerCase());return key?row[key]:''};
+const selectedCategories=()=>el('timelineCategory')?.value==='all'||!el('timelineCategory')?[...categories]:[el('timelineCategory').value];
+function consolidatedItems(){
+ if(!window.state?.data||!window.schemas)return[];
+ const groups=new Map();
+ categories.forEach(category=>(window.state.data[category]||[]).forEach((row,index)=>{
+  const number=clean(field(row,window.schemas[category].number))||`Unnumbered contract ${index+1}`;
+  const supplier=clean(field(row,'Supplier'))||'Supplier not provided';
+  const key=`${category}|${number.toLowerCase()}|${supplier.toLowerCase()}`;
+  const created=parse(field(row,'Creation Date')), expires=parse(field(row,'Expiration Date'));
+  if(!groups.has(key))groups.set(key,{category,number,supplier,project:clean(field(row,'Project')),created,expires,status:clean(field(row,'General Status')),sourceRows:1});
+  else{const item=groups.get(key);item.sourceRows++;if(created&&(!item.created||created<item.created))item.created=created;if(expires&&(!item.expires||expires>item.expires))item.expires=expires;if(!item.project)item.project=clean(field(row,'Project'));if(!item.status)item.status=clean(field(row,'General Status'));}
+ }));
+ return [...groups.values()];
+}
+function setOptions(select,values,label,selected){const list=[...new Set(values.map(clean).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));select.innerHTML=`<option value="">${safe(label)}</option>`+list.map(v=>`<option value="${safe(v)}">${safe(v)}</option>`).join('');select.value=list.includes(selected)?selected:'';}
+function populateFilters(items=consolidatedItems()){
+ const selected=new Set(selectedCategories()), base=items.filter(x=>selected.has(x.category)), supplier=el('timelineSupplier'), contract=el('timelineContract'), oldSupplier=clean(supplier.value), oldContract=clean(contract.value);
+ setOptions(supplier,base.map(x=>x.supplier),'All suppliers',oldSupplier);
+ setOptions(contract,base.filter(x=>!supplier.value||x.supplier===supplier.value).map(x=>x.number),'All contracts',oldContract);
+}
+function baseFiltered(items){const selected=new Set(selectedCategories()),supplier=clean(el('timelineSupplier').value),contract=clean(el('timelineContract').value),q=clean(el('timelineSearch').value).toLowerCase();return items.filter(x=>selected.has(x.category)&&(!supplier||x.supplier===supplier)&&(!contract||x.number===contract)&&(!q||[x.number,x.supplier,x.project,x.status].join(' ').toLowerCase().includes(q)));}
+function periodFiltered(items,today){const period=el('timelinePeriod').value;if(period==='all')return items;if(period==='missing')return items.filter(x=>!x.expires);return items.filter(x=>{if(!x.expires)return false;const days=dayDiff(today,x.expires);return period==='expired'?days<0:days>=0&&days<=Number(period)});}
+function sorted(items){const mode=el('timelineSort').value,farFuture=8640000000000000,farPast=-8640000000000000,time=(x,fallback)=>x?.getTime()??fallback;return [...items].sort((a,b)=>mode==='expiry_desc'?time(b.expires,farPast)-time(a.expires,farPast):mode==='supplier_asc'?a.supplier.localeCompare(b.supplier):mode==='contract_asc'?a.number.localeCompare(b.number):time(a.expires,farFuture)-time(b.expires,farFuture));}
+const level=days=>days<0?'expired':days<=30?'critical':days<=90?'warning':'safe';
+const alertText=days=>`${Math.trunc(days)} Day${Math.abs(days)===1?'':'s'} Remaining`;
+function position(start,end,today){if(!start||!end)return{today:1.5,width:0,cssClass:'not-started'};const duration=end-start;if(duration<=0)return{today:98.5,width:98.5,cssClass:'invalid'};if(today<start)return{today:1.5,width:1.5,cssClass:'not-started'};const p=Math.max(1.5,Math.min(98.5,((today-start)/duration)*100));return{today:p,width:p,cssClass:today>end?'expired':''};}
+function updateSummary(items,today){const counts={expired:0,critical:0,warning:0,safe:0};items.forEach(x=>{if(x.expires)counts[level(dayDiff(today,x.expires))]++});Object.keys(counts).forEach(k=>el(`timeline${k[0].toUpperCase()+k.slice(1)}`).textContent=counts[k]);}
+function renderItem(item,today){
+ const duplicateNote=item.sourceRows>1?` • ${item.sourceRows} source rows consolidated`:'';
+ if(!item.expires)return `<div class="timeline-row"><div class="timeline-contract"><span class="timeline-contract-number" title="${safe(item.number)}">${safe(item.number)}</span><span class="timeline-supplier" title="${safe(item.supplier)}">${safe(item.supplier)}</span></div><div class="timeline-lifetime"><div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>Not provided</strong></span></div><div class="timeline-track"><div class="timeline-track-background"></div></div><div class="timeline-duration-info">Expiration date required${safe(duplicateNote)}</div></div><div class="timeline-alert warning"><strong>N/A</strong></div></div>`;
+ const days=dayDiff(today,item.expires),status=level(days),pos=position(item.created,item.expires,today),duration=item.created?dayDiff(item.created,item.expires):null;
+ const info=duration===null?'Start date not provided':duration<0?'Invalid dates: expiration precedes start':`Registered lifetime: ${Math.trunc(duration)} days${duplicateNote}`;
+ return `<div class="timeline-row"><div class="timeline-contract"><span class="timeline-contract-number" title="${safe(item.number)}">${safe(item.number)}</span><span class="timeline-supplier" title="${safe(item.supplier)}">${safe(item.supplier)}</span>${item.project?`<span class="timeline-supplier" title="${safe(item.project)}">${safe(item.project)}</span>`:''}</div><div class="timeline-lifetime"><div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>${safe(dateText(item.expires))}</strong></span></div><div class="timeline-track"><div class="timeline-track-background"><div class="timeline-elapsed ${pos.cssClass}" style="width:${pos.width}%"></div></div><span class="timeline-today-marker" style="left:${pos.today}%"></span><span class="timeline-expiry-marker" style="left:98.5%"></span></div><div class="timeline-duration-info">${safe(info)}</div></div><div class="timeline-alert ${status}"><strong>${safe(alertText(days))}</strong></div></div>`;
+}
+function renderTimeline(){const body=el('timelineBody');if(!body)return;const today=dayStart(),all=consolidatedItems();populateFilters(all);const base=baseFiltered(all);updateSummary(base,today);const items=sorted(periodFiltered(base,today));if(!items.length){body.innerHTML='<div class="timeline-empty">No contracts found for the selected filters.</div>';return;}body.innerHTML=categories.filter(c=>items.some(x=>x.category===c)).map(c=>{const list=items.filter(x=>x.category===c);return `<div class="timeline-category-header ${c}"><span>${safe(labels[c])}</span><span class="timeline-category-count">${list.length} contract${list.length===1?'':'s'}</span></div>`+list.map(x=>renderItem(x,today)).join('')}).join('');}
+function dashboardNodes(){return[document.querySelector('.top'),document.querySelector('.section-head'),document.querySelector('.kpis'),document.querySelector('.table-section')].filter(Boolean)}
+function showTimeline(){dashboardNodes().forEach(n=>n.hidden=true);el('timelineView').classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));el('timelineTab').classList.add('active');renderTimeline();}
+function showDashboard(){dashboardNodes().forEach(n=>n.hidden=false);el('timelineView').classList.remove('active');el('timelineTab').classList.remove('active');}
+el('timelineTab')?.addEventListener('click',showTimeline);document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',showDashboard));
+el('timelineCategory')?.addEventListener('change',()=>{populateFilters();renderTimeline()});el('timelineSupplier')?.addEventListener('change',()=>{populateFilters();renderTimeline()});['timelineContract','timelinePeriod','timelineSort'].forEach(id=>el(id)?.addEventListener('change',renderTimeline));el('timelineSearch')?.addEventListener('input',renderTimeline);
+window.renderContractTimeline=renderTimeline;
+})();
+
+</script>
 </body>
 </html>
