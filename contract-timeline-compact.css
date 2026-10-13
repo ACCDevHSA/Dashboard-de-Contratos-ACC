@@ -40,9 +40,9 @@
 }
 
 #timelineView .timeline-controls {
-  grid-template-columns: minmax(190px, 1.3fr) repeat(3, minmax(135px, 1fr));
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
   gap: 7px;
-  width: min(840px, 100%);
+  width: 100%;
 }
 
 #timelineView .field label {
@@ -51,8 +51,7 @@
 }
 
 #timelineView .field input,
-#timelineView .field select,
-#timelineView .timeline-multi-button {
+#timelineView .field select {
   height: 32px;
   min-height: 32px;
   padding: 5px 8px;
@@ -135,9 +134,9 @@
   min-width: 820px;
 }
 
-/* Main density improvement: rows reduced from about 113px to about 62px */
+/* Main density improvement: rows reduced to about 46px */
 #timelineView .timeline-row {
-  min-height: 62px;
+  min-height: 46px;
 }
 
 #timelineView .timeline-contract,
@@ -147,13 +146,13 @@
 }
 
 #timelineView .timeline-contract-number {
-  font-size: .76rem;
+  font-size: .70rem;
   line-height: 1.05;
 }
 
 #timelineView .timeline-supplier {
   margin-top: 2px;
-  font-size: .63rem;
+  font-size: .60rem;
   line-height: 1.05;
 }
 
@@ -162,10 +161,14 @@
   display: none;
 }
 
-#timelineView .timeline-category {
-  margin-top: 4px;
-  padding: 2px 5px;
-  font-size: .50rem;
+#timelineView .timeline-category { display: none; }
+#timelineView .timeline-category-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  margin: 3px 0 1px;
+  font-size: .64rem;
   line-height: 1;
 }
 
