@@ -245,6 +245,9 @@ tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
 .snapshot-canvas{position:fixed;left:-20000px;top:0;width:1120px;padding:12px;background:#fff;color:#1f2937;font-family:Inter,"Segoe UI",Arial,sans-serif}.snapshot-canvas *{box-sizing:border-box}.snapshot-brand{display:flex;justify-content:space-between;align-items:end;padding:0 2px 7px;border-bottom:2px solid #c8102e}.snapshot-brand h2,.snapshot-brand p{margin:0}.snapshot-brand h2{font-size:16px}.snapshot-brand p{font-size:9px;color:#667085}.snapshot-generated{font-size:8px;color:#667085}.snapshot-table-head,.snapshot-row{display:grid;grid-template-columns:390px minmax(0,1fr) 150px}.snapshot-table-head{background:#272d3e;color:#fff;font-size:8px;font-weight:900;text-transform:uppercase}.snapshot-table-head>div{padding:4px 7px}.snapshot-group{display:flex;align-items:center;height:18px;padding:0 7px;background:#f2f4f7;border:1px solid #d7dce3;border-top:0;color:#344054;font-size:8px;font-weight:900;text-transform:uppercase}.snapshot-row{min-height:36px;border:1px solid #d7dce3;border-top:0;background:#fff}.snapshot-contract,.snapshot-life,.snapshot-alert{min-width:0;padding:3px 7px}.snapshot-contract,.snapshot-life{display:flex;flex-direction:column;justify-content:center}.snapshot-contract strong,.snapshot-contract span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.snapshot-contract strong{font-size:8.5px}.snapshot-contract span{color:#667085;font-size:7px}.snapshot-life{border-left:1px solid #d7dce3;border-right:1px solid #d7dce3}.snapshot-dates{display:flex;justify-content:space-between;font-size:6.8px;color:#667085;line-height:1}.snapshot-dates b{color:#344054}.snapshot-track{position:relative;width:94%;height:4px;margin:3px auto 7px;border-radius:99px;background:#d7dce3}.snapshot-fill{height:4px;border-radius:99px;background:linear-gradient(90deg,#c8102e,#272d3e)}.snapshot-today{position:absolute;top:-3px;width:1.5px;height:10px;background:#111827;transform:translateX(-50%)}.snapshot-today:before{content:'Today';position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:5.5px;font-weight:900;line-height:1;white-space:nowrap}.snapshot-expiry{position:absolute;top:-2px;right:0;width:1.5px;height:8px;background:#c8102e}.snapshot-alert{display:flex;align-items:center;justify-content:center;text-align:center;font-size:7.5px;font-weight:900}.snapshot-alert.expired{color:#c8102e}.snapshot-alert.critical{color:#ea580c}.snapshot-alert.warning{color:#b77900}.snapshot-alert.safe{color:#15805f}@media(max-width:800px){.timeline-view-head{align-items:flex-start}.timeline-view-actions{flex-wrap:wrap;justify-content:flex-end}.snapshot-dialog-head{align-items:flex-start;flex-direction:column}.snapshot-dialog-actions{width:100%}}
 
 </style>
+<style id="supply-export-styles">
+.section-head{display:flex;align-items:center;gap:12px}.section-head hr{flex:1}.section-head h2{margin:0}.section-head-actions{margin-left:auto;display:flex;align-items:center}.export-supply-btn[hidden]{display:none!important}@media(max-width:680px){.section-head{flex-wrap:wrap}.section-head hr{flex-basis:100%}.section-head-actions{width:100%;justify-content:flex-end}}
+</style>
 </head>
 <body>
 <div class="app" id="app">
@@ -261,7 +264,7 @@ tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
 <main class="main">
   <div class="dashboard-tools"><button id="menuToggle" class="menu-toggle" type="button" aria-label="Recolher menu lateral" aria-controls="sidebar" aria-expanded="true">☰</button><img class="floating-logo" src="favicon.png" alt="Company logo"></div>
   <header class="top"><div><h2>Contract Management</h2><p id="loadInfo">Loading Supabase database...</p></div><button id="topNewRecord" class="btn btn-primary">＋ Novo registro</button></header>
-  <section class="section-head"><hr><h2 id="pageTitle">Tooling Loan Agreements</h2></section>
+  <section class="section-head"><hr><h2 id="pageTitle">Tooling Loan Agreements</h2><div class="section-head-actions"><button id="exportSupplyXlsx" class="btn btn-primary export-supply-btn" type="button" hidden>Export Excel (.xlsx)</button></div></section>
   <section class="kpis">
     <div class="card"><div><p>Total records</p><h3 id="kpiRecords">0</h3></div><span class="kpi-icon records">▤</span></div>
     <div class="card"><div><p>Distinct contracts</p><h3 id="kpiContracts">0</h3></div><span class="kpi-icon contracts">▣</span></div>
@@ -323,6 +326,7 @@ tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const SUPABASE_URL='https://vrcylvpudnhdplpdohml.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_CeG6_XWzmWhaetSRpgFQXw_AjylU7ho';
@@ -461,6 +465,46 @@ window.timelineSnapshotAPI={items:consolidatedItems,dayStart,dayDiff,level,posit
 window.renderContractTimeline=renderTimeline;
 })();
 
+</script>
+
+<script id="supply-export-script">
+(function(){
+'use strict';
+const button=document.getElementById('exportSupplyXlsx');
+function updateSupplyExportButton(){if(button)button.hidden=window.state?.active!=='fornecimento'||document.getElementById('timelineView')?.classList.contains('active');}
+function excelValue(value,column){
+ const text=window.norm?window.norm(value):String(value??'').trim();
+ if(!text)return'';
+ if(column.includes('Date')){const date=window.parseDate?window.parseDate(text):null;return date&&!Number.isNaN(date.getTime())?date:text;}
+ if(column==='Overall Progression'){const number=Number(String(text).replace('%','').replace(',','.'));return Number.isFinite(number)?number:text;}
+ return text;
+}
+function exportSupplyAgreements(){
+ if(!window.XLSX){window.toast?.('Excel export library is still loading. Try again in a moment.');return;}
+ if(window.state?.active!=='fornecimento'){window.toast?.('Open Supply Agreements to export the data.');return;}
+ const schema=window.schemas?.fornecimento;
+ const rows=Array.isArray(window.state?.filtered)?window.state.filtered:[];
+ if(!schema||!rows.length){window.toast?.('No Supply Agreements found for the current filters.');return;}
+ const columns=schema.fields.map(field=>field[0]);
+ const data=rows.map(row=>{const output={};columns.forEach(column=>output[column]=excelValue(row[column],column));return output;});
+ const sheet=window.XLSX.utils.json_to_sheet(data,{header:columns,dateNF:'yyyy-mm-dd'});
+ sheet['!autofilter']={ref:sheet['!ref']};
+ sheet['!freeze']={xSplit:0,ySplit:1};
+ sheet['!cols']=columns.map(column=>({wch:Math.min(45,Math.max(14,column.length+2,...data.map(row=>String(row[column]??'').length+2)))}));
+ columns.forEach((column,index)=>{if(!column.includes('Date'))return;for(let row=2;row<=data.length+1;row++){const cell=sheet[window.XLSX.utils.encode_cell({r:row-1,c:index})];if(cell&&cell.v instanceof Date){cell.t='d';cell.z='yyyy-mm-dd';}}});
+ const book=window.XLSX.utils.book_new();
+ book.Props={Title:'Supply Agreements',Subject:'Filtered Supply Agreements export',Author:'Contract Management'};
+ window.XLSX.utils.book_append_sheet(book,sheet,'Supply Agreements');
+ const date=new Date().toISOString().slice(0,10);
+ window.XLSX.writeFile(book,`Supply_Agreements_${date}.xlsx`,{compression:true});
+ window.toast?.(`${data.length} Supply Agreement${data.length===1?'':'s'} exported to Excel.`);
+}
+button?.addEventListener('click',exportSupplyAgreements);
+document.querySelectorAll('.nav button').forEach(item=>item.addEventListener('click',()=>setTimeout(updateSupplyExportButton,0)));
+document.getElementById('timelineTab')?.addEventListener('click',()=>setTimeout(updateSupplyExportButton,0));
+window.addEventListener('load',updateSupplyExportButton);
+window.updateSupplyExportButton=updateSupplyExportButton;
+})();
 </script>
 <script id="expiration-snapshot-script">
 (function(){
