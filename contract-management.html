@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contract Management</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+:root{--bg:#08111f;--bg2:#111827;--side:rgba(8,17,31,.96);--surface:rgba(255,255,255,.08);--solid:#111c2e;--input:#182235;--text:#eef6ff;--muted:#97a6ba;--line:rgba(255,255,255,.12);--primary:#5eead4;--primary2:#60a5fa;--purple:#a78bfa;--warning:#fbbf24;--success:#34d399;--danger:#fb7185;--header:#06435a;--shadow:0 24px 70px rgba(0,0,0,.34)}
+html[data-theme="light"]{--bg:#f4f7fb;--bg2:#e6edf7;--side:rgba(255,255,255,.97);--surface:rgba(255,255,255,.9);--solid:#fff;--input:#f8fafc;--text:#132238;--muted:#617086;--line:rgba(15,23,42,.14);--primary:#0f9f93;--primary2:#287fd1;--purple:#7c5fd0;--warning:#b77900;--success:#15805f;--danger:#c63f59;--header:#0b6784;--shadow:0 18px 45px rgba(32,54,86,.13)}
+*{box-sizing:border-box}html{color-scheme:dark}html[data-theme="light"]{color-scheme:light}body{margin:0;color:var(--text);font-family:Inter,Segoe UI,sans-serif;background:radial-gradient(circle at top left,color-mix(in srgb,var(--primary2) 25%,transparent),transparent 32rem),linear-gradient(135deg,var(--bg),var(--bg2));min-height:100vh}.app{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}.side{position:sticky;top:0;height:100vh;overflow:auto;padding:16px 13px;background:var(--side);border-right:1px solid var(--line)}.brand{display:flex;gap:12px;align-items:center;margin-bottom:12px}.brand-logo{width:48px;height:48px;border-radius:13px;object-fit:contain;background:#fff;padding:4px;border:1px solid var(--line)}.brand h1,.brand p{margin:0}.brand h1{font-size:1.05rem}.brand p,.muted{color:var(--muted);font-size:.78rem}.theme-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 16px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.theme-toggle{width:44px;height:24px;border:0;border-radius:999px;background:var(--input);padding:3px;cursor:pointer}.theme-toggle i{display:block;width:18px;height:18px;border-radius:50%;background:var(--primary2);transition:.2s}.theme-toggle.light i{transform:translateX(20px)}.nav{display:grid;gap:8px;margin:12px 0 16px}.nav button,.btn{border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--text);background:var(--surface);font-weight:800;cursor:pointer}.nav button{text-align:left}.nav button.active{color:#06111f;background:linear-gradient(135deg,var(--primary),var(--primary2))}.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#06111f;border:0}.btn-danger{background:color-mix(in srgb,var(--danger) 18%,var(--surface));color:var(--danger)}.new-btn{width:100%;text-align:center;margin:2px 0 12px}.nav-separator{height:1px;margin:14px 2px;background:linear-gradient(90deg,transparent,var(--line),transparent)}.timeline-nav-btn{width:100%;margin-bottom:12px;text-align:left}.main{padding:20px;min-width:0}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.top h2{font-size:clamp(1.8rem,3vw,2.8rem);margin:0}.top p{color:var(--muted);margin:7px 0 16px}.section-head{margin:4px 0 17px}.section-head hr{border:0;height:1px;background:linear-gradient(90deg,transparent,var(--primary),var(--primary2),transparent);margin-bottom:15px}.section-head h2{margin:0;font-size:1.65rem}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card,.table-section,.filter-panel{border:1px solid var(--line);background:var(--surface);border-radius:20px;box-shadow:var(--shadow)}.card{padding:17px}.card p,.card h3{margin:0}.card p{color:var(--muted);font-size:.82rem}.card h3{margin-top:8px;font-size:1.65rem}.kpis .card{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:106px}.kpi-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;font-size:1.45rem;font-weight:900;color:#06111f}.records{background:#5eead4}.contracts{background:#60a5fa}.suppliers{background:#a78bfa}.progress-icon{background:#fbbf24}.table-section{padding:15px;margin-top:16px}.filter-panel{padding:14px;margin:0 0 14px;box-shadow:none}.filter-grid{display:grid;grid-template-columns:minmax(210px,1.5fr) repeat(3,minmax(155px,1fr)) auto;gap:10px;align-items:end}.field{min-width:0}.field label{display:block;margin:0 0 5px;color:var(--muted);font-size:.68rem;font-weight:800;text-transform:uppercase}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px;background:var(--input);color:var(--text);font:inherit}.field input,.field select{height:40px}.field textarea{min-height:76px;resize:vertical}select option{background:var(--solid);color:var(--text)}.title{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:12px}.title h3,.title p{margin:0}.title p{color:var(--muted);font-size:.78rem}.title span{color:var(--primary);font-weight:800}.wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;background:color-mix(in srgb,var(--solid) 82%,transparent)}th,td{padding:9px 8px;border-bottom:1px solid var(--line);font-size:.76rem;vertical-align:middle}th{text-align:center;background:var(--header);color:#fff;text-transform:uppercase;font-weight:900;position:sticky;top:0;z-index:2}td{text-align:left}.pill{display:inline-flex;border-radius:999px;padding:4px 8px;font-weight:850;background:color-mix(in srgb,var(--primary) 13%,transparent);color:var(--primary)}.pill.pending{color:var(--warning)}.pill.ongoing{color:var(--primary2)}.pill.concluded{color:#26734d;background:#dff3e8;border:1px solid #b9dfca}html[data-theme="dark"] .pill.concluded{color:#9fddba;background:rgba(46,125,82,.22);border-color:rgba(111,190,143,.38)}.progress{min-width:90px;height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:5px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2))}.attachment-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:82px;border:1px solid color-mix(in srgb,var(--primary2) 55%,var(--line));border-radius:10px;padding:7px 9px;color:var(--text);background:color-mix(in srgb,var(--primary2) 18%,var(--surface));font-size:.7rem;font-weight:900;text-decoration:none;white-space:nowrap}.attachment-btn.disabled{opacity:.42;pointer-events:none}.actions{display:flex;gap:6px;justify-content:center;white-space:nowrap}.action-btn{border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:var(--surface);color:var(--text);font-weight:800;cursor:pointer}.action-btn.delete{color:var(--danger)}.empty{text-align:center;padding:30px}.toast{position:fixed;right:22px;bottom:22px;max-width:420px;padding:12px 15px;border-radius:13px;background:var(--solid);border:1px solid var(--line);opacity:0;transform:translateY(14px);transition:.2s;z-index:400;box-shadow:var(--shadow)}.toast.show{opacity:1;transform:none}.overlay{position:fixed;inset:0;background:rgba(2,8,20,.82);display:grid;place-items:center;padding:18px;z-index:300}.overlay.hidden{display:none}.dialog{width:min(980px,96vw);max-height:94vh;overflow:auto;background:var(--solid);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}.dialog-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:15px;padding:16px 18px;background:var(--solid);border-bottom:1px solid var(--line)}.dialog-head h3,.dialog-head p{margin:0}.dialog-head p{color:var(--muted);font-size:.76rem;margin-top:4px}.close-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;font-size:1.2rem}.form-body{padding:18px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.form-grid .full{grid-column:1/-1}.form-actions{position:sticky;bottom:0;display:flex;justify-content:flex-end;gap:9px;padding:14px 18px;background:var(--solid);border-top:1px solid var(--line)}.required:after{content:' *';color:var(--danger)}.form-error{color:var(--danger);font-size:.8rem;min-height:20px;margin:8px 0 0}.delete-box{padding:20px}.delete-box strong{color:var(--danger)}.sync-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--success);margin-right:6px}.sync-dot.loading{background:var(--warning)}
+@media(max-width:1100px){.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:800px){.app{grid-template-columns:1fr}.side{position:relative;height:auto}.top{display:block}.form-grid,.filter-grid,.kpis{grid-template-columns:1fr}.main{padding:10px}}
+
+/* Menu lateral totalmente recolhível e KPIs compactos */
+.app{display:grid;grid-template-columns:290px minmax(0,1fr);transition:grid-template-columns .34s cubic-bezier(.4,0,.2,1)}
+.side{width:290px;transition:width .34s cubic-bezier(.4,0,.2,1),padding .34s cubic-bezier(.4,0,.2,1),opacity .2s,transform .34s cubic-bezier(.4,0,.2,1)}
+.app.sidebar-collapsed{grid-template-columns:0 minmax(0,1fr)}
+.app.sidebar-collapsed .side{width:0;padding-left:0;padding-right:0;border-right:0;opacity:0;overflow:hidden;pointer-events:none;transform:translateX(-100%)}
+.main{position:relative;transition:padding .34s cubic-bezier(.4,0,.2,1)}
+.dashboard-tools{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.menu-toggle{display:inline-grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);box-shadow:var(--shadow);cursor:pointer;font-size:1.28rem;line-height:1;transition:transform .2s,background .2s}
+.menu-toggle:hover{background:color-mix(in srgb,var(--primary2) 18%,var(--surface));transform:scale(1.04)}
+.menu-toggle:focus-visible{outline:3px solid color-mix(in srgb,var(--primary2) 55%,transparent);outline-offset:2px}
+.floating-logo{width:48px;height:48px;border-radius:13px;object-fit:contain;background:#fff;padding:4px;border:1px solid var(--line);box-shadow:var(--shadow);opacity:0;visibility:hidden;transform:translateY(-8px) scale(.92);transition:opacity .24s,transform .3s,visibility .24s}
+.app.sidebar-collapsed .floating-logo{opacity:1;visibility:visible;transform:none}
+.kpis{gap:10px}
+.kpis .card{min-height:78px;padding:11px 13px;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.kpis .card p{font-size:.72rem}.kpis .card h3{margin-top:5px;font-size:1.3rem}
+.kpi-icon{width:38px;height:38px;border-radius:11px;font-size:1.05rem}
+.mobile-backdrop{display:none}
+@media(max-width:800px){
+ .app,.app.sidebar-collapsed{display:block}
+ .side,.app.sidebar-collapsed .side{position:fixed;left:0;top:0;z-index:200;width:min(290px,86vw);height:100vh;padding:16px 13px;border-right:1px solid var(--line);opacity:1;transform:translateX(-105%);pointer-events:auto;overflow:auto;box-shadow:var(--shadow)}
+ .app.sidebar-open .side{transform:translateX(0)}
+ .mobile-backdrop{position:fixed;inset:0;z-index:190;background:rgba(2,8,20,.58);backdrop-filter:blur(2px)}
+ .app.sidebar-open .mobile-backdrop{display:block}
+ .floating-logo{opacity:1;visibility:visible;transform:none}
+ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:480px){.kpis{grid-template-columns:1fr}.kpis .card{min-height:72px}}
+@media(prefers-reduced-motion:reduce){.app,.side,.main,.menu-toggle,.floating-logo{transition:none!important}}
+
+</style>
+
+<style id="pp-fleet-contract-style-v1">
+/* Visual adaptation inspired by PP Fleet HUB. Functional structure and scripts remain unchanged. */
+:root,
+html[data-theme="light"]{
+  --bg:#f5f6f8;
+  --bg2:#eef1f4;
+  --side:#8f0f1b;
+  --surface:#ffffff;
+  --solid:#ffffff;
+  --input:#f3f4f6;
+  --text:#1f2937;
+  --muted:#778197;
+  --line:#e5e7eb;
+  --primary:#c8102e;
+  --primary2:#272d3e;
+  --purple:#8f0f1b;
+  --warning:#d99016;
+  --success:#4f9d30;
+  --danger:#c8102e;
+  --header:#272d3e;
+  --shadow:0 1px 3px rgba(30,36,52,.08);
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --bg:#111827;
+  --bg2:#0f172a;
+  --side:#750d17;
+  --surface:#182235;
+  --solid:#182235;
+  --input:#222f43;
+  --text:#f8fafc;
+  --muted:#aeb8c8;
+  --line:#334155;
+  --primary:#ef4056;
+  --primary2:#e5e7eb;
+  --purple:#ef4056;
+  --warning:#e5a52f;
+  --success:#72b64e;
+  --danger:#ff6b7f;
+  --header:#272d3e;
+  --shadow:0 4px 14px rgba(0,0,0,.18);
+  color-scheme:dark;
+}
+body{
+  background:var(--bg2);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+}
+.app{grid-template-columns:238px minmax(0,1fr);transition:grid-template-columns .25s ease}
+.side{
+  width:238px;
+  padding:18px 14px;
+  background:var(--side);
+  color:#fff;
+  border-right:0;
+  box-shadow:none;
+  transition:width .25s ease,padding .25s ease,opacity .2s ease,transform .25s ease;
+}
+.brand{height:48px;margin:0 0 30px;padding:0 7px;gap:11px}
+.brand-logo{width:42px;height:42px;min-width:42px;border-radius:50%;padding:3px;border:0;box-shadow:none}
+.brand h1{color:#fff;font-size:13px}
+.brand p{color:#dac0c4;font-size:10px}
+.theme-row{
+  margin:0 0 18px;
+  padding:8px 10px;
+  border-color:rgba(255,255,255,.20);
+  border-radius:8px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+.theme-row #themeLabel{font-size:.72rem;font-weight:700}
+.theme-toggle{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.18)}
+.theme-toggle i{background:#fff}
+.side>.muted{color:#e2c6ca;font-size:.62rem;font-weight:800;letter-spacing:.08em}
+.nav{gap:5px;margin:8px 0 14px}
+.nav button,.timeline-nav-btn{
+  min-height:40px;
+  padding:10px 12px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:#e6cfd3;
+  font-size:12px;
+  font-weight:700;
+}
+.nav button:hover,.nav button.active,.timeline-nav-btn:hover{
+  background:rgba(255,255,255,.13);
+  color:#fff;
+}
+.nav button.active{box-shadow:none}
+.nav-separator{background:rgba(255,255,255,.18)}
+.side .sync-dot{box-shadow:0 0 0 3px rgba(255,255,255,.10)}
+.side #syncText{color:#e2c6ca}
+.main{padding:24px 28px;background:var(--bg2)}
+.dashboard-tools{margin-bottom:14px}
+.menu-toggle{
+  width:38px;height:38px;flex-basis:38px;
+  border-radius:8px;
+  background:var(--solid);
+  box-shadow:var(--shadow);
+  font-size:1.05rem;
+}
+.menu-toggle:hover{background:var(--input);transform:none}
+.floating-logo{width:42px;height:42px;border-radius:50%;padding:3px;box-shadow:var(--shadow)}
+.top{align-items:center}
+.top h2{font-size:25px;line-height:1.2}
+.top p{margin:5px 0 14px}
+.section-head{margin:3px 0 14px}
+.section-head hr{display:none}
+.section-head h2{font-size:1.25rem}
+.btn{
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:9px 12px;
+  background:var(--input);
+  color:var(--text);
+  box-shadow:none;
+}
+.btn:hover{filter:brightness(.98)}
+.btn-primary{
+  border-color:var(--primary2);
+  background:var(--primary2);
+  color:#fff;
+}
+html[data-theme="dark"] .btn-primary{background:#e5e7eb;color:#111827;border-color:#e5e7eb}
+.btn-danger{border-color:color-mix(in srgb,var(--danger) 34%,var(--line));background:color-mix(in srgb,var(--danger) 10%,var(--solid));color:var(--danger)}
+.kpis{gap:11px;margin:0}
+.card,.table-section,.filter-panel{border:1px solid var(--line);border-radius:11px;background:var(--solid);box-shadow:var(--shadow)}
+.kpis .card{min-height:86px;padding:14px 16px;border-radius:11px;box-shadow:var(--shadow)}
+.kpis .card p{font-size:.72rem}
+.kpis .card h3{font-size:1.45rem}
+.kpi-icon{width:38px;height:38px;border-radius:9px;font-size:1rem;color:#fff}
+.records{background:#c8102e}.contracts{background:#272d3e}.suppliers{background:#8f0f1b}.progress-icon{background:#d99016}
+html[data-theme="dark"] .records{background:#ef4056}
+.table-section{padding:16px;margin-top:16px}
+.title{margin-bottom:14px}
+.title h3{font-size:1rem}.title span{color:var(--primary)}
+.filter-panel{padding:13px;background:var(--solid);box-shadow:none}
+.field label{font-size:.65rem;color:var(--muted)}
+.field input,.field select,.field textarea{border-radius:8px;background:var(--input)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 12%,transparent)}
+.wrap{border-radius:9px;background:var(--solid)}
+table{background:var(--solid)}
+th,td{padding:10px 9px}
+th{background:var(--header);color:#fff;font-size:.68rem}
+tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
+.pill{background:color-mix(in srgb,var(--primary) 10%,transparent);color:var(--primary)}
+.progress{height:6px}.progress i{background:var(--primary)}
+.attachment-btn,.action-btn{border-radius:7px;background:var(--input)}
+.attachment-btn{border-color:var(--line)}
+.action-btn:hover,.attachment-btn:hover{border-color:var(--primary)}
+.toast{border-radius:10px;background:var(--solid);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.overlay{background:rgba(7,17,31,.80);backdrop-filter:blur(5px)}
+.dialog{border-radius:14px;background:var(--solid);box-shadow:0 24px 70px rgba(0,0,0,.30)}
+.dialog-head,.form-actions{background:var(--solid)}
+.close-btn{border-radius:8px;background:var(--input)}
+.app.sidebar-collapsed{grid-template-columns:0 minmax(0,1fr)}
+.app.sidebar-collapsed .side{width:0}
+@media(max-width:800px){
+  .main{padding:16px 12px}
+  .side,.app.sidebar-collapsed .side{width:min(288px,88vw);padding:18px 14px;background:var(--side)}
+  .top{align-items:flex-start}.top h2{font-size:1.45rem}
+  .table-section{padding:11px}.filter-panel{padding:10px}
+}
+</style>
+<style id="integrated-expiration-timeline">
+/* Integrated Expiration Timelines */
+.timeline-view{display:none}.timeline-view.active{display:block}
+.timeline-view-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:0 0 10px}
+.timeline-view-head h2,.timeline-view-head p,.timeline-header h3,.timeline-header p{margin:0}
+.timeline-view-head h2{font-size:1.35rem}.timeline-view-head p,.timeline-header p{margin-top:3px;color:var(--muted);font-size:.7rem}
+.timeline-section{overflow:hidden;border:1px solid var(--line);border-radius:11px;background:var(--solid);box-shadow:var(--shadow)}
+.timeline-header{padding:12px;border-bottom:1px solid var(--line)}
+.timeline-header h3{font-size:1rem}.timeline-controls{display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));gap:7px;margin-top:10px}
+.timeline-controls .field label{font-size:.6rem}.timeline-controls select,.timeline-controls input{height:32px;padding:5px 8px;font-size:.69rem}
+.timeline-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.timeline-summary-card{display:flex;align-items:center;gap:8px;min-height:46px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--input)}
+.timeline-summary-card strong,.timeline-summary-card small{display:block}.timeline-summary-card strong{font-size:1rem}.timeline-summary-card small{color:var(--muted);font-size:.59rem}
+.summary-dot{width:8px;height:8px;flex:0 0 8px;border-radius:50%}.summary-dot.expired{background:var(--danger)}.summary-dot.critical{background:#f97316}.summary-dot.warning{background:var(--warning)}.summary-dot.safe{background:var(--success)}
+.timeline-table{overflow-x:auto}.timeline-table-head,.timeline-row{display:grid;grid-template-columns:minmax(165px,.85fr) minmax(360px,2fr) minmax(115px,.55fr);min-width:680px}
+.timeline-table-head{background:var(--header);color:#fff;font-size:.6rem;font-weight:900;text-transform:uppercase}.timeline-table-head>div{padding:7px 10px}
+.timeline-category-header{display:flex;align-items:center;gap:8px;min-width:680px;padding:5px 10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--primary) 8%,var(--solid));font-size:.63rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.timeline-category-header:before{content:'';width:4px;height:14px;border-radius:3px;background:var(--primary)}.timeline-category-header.fornecimento:before{background:var(--primary2)}
+.timeline-category-count{margin-left:auto;color:var(--muted);font-size:.57rem;text-transform:none;letter-spacing:0}
+.timeline-row{min-height:54px;border-bottom:1px solid var(--line)}.timeline-row:hover{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
+.timeline-contract,.timeline-lifetime,.timeline-alert{min-width:0;padding:6px 10px}.timeline-contract,.timeline-lifetime{display:flex;flex-direction:column;justify-content:center}.timeline-lifetime{border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.timeline-contract-number,.timeline-supplier{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.timeline-contract-number{font-size:.69rem;font-weight:900}.timeline-supplier{margin-top:2px;color:var(--muted);font-size:.59rem}
+.timeline-track-dates{display:flex;justify-content:space-between;align-items:center;width:82%;margin:0 auto 3px;color:var(--muted);font-size:.56rem;line-height:1}.timeline-track-dates span{white-space:nowrap}.timeline-track-dates strong{color:var(--text)}
+.timeline-track{position:relative;width:82%;height:6px;margin:3px auto 4px}.timeline-track-background{position:absolute;inset:0;height:6px;overflow:hidden;border-radius:999px;background:var(--line)}.timeline-elapsed{height:100%;min-width:2px;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary2))}.timeline-elapsed.expired{background:var(--danger)}.timeline-elapsed.not-started{background:var(--muted)}.timeline-elapsed.invalid{background:repeating-linear-gradient(45deg,var(--danger),var(--danger) 4px,transparent 4px,transparent 8px)}
+.timeline-today-marker,.timeline-expiry-marker{position:absolute;z-index:2;top:50%;width:2px;transform:translate(-50%,-50%);border-radius:2px}.timeline-today-marker{height:18px;background:var(--text)}.timeline-today-marker:before{content:'Today';position:absolute;left:50%;bottom:14px;transform:translateX(-50%);padding:1px 4px;border-radius:4px;background:var(--text);color:var(--solid);font-size:.52rem;font-weight:900;white-space:nowrap}.timeline-expiry-marker{height:12px;background:var(--danger)}
+.timeline-duration-info{text-align:center;color:var(--muted);font-size:.54rem;line-height:1}.timeline-alert{display:flex;align-items:center;justify-content:center;text-align:center}.timeline-alert strong{font-size:.67rem;white-space:nowrap}.timeline-alert.expired{color:var(--danger)}.timeline-alert.critical{color:#f97316}.timeline-alert.warning{color:var(--warning)}.timeline-alert.safe{color:var(--success)}
+.timeline-empty{padding:28px;text-align:center;color:var(--muted);font-size:.76rem}
+@media(max-width:1200px){.timeline-controls{grid-template-columns:repeat(3,minmax(130px,1fr))}}
+@media(max-width:800px){.timeline-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.timeline-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.timeline-controls{grid-template-columns:1fr}.timeline-summary{grid-template-columns:1fr 1fr}}
+
+</style>
+<style id="expiration-snapshot-styles">
+/* Expiration Timeline snapshot workflow */
+.timeline-view-actions{display:flex;align-items:center;gap:8px}.timeline-snapshot-btn{white-space:nowrap}.timeline-select-bar{display:none;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--primary) 6%,var(--solid))}.timeline-select-bar.active{display:flex}.timeline-select-count{margin-right:auto;color:var(--muted);font-size:.68rem;font-weight:800}.timeline-select-cell{display:none;align-items:center;justify-content:center;padding:0!important}.timeline-selection-mode .timeline-select-cell{display:flex}.timeline-selection-mode .timeline-table-head,.timeline-selection-mode .timeline-row{grid-template-columns:34px minmax(155px,.85fr) minmax(340px,2fr) minmax(110px,.55fr)}.timeline-selection-mode .timeline-category-header{padding-left:44px}.timeline-row.selected{background:color-mix(in srgb,var(--primary) 10%,var(--solid));box-shadow:inset 3px 0 var(--primary)}.timeline-row-check{width:15px;height:15px;accent-color:var(--primary);cursor:pointer}
+.snapshot-overlay{position:fixed;inset:0;z-index:700;display:grid;place-items:center;padding:16px;background:rgba(7,17,31,.82);backdrop-filter:blur(5px)}.snapshot-overlay.hidden{display:none}.snapshot-dialog{width:min(1180px,98vw);max-height:96vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--solid);box-shadow:0 24px 70px rgba(0,0,0,.32)}.snapshot-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line)}.snapshot-dialog-head h3,.snapshot-dialog-head p{margin:0}.snapshot-dialog-head p{margin-top:3px;color:var(--muted);font-size:.68rem}.snapshot-dialog-actions{display:flex;flex-wrap:wrap;gap:7px}.snapshot-preview-wrap{overflow:auto;padding:12px;background:#d9dee7}.snapshot-preview-wrap img{display:block;max-width:100%;height:auto;margin:auto;box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.snapshot-canvas{position:fixed;left:-20000px;top:0;width:1120px;padding:12px;background:#fff;color:#1f2937;font-family:Inter,"Segoe UI",Arial,sans-serif}.snapshot-canvas *{box-sizing:border-box}.snapshot-brand{display:flex;justify-content:space-between;align-items:end;padding:0 2px 7px;border-bottom:2px solid #c8102e}.snapshot-brand h2,.snapshot-brand p{margin:0}.snapshot-brand h2{font-size:16px}.snapshot-brand p{font-size:9px;color:#667085}.snapshot-generated{font-size:8px;color:#667085}.snapshot-table-head,.snapshot-row{display:grid;grid-template-columns:390px minmax(0,1fr) 150px}.snapshot-table-head{background:#272d3e;color:#fff;font-size:8px;font-weight:900;text-transform:uppercase}.snapshot-table-head>div{padding:4px 7px}.snapshot-group{display:flex;align-items:center;height:18px;padding:0 7px;background:#f2f4f7;border:1px solid #d7dce3;border-top:0;color:#344054;font-size:8px;font-weight:900;text-transform:uppercase}.snapshot-row{min-height:36px;border:1px solid #d7dce3;border-top:0;background:#fff}.snapshot-contract,.snapshot-life,.snapshot-alert{min-width:0;padding:3px 7px}.snapshot-contract,.snapshot-life{display:flex;flex-direction:column;justify-content:center}.snapshot-contract strong,.snapshot-contract span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.snapshot-contract strong{font-size:8.5px}.snapshot-contract span{color:#667085;font-size:7px}.snapshot-life{border-left:1px solid #d7dce3;border-right:1px solid #d7dce3}.snapshot-dates{display:flex;justify-content:space-between;font-size:6.8px;color:#667085;line-height:1}.snapshot-dates b{color:#344054}.snapshot-track{position:relative;width:94%;height:4px;margin:3px auto 7px;border-radius:99px;background:#d7dce3}.snapshot-fill{height:4px;border-radius:99px;background:linear-gradient(90deg,#c8102e,#272d3e)}.snapshot-today{position:absolute;top:-3px;width:1.5px;height:10px;background:#111827;transform:translateX(-50%)}.snapshot-today:before{content:'Today';position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:5.5px;font-weight:900;line-height:1;white-space:nowrap}.snapshot-expiry{position:absolute;top:-2px;right:0;width:1.5px;height:8px;background:#c8102e}.snapshot-alert{display:flex;align-items:center;justify-content:center;text-align:center;font-size:7.5px;font-weight:900}.snapshot-alert.expired{color:#c8102e}.snapshot-alert.critical{color:#ea580c}.snapshot-alert.warning{color:#b77900}.snapshot-alert.safe{color:#15805f}@media(max-width:800px){.timeline-view-head{align-items:flex-start}.timeline-view-actions{flex-wrap:wrap;justify-content:flex-end}.snapshot-dialog-head{align-items:flex-start;flex-direction:column}.snapshot-dialog-actions{width:100%}}
+
+</style>
+<style id="supply-export-styles">
+.section-head{display:flex;align-items:center;gap:12px}.section-head hr{flex:1}.section-head h2{margin:0}.section-head-actions{margin-left:auto;display:flex;align-items:center}.export-supply-btn[hidden]{display:none!important}@media(max-width:680px){.section-head{flex-wrap:wrap}.section-head hr{flex-basis:100%}.section-head-actions{width:100%;justify-content:flex-end}}
+</style>
+<style id="tax-reform-styles">.tax-reform-btn{width:100%;min-height:40px;margin-bottom:12px;text-align:left;border:0;border-radius:8px;padding:10px 12px;background:transparent;color:#e6cfd3;font-size:12px;font-weight:700;cursor:pointer}.tax-reform-btn:hover,.tax-reform-btn.active{background:rgba(255,255,255,.13);color:#fff}.tax-info{display:none;margin:0 0 12px;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--solid);color:var(--muted);font-size:.72rem}.tax-info.active{display:block}.tax-active #thead th,.tax-active #tbody td{text-align:center!important;vertical-align:middle!important}.tax-active #tbody .actions{justify-content:center!important}.tax-active #tbody .pill,.tax-active #tbody .attachment-btn{margin-left:auto!important;margin-right:auto!important}.tax-overlay{position:fixed;inset:0;z-index:760;display:grid;place-items:center;padding:18px;background:rgba(7,17,31,.82);backdrop-filter:blur(5px)}.tax-overlay.hidden{display:none}.tax-dialog{width:min(520px,96vw);overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--solid);box-shadow:var(--shadow)}.tax-body{display:grid;gap:13px;padding:18px}.tax-ref{padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--input)}.tax-ref strong,.tax-ref span{display:block}.tax-ref span{margin-top:3px;color:var(--muted)}</style><style id="tax-edit-fixes">
+#taxSentDate{cursor:pointer;pointer-events:auto!important;opacity:1!important}
+#taxSentDate::-webkit-calendar-picker-indicator{cursor:pointer;opacity:1}
+#taxError:not(:empty){display:block!important;margin-top:4px;padding:9px 10px;border:1px solid color-mix(in srgb,var(--danger) 55%,var(--line));border-radius:8px;background:color-mix(in srgb,var(--danger) 10%,var(--solid));color:var(--danger);font-weight:800}
+#taxSave:disabled{cursor:wait;opacity:.72}
+</style>
+<style id="tax-reform-compact-table">
+.tax-active .table-wrap{overflow-x:auto!important}.tax-active table{width:100%!important;min-width:0!important;table-layout:auto!important}.tax-active #thead th,.tax-active #tbody td{padding:5px 6px!important;font-size:.65rem!important;line-height:1.12!important;white-space:normal!important;overflow-wrap:anywhere!important;vertical-align:middle!important;text-align:center!important}.tax-active #thead th{font-size:.58rem!important;line-height:1.05!important}.tax-active #tbody tr{height:auto!important;min-height:0!important}.tax-active #thead th:nth-child(1),.tax-active #tbody td:nth-child(1){width:19%;min-width:105px;max-width:178px}.tax-active #thead th:nth-child(2),.tax-active #tbody td:nth-child(2){width:16%;min-width:96px;max-width:150px}.tax-active #thead th:nth-child(3),.tax-active #tbody td:nth-child(3){width:13%;min-width:84px;max-width:122px}.tax-active #thead th:nth-child(4),.tax-active #tbody td:nth-child(4){width:10%;min-width:72px;max-width:94px}.tax-active #thead th:nth-child(5),.tax-active #tbody td:nth-child(5){width:10%;min-width:74px;max-width:96px}.tax-active #thead th:nth-child(6),.tax-active #tbody td:nth-child(6){width:11%;min-width:78px;max-width:104px}.tax-active #thead th:nth-child(7),.tax-active #tbody td:nth-child(7){width:11%;min-width:78px;max-width:104px}.tax-active #thead th:nth-child(8),.tax-active #tbody td:nth-child(8){width:10%;min-width:72px;max-width:92px}.tax-active #tbody .pill{display:inline-flex!important;justify-content:center!important;max-width:100%!important;padding:3px 5px!important;font-size:.59rem!important;line-height:1!important;white-space:normal!important;text-align:center!important}.tax-active #tbody .attachment-btn,.tax-active #tbody .action-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;max-width:100%!important;padding:4px 6px!important;font-size:.59rem!important;line-height:1!important;white-space:normal!important;text-align:center!important}.tax-active #tbody .actions{gap:3px!important;flex-wrap:wrap!important;justify-content:center!important}@media(max-width:900px){.tax-active table{min-width:780px!important}}
+<style id="tax-sent-date-check-style">
+.tax-active .sent-date-check{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;margin-left:5px;border-radius:50%;background:var(--success);color:#fff;font-size:.68rem;font-weight:900;line-height:1;vertical-align:middle}
+
+.tax-active .signature-date-check{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;margin-left:5px;border-radius:50%;background:var(--success);color:#fff;font-size:.68rem;font-weight:900;line-height:1;vertical-align:middle}
+</style>
+</style>
+<style id="tax-date-check-pill-style">
+.tax-active .date-check-pill{display:inline-flex;align-items:center;justify-content:center;min-width:24px;padding:3px 8px;margin-left:6px;vertical-align:middle}
+.tax-active .field small{display:block;margin-top:6px;color:var(--muted);font-size:.75rem}
+</style>
+
+<style id="standaloneContractLayout">
+  html,body{width:100%;min-height:100%;margin:0;overflow-x:hidden}
+  .app,.app.sidebar-collapsed{display:grid!important;grid-template-columns:290px minmax(0,1fr)!important;min-height:100vh!important}
+  .side,.app.sidebar-collapsed .side{position:sticky!important;left:0!important;top:0!important;width:290px!important;height:100vh!important;min-height:100vh!important;opacity:1!important;transform:none!important;pointer-events:auto!important;overflow-y:auto!important;display:flex!important}
+  .main,.app.sidebar-collapsed .main{width:100%!important;max-width:none!important;margin:0!important;min-width:0!important}
+  .nav{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:6px!important}
+  .nav button,.timeline-nav-btn,.tax-reform-btn{width:100%!important;text-align:left!important;justify-content:flex-start!important;white-space:normal!important}
+  .menu-toggle,#menuToggle,[aria-label="Open menu"],[aria-label="Close menu"],.floating-logo,.mobile-backdrop{display:none!important}
+  @media(max-width:900px){
+    .app,.app.sidebar-collapsed .app{grid-template-columns:230px minmax(0,1fr)!important}
+    .side,.app.sidebar-collapsed .side{width:230px!important}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<div id="mobileBackdrop" class="mobile-backdrop" aria-hidden="true"></div>
+<aside class="side" id="sidebar">
+  <div class="brand"><img class="brand-logo" src="favicon.png" alt="Company logo"><div><h1>Contract Management</h1><p>Online contract database</p></div></div>
+  <div class="theme-row"><span id="themeLabel">Dark theme</span><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch theme"><i></i></button></div>
+  <label class="muted">CONTRACT CATEGORY</label>
+  <nav class="nav"><button data-tab="comodato" class="active">Tooling Loan Agreements</button><button data-tab="fornecimento">Supply Agreements</button><button data-tab="distrato">Terminations</button></nav>
+  <div class="nav-separator"></div>
+  <button id="timelineTab" class="btn timeline-nav-btn" type="button">Expiration Timelines</button>
+<button id="taxReformTab" class="tax-reform-btn" type="button">Tax Reform Addendum</button>
+  <div class="muted"><span id="syncDot" class="sync-dot"></span><span id="syncText">Conectando...</span></div>
+</aside>
+<main class="main">
+  <div class="dashboard-tools"><button id="menuToggle" class="menu-toggle" type="button" aria-label="Recolher menu lateral" aria-controls="sidebar" aria-expanded="true">☰</button><img class="floating-logo" src="favicon.png" alt="Company logo"></div>
+  <header class="top"><div><h2>Contract Management</h2><p id="loadInfo" hidden aria-live="polite"></p></div><button id="topNewRecord" class="btn btn-primary">＋ Novo registro</button></header>
+  <section class="section-head"><hr><h2 id="pageTitle">Tooling Loan Agreements</h2><div class="section-head-actions"><button id="exportSupplyXlsx" class="btn btn-primary export-supply-btn" type="button" hidden>Export Excel (.xlsx)</button></div></section>
+  <section class="kpis">
+    <div class="card"><div><p>Total records</p><h3 id="kpiRecords">0</h3></div><span class="kpi-icon records">▤</span></div>
+    <div class="card"><div><p>Distinct contracts</p><h3 id="kpiContracts">0</h3></div><span class="kpi-icon contracts">▣</span></div>
+    <div class="card"><div><p>Suppliers</p><h3 id="kpiSuppliers">0</h3></div><span class="kpi-icon suppliers">◆</span></div>
+    <div class="card"><div><p>Average progress</p><h3 id="kpiProgress">0%</h3></div><span class="kpi-icon progress-icon">↗</span></div>
+  </section>
+  <section class="table-section">
+    <div class="title"><div><h3>Analytical Table</h3><p>Cadastre, edite e exclua registros diretamente no Supabase</p></div><span id="tableCount"></span></div>
+    <div class="filter-panel"><div class="filter-grid">
+      <div class="field"><label>Search</label><input id="search" type="search" placeholder="Number, supplier, project, status..."></div>
+      <div class="field"><label>Supplier</label><select id="supplier"><option value="">All suppliers</option></select></div>
+      <div class="field"><label>Status</label><select id="status"><option value="">All statuses</option></select></div>
+      <div class="field"><label>Sort</label><select id="sort"><option value="created_desc">Date: newest</option><option value="created_asc">Date: oldest</option><option value="expiry_asc">Expiration: nearest</option><option value="progress_desc">Progress: highest</option><option value="supplier_asc">Supplier A-Z</option></select></div>
+      <button id="clearFilters" class="btn">Clear</button>
+    </div></div>
+    <div class="wrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+  </section>
+  <section id="timelineView" class="timeline-view" aria-labelledby="timelineTitle">
+    <div class="timeline-view-head"><div><h2 id="timelineTitle">Expiration Timelines</h2><p>Consolidated and validated contract expiration view.</p></div><div class="timeline-view-actions"><button id="snapshotModeButton" class="btn btn-primary timeline-snapshot-btn" type="button">Snapshot</button></div></div>
+    <div class="timeline-section">
+      <div class="timeline-header">
+        <div><h3>Contract Expiration Timeline</h3><p>One consolidated line per contract. Terminations are excluded.</p></div>
+        <div class="timeline-controls">
+          <div class="field"><label for="timelineCategory">Contract type</label><select id="timelineCategory"><option value="all">All contract types</option><option value="comodato">Tooling Loan Agreements</option><option value="fornecimento">Supply Agreements</option></select></div>
+          <div class="field"><label for="timelineSupplier">Supplier</label><select id="timelineSupplier"><option value="">All suppliers</option></select></div>
+          <div class="field"><label for="timelineContract">Contract</label><select id="timelineContract"><option value="">All contracts</option></select></div>
+          <div class="field"><label for="timelinePeriod">Expiration period</label><select id="timelinePeriod"><option value="all">All dates</option><option value="expired">Expired</option><option value="30">Next 30 days</option><option value="60">Next 60 days</option><option value="90">Next 90 days</option><option value="180">Next 180 days</option><option value="365">Next 12 months</option><option value="missing">Missing expiration date</option></select></div>
+          <div class="field"><label for="timelineSort">Sort by</label><select id="timelineSort"><option value="expiry_asc">Expiration: nearest</option><option value="expiry_desc">Expiration: farthest</option><option value="supplier_asc">Supplier A-Z</option><option value="contract_asc">Contract A-Z</option></select></div>
+          <div class="field"><label for="timelineSearch">Search</label><input id="timelineSearch" type="search" placeholder="Contract, supplier, or project"></div>
+        </div>
+      </div>
+      <div id="timelineSelectBar" class="timeline-select-bar"><span id="timelineSelectCount" class="timeline-select-count">0 contracts selected</span><button id="selectAllTimeline" class="btn" type="button">Select visible</button><button id="clearTimelineSelection" class="btn" type="button">Clear</button><button id="generateSnapshot" class="btn btn-primary" type="button" disabled>Generate snapshot</button><button id="cancelTimelineSelection" class="btn" type="button">Cancel</button></div>
+      <div class="timeline-summary">
+        <div class="timeline-summary-card"><span class="summary-dot expired"></span><div><strong id="timelineExpired">0</strong><small>Expired</small></div></div>
+        <div class="timeline-summary-card"><span class="summary-dot critical"></span><div><strong id="timelineCritical">0</strong><small>Within 30 days</small></div></div>
+        <div class="timeline-summary-card"><span class="summary-dot warning"></span><div><strong id="timelineWarning">0</strong><small>31 to 90 days</small></div></div>
+        <div class="timeline-summary-card"><span class="summary-dot safe"></span><div><strong id="timelineSafe">0</strong><small>More than 90 days</small></div></div>
+      </div>
+      <div class="timeline-table"><div class="timeline-table-head"><div class="timeline-select-cell">✓</div><div>Contract</div><div>Contract lifetime</div><div>Expiration alert</div></div><div id="timelineBody" class="timeline-body"></div></div>
+    </div>
+  </section>
+
+</main>
+</div>
+<div id="toast" class="toast"></div>
+<div id="snapshotOverlay" class="snapshot-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="snapshotDialogTitle">
+  <div class="snapshot-dialog">
+    <div class="snapshot-dialog-head">
+      <div><h3 id="snapshotDialogTitle">Expiration Timeline Snapshot</h3><p id="snapshotDialogInfo">Compact PNG preview of the selected contracts.</p></div>
+      <div class="snapshot-dialog-actions"><button id="copySnapshot" class="btn btn-primary" type="button">Copy image</button><button id="downloadSnapshot" class="btn" type="button">Download PNG</button><button id="closeSnapshot" class="btn" type="button">Close</button></div>
+    </div>
+    <div class="snapshot-preview-wrap"><img id="snapshotPreview" alt="Expiration timeline snapshot preview"></div>
+  </div>
+</div>
+<div id="snapshotCanvas" class="snapshot-canvas" aria-hidden="true"></div>
+
+<div id="recordOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="recordTitle"><div class="dialog"><div class="dialog-head"><div><h3 id="recordTitle">Novo registro</h3><p id="recordSubtitle">Preencha os dados do contrato</p></div><button id="closeRecord" class="close-btn" type="button">×</button></div><form id="recordForm"><div class="form-body"><div class="field full" style="margin-bottom:13px"><label class="required">Categoria</label><select id="recordCategory" required><option value="comodato">Tooling Loan Agreements</option><option value="fornecimento">Supply Agreements</option><option value="distrato">Terminations</option></select></div><div id="dynamicFields" class="form-grid"></div><div id="formError" class="form-error"></div></div><div class="form-actions"><button id="cancelRecord" class="btn" type="button">Cancelar</button><button id="saveRecord" class="btn btn-primary" type="submit">Salvar no Supabase</button></div></form></div></div>
+<div id="taxOverlay" class="tax-overlay hidden"><div class="tax-dialog"><div class="dialog-head"><div><h3>Tax Reform Addendum</h3><p>Update the fields displayed in the Tax Reform Addendum table.</p></div><button id="taxClose" class="close-btn" type="button">×</button></div><form id="taxForm"><div class="tax-body"><div id="taxRef" class="tax-ref"></div><div class="field"><label for="taxNumber">Tax Reform Addendum</label><input id="taxNumber" type="text" placeholder="Enter contract number"></div><div class="field"><label for="taxSentDate">Addendum Sent to Supplier</label><input id="taxSentDate" type="date"><small>Date displayed as DD/MM/YYYY.</small></div><div class="field"><label for="taxSignatureDate">Signature Date</label><input id="taxSignatureDate" type="date"><small>Date displayed as DD/MM/YYYY.</small></div><div class="field"><label for="taxStatus">General Status</label><select id="taxStatus"><option>PENDING</option><option>ON GOING</option><option>CONCLUDED</option><option>CANCELLED</option><option>N/A</option></select></div><div class="field"><label for="taxAttachment">Attachment URL</label><input id="taxAttachment" type="url" placeholder="https://..."></div><div id="taxError" class="form-error"></div></div><div class="form-actions"><button id="taxCancel" class="btn" type="button">Cancel</button><button id="taxSave" class="btn btn-primary" type="submit">Save</button></div></form></div></div><div id="deleteOverlay" class="overlay hidden" role="dialog" aria-modal="true"><div class="dialog" style="width:min(520px,96vw)"><div class="dialog-head"><div><h3>Excluir registro</h3><p>Esta ação apaga a linha no Supabase</p></div><button id="closeDelete" class="close-btn" type="button">×</button></div><div class="delete-box"><p>Deseja realmente excluir <strong id="deleteLabel"></strong>?</p><p class="muted">A exclusão é permanente.</p></div><div class="form-actions"><button id="cancelDelete" class="btn" type="button">Cancelar</button><button id="confirmDelete" class="btn btn-danger" type="button">Excluir definitivamente</button></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+const SUPABASE_URL='https://vrcylvpudnhdplpdohml.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_CeG6_XWzmWhaetSRpgFQXw_AjylU7ho';
+const {createClient}=window.supabase;
+const supabaseClient=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const AUTO_REFRESH_MS=60000;
+const schemas={
+ comodato:{title:'Tooling Loan Agreements',number:'Tooling Loan Agreement ID',fields:[['Project','text',false],['Supplier','text',true],['Tooling Loan Agreement ID','text',true],['Total Agreement Value','number',false],['Creation Date','date',false],['Renewal Date','date',false],['Expiration Date','date',false],['Custody Certificate Status','select',false],['Sales Invoice Status','select',false],['Tooling Loan Invoice Status','select',false],['Supplier Validation','select',false],['Agreement Invoice Signature Status','select',false],['Tooling Loan Agreement Signature Status','select',false],['General Status','select',false],['Overall Progression','progress',false],['Attachment URL','url',false]]},
+ fornecimento:{title:'Supply Agreements',number:'Contract Number',fields:[['Supplier','text',true],['Contract Number','text',true],['Creation Date','date',false],['Renewal Date','date',false],['Expiration Date','date',false],['Supplier Validation','select',false],['Contract Signature','select',false],['General Status','select',false],['Overall Progression','progress',false],['Attachment URL','url',false]]},
+ distrato:{title:'Terminations',number:'Contract Termination Number',fields:[['Supplier','text',true],['Contract Termination Number','text',true],['Creation Date','date',false],['Expiration Date','date',false],['Supplier Validation','select',false],['Contract Signature','select',false],['General Status','select',false],['Overall Progression','progress',false],['Attachment URL','url',false]]}
+};
+const statusOptions=['','PENDING','ON GOING','CONCLUDED','CANCELLED','ARCHIVED','N/A'];
+const state={active:'comodato',data:{comodato:[],fornecimento:[],distrato:[]},filtered:[],editing:null,deleting:null,loading:false,preferencesReady:false};
+const PREFERENCES_KEY='contractManagementPreferencesV1',DEFAULT_FILTERS={search:'',supplier:'',status:'',sort:'created_desc'};
+const $=id=>document.getElementById(id);
+const norm=v=>String(v??'').replace(/[\u00A0\u200B-\u200D\uFEFF]/g,' ').replace(/\s+/g,' ').trim();
+const esc=v=>norm(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function pct(v){const n=Number(String(v??0).replace('%','').replace(',','.'));return Number.isFinite(n)?Math.max(0,Math.min(100,Math.round(n<=1?n*100:n))):0}
+function parseDate(v){const s=norm(v);if(!s)return null;let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(m)return new Date(+m[3],+m[2]-1,+m[1]);const d=new Date(s);return Number.isNaN(d.getTime())?null:d}
+function isoDate(v){const d=parseDate(v);return d?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`:''}
+function fmtDate(v){const d=parseDate(v);return d?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',year:'numeric'}).format(d).replace('.',''):norm(v)||'-'}
+function readPreferences(){try{const s=JSON.parse(localStorage.getItem(PREFERENCES_KEY)||'null');return{active:schemas[s?.active]?s.active:'comodato',filtersByCategory:s?.filtersByCategory&&typeof s.filtersByCategory==='object'?s.filtersByCategory:{}}}catch{localStorage.removeItem(PREFERENCES_KEY);return{active:'comodato',filtersByCategory:{}}}}
+function captureFilters(){return{search:$('search').value,supplier:$('supplier').value,status:$('status').value,sort:$('sort').value}}
+function getSavedFilters(c){return{...DEFAULT_FILTERS,...(readPreferences().filtersByCategory?.[c]||{})}}
+function savePreferences(){if(!state.preferencesReady)return;const s=readPreferences();s.active=state.active;s.filtersByCategory[state.active]=captureFilters();localStorage.setItem(PREFERENCES_KEY,JSON.stringify(s))}
+function restoreFilters(f={}){$('search').value=f.search||'';$('supplier').value=[...$('supplier').options].some(o=>o.value===f.supplier)?f.supplier:'';$('status').value=[...$('status').options].some(o=>o.value===f.status)?f.status:'';$('sort').value=f.sort||'created_desc'}
+function toast(m){$('toast').textContent=m;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),3500)}
+function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem('contractTheme',t);const l=t==='light';$('themeToggle').classList.toggle('light',l);$('themeLabel').textContent=l?'Light theme':'Dark theme'}
+function initTheme(){setTheme(localStorage.getItem('contractTheme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}
+function setSync(l,t){$('syncDot').classList.toggle('loading',l);$('syncText').textContent=t}
+function optionList(v,l){return `<option value="">${l}</option>`+[...new Set(v.filter(Boolean))].sort().map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
+function populateFilters(){const r=state.data[state.active];$('supplier').innerHTML=optionList(r.map(x=>norm(x.Supplier)),'All suppliers');$('status').innerHTML=optionList(r.map(x=>norm(x['General Status'])),'All statuses')}
+function applyFilters(){const s=schemas[state.active],q=norm($('search').value).toLowerCase();state.filtered=state.data[state.active].filter(r=>(!q||s.fields.map(([n])=>r[n]).join(' ').toLowerCase().includes(q))&&(!$('supplier').value||norm(r.Supplier)===$('supplier').value)&&(!$('status').value||norm(r['General Status'])===$('status').value));const ts=(r,k)=>parseDate(r[k])?.getTime()||0,sorters={created_desc:(a,b)=>ts(b,'Creation Date')-ts(a,'Creation Date'),created_asc:(a,b)=>ts(a,'Creation Date')-ts(b,'Creation Date'),expiry_asc:(a,b)=>ts(a,'Expiration Date')-ts(b,'Expiration Date'),progress_desc:(a,b)=>pct(b['Overall Progression'])-pct(a['Overall Progression']),supplier_asc:(a,b)=>norm(a.Supplier).localeCompare(norm(b.Supplier))};state.filtered.sort(sorters[$('sort').value]||sorters.created_desc);render()}
+function displayValue(r,n){if(n.includes('Date'))return fmtDate(r[n]);if(n==='Overall Progression')return pct(r[n])+'%';if(n==='Total Agreement Value'){const x=Number(r[n]);return Number.isFinite(x)?x.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}):'-'}return norm(r[n])||'-'}
+function pillClass(v){const s=norm(v).toUpperCase();return s==='PENDING'?'pending':s==='ON GOING'?'ongoing':s==='CONCLUDED'?'concluded':''}
+function render(){const s=schemas[state.active],rows=state.filtered,visible=s.fields.map(x=>x[0]).filter(x=>x!=='Attachment URL');$('kpiRecords').textContent=rows.length;$('kpiContracts').textContent=new Set(rows.map(r=>norm(r[s.number])).filter(Boolean)).size;$('kpiSuppliers').textContent=new Set(rows.map(r=>norm(r.Supplier)).filter(Boolean)).size;$('kpiProgress').textContent=(rows.length?Math.round(rows.reduce((a,r)=>a+pct(r['Overall Progression']),0)/rows.length):0)+'%';$('tableCount').textContent=rows.length+' rows';$('thead').innerHTML='<tr>'+visible.map(x=>`<th>${esc(x)}</th>`).join('')+'<th>Attachment</th><th>Actions</th></tr>';$('tbody').innerHTML=rows.length?rows.map(r=>{const cells=visible.map(n=>{const v=displayValue(r,n);if(n==='Overall Progression')return `<td><strong>${v}</strong><div class="progress"><i style="width:${pct(r[n])}%"></i></div></td>`;if(n.includes('Status')||n.includes('Validation')||n.includes('Signature'))return `<td><span class="pill ${pillClass(r[n])}">${esc(v)}</span></td>`;return `<td>${esc(v)}</td>`}).join(''),u=norm(r['Attachment URL']),a=u?`<a class="attachment-btn" href="${esc(u)}" target="_blank" rel="noopener noreferrer">↗ Open</a>`:'<span class="attachment-btn disabled">No file</span>';return `<tr>${cells}<td>${a}</td><td><div class="actions"><button class="action-btn" data-edit="${esc(r.id)}">✎ Edit</button><button class="action-btn delete" data-delete="${esc(r.id)}">🗑 Delete</button></div></td></tr>`}).join(''):`<tr><td class="empty" colspan="${visible.length+2}">No data found.</td></tr>`;document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>openDelete(b.dataset.delete))}
+function switchTab(t,p=false){state.active=t;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));$('pageTitle').textContent=schemas[t].title;const f=p?captureFilters():getSavedFilters(t);populateFilters();restoreFilters(f);applyFilters();savePreferences()}
+async function loadDatabase({preserve=true,notify=false}={}){if(state.loading)return;state.loading=true;setSync(true,'Updating...');const active=state.active,filters=preserve?captureFilters():null;try{const [a,b,c]=await Promise.all(['comodato','fornecimento','distrato'].map(t=>supabaseClient.from(t).select('*').order('created_at',{ascending:false})));const failed=[a,b,c].find(x=>x.error);if(failed)throw failed.error;state.data={comodato:a.data??[],fornecimento:b.data??[],distrato:c.data??[]};state.active=active;populateFilters();if(filters)restoreFilters(filters);applyFilters();window.renderContractTimeline?.();window.taxReformAddendum?.refresh();const total=a.data.length+b.data.length+c.data.length,time=new Intl.DateTimeFormat('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date());$('loadInfo').textContent=`Database loaded • ${total} total rows • updated ${time}`;setSync(false,'Online • automatic refresh');if(notify)toast('Database loaded successfully.')}catch(e){console.error(e);$('loadInfo').textContent='Supabase load failed: '+e.message;setSync(false,'Connection error');toast('Unable to load database. Check RLS and permissions.')}finally{state.loading=false}}
+function fieldId(n){return'f_'+n.toLowerCase().replace(/[^a-z0-9]+/g,'_')}
+function renderFormFields(c,row={}){$('dynamicFields').innerHTML=schemas[c].fields.map(([n,t,req])=>{const id=fieldId(n),raw=row[n]??'',value=t==='date'?isoDate(raw):raw;let control;if(t==='select')control=`<select id="${id}" data-column="${esc(n)}" ${req?'required':''}>${statusOptions.map(x=>`<option value="${esc(x)}" ${norm(raw)===x?'selected':''}>${x||'Select...'}</option>`).join('')}</select>`;else if(t==='progress')control=`<input id="${id}" data-column="${esc(n)}" type="number" min="0" max="100" step="1" value="${pct(raw)}">`;else control=`<input id="${id}" data-column="${esc(n)}" type="${t}" ${t==='number'?'step="0.01" min="0"':''} value="${esc(value)}" ${req?'required':''} ${t==='url'?'placeholder="https://..."':''}>`;return `<div class="field ${n==='Attachment URL'?'full':''}"><label class="${req?'required':''}" for="${id}">${esc(n)}</label>${control}</div>`}).join('')}
+function openNew(){state.editing=null;$('recordTitle').textContent='New record';$('recordSubtitle').textContent='The record will be saved directly to Supabase';$('recordCategory').disabled=false;$('recordCategory').value=state.active;renderFormFields(state.active);$('formError').textContent='';$('recordOverlay').classList.remove('hidden')}
+function openEdit(id){const r=state.data[state.active].find(x=>String(x.id)===String(id));if(!r)return;state.editing={category:state.active,id:r.id,row:r};$('recordTitle').textContent='Edit record';$('recordSubtitle').textContent=norm(r[schemas[state.active].number]);$('recordCategory').value=state.active;$('recordCategory').disabled=true;renderFormFields(state.active,r);$('formError').textContent='';$('recordOverlay').classList.remove('hidden')}
+function closeRecord(){$('recordOverlay').classList.add('hidden');state.editing=null;$('recordForm').reset()}
+function collectForm(){const category=$('recordCategory').value,payload={};document.querySelectorAll('#dynamicFields [data-column]').forEach(el=>{const n=el.dataset.column;let v=el.value.trim();if(n==='Overall Progression')v=Math.max(0,Math.min(100,Number(v)||0))/100;else if(n==='Total Agreement Value')v=v===''?null:Number(v);payload[n]=v===''?null:v});return{category,payload}}
+function validatePayload(c,p){for(const[n,,req]of schemas[c].fields)if(req&&!norm(p[n]))return`Complete the required field: ${n}.`;const u=norm(p['Attachment URL']);if(u){try{const x=new URL(u);if(!['http:','https:'].includes(x.protocol))throw 0}catch{return'Enter a valid URL beginning with http:// or https://.'}}return''}
+function dbError(e){const m=e?.message||String(e);if(m.includes('row-level security'))return'Supabase blocked the operation due to RLS.';if(m.includes('duplicate key'))return'A record with this contract number already exists.';if(m.includes('permission denied'))return'The public key does not have write permission.';return m}
+async function saveRecord(e){e.preventDefault();const{category,payload}=collectForm(),error=validatePayload(category,payload);if(error){$('formError').textContent=error;return}const b=$('saveRecord');b.disabled=true;b.textContent='Saving...';try{const editing=!!state.editing,result=editing?await supabaseClient.from(category).update(payload).eq('id',state.editing.id).select():await supabaseClient.from(category).insert(payload).select();if(result.error)throw result.error;closeRecord();state.active=category;await loadDatabase({preserve:false});switchTab(category);window.renderContractTimeline?.();toast(editing?'Record updated.':'Record added.')}catch(e){console.error(e);$('formError').textContent=dbError(e)}finally{b.disabled=false;b.textContent='Save to Supabase'}}
+function openDelete(id){const r=state.data[state.active].find(x=>String(x.id)===String(id));if(!r)return;state.deleting={category:state.active,id:r.id,row:r};$('deleteLabel').textContent=norm(r[schemas[state.active].number])||id;$('deleteOverlay').classList.remove('hidden')}
+function closeDelete(){$('deleteOverlay').classList.add('hidden');state.deleting=null}
+async function confirmDelete(){if(!state.deleting)return;const b=$('confirmDelete');b.disabled=true;b.textContent='Deleting...';try{const r=await supabaseClient.from(state.deleting.category).delete().eq('id',state.deleting.id);if(r.error)throw r.error;closeDelete();await loadDatabase({preserve:true});toast('Record deleted.')}catch(e){toast(dbError(e))}finally{b.disabled=false;b.textContent='Delete permanently'}}
+Object.assign(window,{schemas,state,norm,esc,parseDate,loadDatabase});
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{savePreferences();switchTab(b.dataset.tab)});['search','supplier','status','sort'].forEach(id=>$(id).addEventListener('input',()=>{applyFilters();savePreferences()}));$('clearFilters').onclick=()=>{['search','supplier','status'].forEach(id=>$(id).value='');$('sort').value='created_desc';applyFilters();savePreferences()};$('themeToggle').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');$('topNewRecord').onclick=openNew;$('recordCategory').onchange=e=>renderFormFields(e.target.value);$('recordForm').onsubmit=saveRecord;$('closeRecord').onclick=closeRecord;$('cancelRecord').onclick=closeRecord;$('closeDelete').onclick=closeDelete;$('cancelDelete').onclick=closeDelete;$('confirmDelete').onclick=confirmDelete;$('recordOverlay').onclick=e=>{if(e.target===$('recordOverlay'))closeRecord()};$('deleteOverlay').onclick=e=>{if(e.target===$('deleteOverlay'))closeDelete()};document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRecord();closeDelete()}});
+
+// Menu lateral: recolhimento total no desktop e gaveta no celular
+const appShell=document.getElementById('app');
+const menuToggle=document.getElementById('menuToggle');
+const mobileBackdrop=document.getElementById('mobileBackdrop');
+const SIDEBAR_KEY='contractSidebarCollapsedV2';
+function isMobileSidebar(){return window.matchMedia('(max-width:800px)').matches}
+function updateSidebarA11y(){
+ const expanded=isMobileSidebar()?appShell.classList.contains('sidebar-open'):!appShell.classList.contains('sidebar-collapsed');
+ menuToggle.setAttribute('aria-expanded',String(expanded));
+ menuToggle.setAttribute('aria-label',expanded?'Recolher menu lateral':'Expandir menu lateral');
+}
+function toggleSidebar(){
+ if(isMobileSidebar()) appShell.classList.toggle('sidebar-open');
+ else{
+  appShell.classList.toggle('sidebar-collapsed');
+  localStorage.setItem(SIDEBAR_KEY,String(appShell.classList.contains('sidebar-collapsed')));
+ }
+ updateSidebarA11y();
+}
+function closeMobileSidebar(){if(isMobileSidebar()){appShell.classList.remove('sidebar-open');updateSidebarA11y()}}
+function initSidebar(){
+ if(!isMobileSidebar()&&localStorage.getItem(SIDEBAR_KEY)==='true') appShell.classList.add('sidebar-collapsed');
+ appShell.classList.remove('sidebar-open');updateSidebarA11y();
+}
+menuToggle.addEventListener('click',toggleSidebar);
+mobileBackdrop.addEventListener('click',closeMobileSidebar);
+document.querySelectorAll('.side .nav button,.side .timeline-nav-btn').forEach(el=>el.addEventListener('click',closeMobileSidebar));
+window.addEventListener('resize',()=>{appShell.classList.remove('sidebar-open');updateSidebarA11y()});
+initSidebar();
+
+window.addEventListener('load',async()=>{initTheme();const p=readPreferences();state.active=p.active;await loadDatabase({preserve:false,notify:true});document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.active));$('pageTitle').textContent=schemas[state.active].title;populateFilters();restoreFilters(getSavedFilters(state.active));applyFilters();state.preferencesReady=true;savePreferences();setInterval(()=>{if(!document.hidden)loadDatabase({preserve:true})},AUTO_REFRESH_MS)});document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDatabase({preserve:true})});
+</script>
+<script id="tax-reform-script">(function(){
+'use strict';
+const $=id=>document.getElementById(id),TABLE='tax_reform_addendum',SIGNATURE_DATE_KEY='taxReformSignatureDateV1';let active=false,editKey='',records=[];const readSignatureDates=()=>{try{return JSON.parse(localStorage.getItem(SIGNATURE_DATE_KEY)||'{}')||{}}catch{return{}}},signatureDateFor=k=>norm(readSignatureDates()[k]),saveSignatureDate=(k,v)=>{const data=readSignatureDates();if(norm(v))data[k]=norm(v);else delete data[k];localStorage.setItem(SIGNATURE_DATE_KEY,JSON.stringify(data))};
+const key=(supplier,contract)=>`${norm(supplier).toLowerCase()}|${norm(contract).toLowerCase()}`;
+function fmtTaxDate(value){const text=norm(value);if(!text)return '-';const match=text.match(/^(\d{4})-(\d{2})-(\d{2})/);return match?`${match[3]}/${match[2]}/${match[1]}`:text}
+function mapRecords(data){records=(data||[]).map(r=>({id:r.id,key:key(r.supplier,r.supply_contract_number),supply:norm(r.supplier)||'-',sourceContract:norm(r.supply_contract_number),addendum:norm(r.tax_reform_addendum_number)||'-',status:norm(r.status)||'PENDING',sent:(norm(r.addendum_sent)||'PENDING').toUpperCase(),sentDate:norm(r.sent_date),attachment:norm(r.attachment_url),signatureDate:signatureDateFor(key(r.supplier,r.supply_contract_number))}));}
+async function loadTaxRecords(){const {data,error}=await supabaseClient.from(TABLE).select('*').order('updated_at',{ascending:false});if(error)throw error;mapRecords(data);}
+function rows(){const byKey=new Map(records.map(r=>[r.key,r]));return(state.data.fornecimento||[]).map(source=>{const supplier=norm(source.Supplier)||'-',sourceContract=norm(source['Contract Number']),stored=byKey.get(key(supplier,sourceContract));return stored||{id:null,key:key(supplier,sourceContract),supply:supplier,sourceContract,addendum:'-',status:'PENDING',sent:'PENDING',sentDate:'',attachment:'',signatureDate:signatureDateFor(key(supplier,sourceContract))}})}
+function pill(v){const upper=norm(v).toUpperCase();return`<span class="pill ${upper==='PENDING'?'pending':upper==='ON GOING'?'ongoing':upper==='CONCLUDED'||upper==='OK'?'concluded':''}">${esc(v)}</span>`}
+function filtered(){let a=rows(),q=norm($('search').value).toLowerCase(),sup=$('supplier').value,st=$('status').value;if(q)a=a.filter(r=>[r.supply,r.addendum,r.status,r.sent,r.sentDate,r.signatureDate].join(' ').toLowerCase().includes(q));if(sup)a=a.filter(r=>r.supply===sup);if(st)a=a.filter(r=>r.status===st);a.sort($('sort').value==='supplier_asc'?(a,b)=>a.supply.localeCompare(b.supply):(a,b)=>a.addendum.localeCompare(b.addendum));return a}
+function populate(){const a=rows(),sup=$('supplier'),st=$('status'),os=sup.value,ot=st.value;sup.innerHTML=`<option value="">All suppliers</option>`+[...new Set(a.map(r=>r.supply))].sort().map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');st.innerHTML=`<option value="">All statuses</option>`+[...new Set(a.map(r=>r.status))].sort().map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');sup.value=[...sup.options].some(o=>o.value===os)?os:'';st.value=[...st.options].some(o=>o.value===ot)?ot:''}
+function render(){const a=filtered();$('kpiRecords').textContent=a.length;$('kpiContracts').textContent=new Set(a.map(r=>r.addendum).filter(v=>v&&v!=='-')).size;$('kpiSuppliers').textContent=new Set(a.map(r=>r.supply)).size;$('kpiProgress').textContent=Math.round(a.filter(r=>r.status==='CONCLUDED').length/(a.length||1)*100)+'%';$('tableCount').textContent=a.length+' rows';$('thead').innerHTML='<tr><th>Supplier</th><th>Tax Reform Addendum</th><th>Addendum Sent to Supplier</th><th>Signature Date</th><th>General Status</th><th>Attachment</th><th>Actions</th></tr>';$('tbody').innerHTML=a.length?a.map(r=>`<tr><td>${esc(r.supply)}</td><td>${esc(r.addendum)}</td><td>${r.sentDate?`${esc(fmtTaxDate(r.sentDate))} <span class="pill concluded date-check-pill" title="Addendum sent" aria-label="Addendum sent">✓</span>`:'-'}</td><td>${r.signatureDate?`${esc(fmtTaxDate(r.signatureDate))} <span class="pill concluded date-check-pill" title="Signature completed" aria-label="Signature completed">✓</span>`:'-'}</td><td>${pill(r.status)}</td><td>${r.attachment?`<a class="attachment-btn" href="${esc(r.attachment)}" target="_blank" rel="noopener noreferrer">↗ Open</a>`:'<span class="attachment-btn disabled">No file</span>'}</td><td><div class="actions"><button class="action-btn" data-tax="${esc(r.key)}">✎ Edit</button></div></td></tr>`).join(''):'<tr><td class="empty" colspan="7">No data found.</td></tr>';document.querySelectorAll('[data-tax]').forEach(b=>b.onclick=()=>open(b.dataset.tax))}
+function open(k){const r=rows().find(x=>x.key===k);if(!r)return;editKey=k;$('taxRef').innerHTML=`<strong>${esc(r.supply)}</strong>`;$('taxNumber').value=r.addendum==='-'?'':r.addendum;$('taxSentDate').value=r.sentDate||'';$('taxSignatureDate').value=r.signatureDate||'';$('taxStatus').value=r.status;$('taxAttachment').value=r.attachment;$('taxError').textContent='';$('taxOverlay').classList.remove('hidden')}
+function close(){$('taxOverlay').classList.add('hidden');editKey=''}
+async function save(e){e.preventDefault();e.stopPropagation();$('taxError').textContent='';const row=rows().find(x=>x.key===editKey);if(!row){$('taxError').textContent='The selected Supply Agreement could not be found. Close and open Edit again.';return}const sentDate=$('taxSentDate').value,signatureDate=$('taxSignatureDate').value,sent=sentDate?'OK':'PENDING',url=norm($('taxAttachment').value);if(url){try{const u=new URL(url);if(!['http:','https:'].includes(u.protocol))throw new Error()}catch{$('taxError').textContent='Enter a valid URL beginning with http:// or https://.';$('taxAttachment').focus();return}}const payload={supplier:row.supply,supply_contract_number:row.sourceContract,tax_reform_addendum_number:norm($('taxNumber').value)||null,status:$('taxStatus').value,addendum_sent:sent,sent_date:sentDate||null,attachment_url:url||null,updated_at:new Date().toISOString()};const button=$('taxForm').querySelector('[type="submit"]');button.disabled=true;button.textContent='Saving...';try{const {data,error}=await supabaseClient.from(TABLE).upsert(payload,{onConflict:'supplier,supply_contract_number'}).select('id').single();if(error)throw error;if(!data?.id)throw new Error('Supabase did not return the saved record. Check table permissions and RLS policies.');saveSignatureDate(row.key,signatureDate);await loadTaxRecords();close();populate();render();toast('Tax Reform Addendum saved in Supabase.')}catch(error){console.error('Tax Reform Addendum save failed:',error);$('taxError').textContent=dbError(error)}finally{button.disabled=false;button.textContent='Save'}}
+async function show(){active=true;document.body.classList.add('tax-active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));$('timelineTab').classList.remove('active');$('taxReformTab').classList.add('active');$('timelineView').classList.remove('active');[document.querySelector('.top'),document.querySelector('.section-head'),document.querySelector('.kpis'),document.querySelector('.table-section')].forEach(n=>n&&(n.hidden=false));$('pageTitle').textContent='Tax Reform Addendum';$('topNewRecord').hidden=true;$('exportSupplyXlsx').hidden=true;$('search').value='';try{await loadTaxRecords();populate();render()}catch(error){console.error(error);toast('Unable to load Tax Reform Addendum table. Run the provided SQL in Supabase.')}}
+function leave(){if(!active)return;active=false;document.body.classList.remove('tax-active');$('taxReformTab').classList.remove('active');$('topNewRecord').hidden=false}
+$('taxReformTab').onclick=show;document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',leave));$('timelineTab').addEventListener('click',leave);['search','supplier','status','sort'].forEach(id=>$(id).addEventListener('input',()=>active&&render()));$('taxClose').addEventListener('click',close);$('taxCancel').addEventListener('click',close);$('taxForm').addEventListener('submit',save);$('taxSave').addEventListener('click',event=>{if(typeof $('taxForm').requestSubmit==='function'){event.preventDefault();$('taxForm').requestSubmit()}else{save(event)}});$('taxOverlay').addEventListener('click',e=>{if(e.target===$('taxOverlay'))close()});window.taxReformAddendum={refresh:async()=>{if(active){await loadTaxRecords();populate();render()}}};
+})();</script><script id="integrated-expiration-timeline-script">
+(function(){
+'use strict';
+const el=id=>document.getElementById(id), clean=v=>window.norm?window.norm(v):String(v??'').trim(), safe=v=>window.esc?window.esc(v):String(v??''), parse=v=>window.parseDate?window.parseDate(v):(v?new Date(v):null);
+const labels={comodato:'Tooling Loan Agreements',fornecimento:'Supply Agreements'}, categories=['comodato','fornecimento'];
+const dayStart=(d=new Date())=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const dayDiff=(a,b)=>(Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/86400000;
+const dateText=v=>{const d=v instanceof Date?v:parse(v);return !d||Number.isNaN(d.getTime())?'Not provided':new Intl.DateTimeFormat('en-US',{month:'short',day:'2-digit',year:'numeric'}).format(d)};
+const field=(row,name)=>{if(!row)return'';if(Object.prototype.hasOwnProperty.call(row,name))return row[name];const key=Object.keys(row).find(k=>clean(k).toLowerCase()===name.toLowerCase());return key?row[key]:''};
+const selectedCategories=()=>el('timelineCategory')?.value==='all'||!el('timelineCategory')?[...categories]:[el('timelineCategory').value];
+function consolidatedItems(){
+ if(!window.state?.data||!window.schemas)return[];
+ const groups=new Map();
+ categories.forEach(category=>(window.state.data[category]||[]).forEach((row,index)=>{
+  const number=clean(field(row,window.schemas[category].number))||`Unnumbered contract ${index+1}`;
+  const supplier=clean(field(row,'Supplier'))||'Supplier not provided';
+  const key=`${category}|${number.toLowerCase()}|${supplier.toLowerCase()}`;
+  const created=parse(field(row,'Creation Date')), expires=parse(field(row,'Expiration Date'));
+  if(!groups.has(key))groups.set(key,{category,number,supplier,project:clean(field(row,'Project')),created,expires,status:clean(field(row,'General Status')),sourceRows:1});
+  else{const item=groups.get(key);item.sourceRows++;if(created&&(!item.created||created<item.created))item.created=created;if(expires&&(!item.expires||expires>item.expires))item.expires=expires;if(!item.project)item.project=clean(field(row,'Project'));if(!item.status)item.status=clean(field(row,'General Status'));}
+ }));
+ return [...groups.values()];
+}
+function setOptions(select,values,label,selected){const list=[...new Set(values.map(clean).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));select.innerHTML=`<option value="">${safe(label)}</option>`+list.map(v=>`<option value="${safe(v)}">${safe(v)}</option>`).join('');select.value=list.includes(selected)?selected:'';}
+function populateFilters(items=consolidatedItems()){
+ const selected=new Set(selectedCategories()), base=items.filter(x=>selected.has(x.category)), supplier=el('timelineSupplier'), contract=el('timelineContract'), oldSupplier=clean(supplier.value), oldContract=clean(contract.value);
+ setOptions(supplier,base.map(x=>x.supplier),'All suppliers',oldSupplier);
+ setOptions(contract,base.filter(x=>!supplier.value||x.supplier===supplier.value).map(x=>x.number),'All contracts',oldContract);
+}
+function baseFiltered(items){const selected=new Set(selectedCategories()),supplier=clean(el('timelineSupplier').value),contract=clean(el('timelineContract').value),q=clean(el('timelineSearch').value).toLowerCase();return items.filter(x=>selected.has(x.category)&&(!supplier||x.supplier===supplier)&&(!contract||x.number===contract)&&(!q||[x.number,x.supplier,x.project,x.status].join(' ').toLowerCase().includes(q)));}
+function periodFiltered(items,today){const period=el('timelinePeriod').value;if(period==='all')return items;if(period==='missing')return items.filter(x=>!x.expires);return items.filter(x=>{if(!x.expires)return false;const days=dayDiff(today,x.expires);return period==='expired'?days<0:days>=0&&days<=Number(period)});}
+function sorted(items){const mode=el('timelineSort').value,farFuture=8640000000000000,farPast=-8640000000000000,time=(x,fallback)=>x?.getTime()??fallback;return [...items].sort((a,b)=>mode==='expiry_desc'?time(b.expires,farPast)-time(a.expires,farPast):mode==='supplier_asc'?a.supplier.localeCompare(b.supplier):mode==='contract_asc'?a.number.localeCompare(b.number):time(a.expires,farFuture)-time(b.expires,farFuture));}
+const level=days=>days<0?'expired':days<=30?'critical':days<=90?'warning':'safe';
+const alertText=days=>`${Math.trunc(days)} Day${Math.abs(days)===1?'':'s'} Remaining`;
+function position(start,end,today){if(!start||!end)return{today:1.5,width:0,cssClass:'not-started'};const duration=end-start;if(duration<=0)return{today:98.5,width:98.5,cssClass:'invalid'};if(today<start)return{today:1.5,width:1.5,cssClass:'not-started'};const p=Math.max(1.5,Math.min(98.5,((today-start)/duration)*100));return{today:p,width:p,cssClass:today>end?'expired':''};}
+function updateSummary(items,today){const counts={expired:0,critical:0,warning:0,safe:0};items.forEach(x=>{if(x.expires)counts[level(dayDiff(today,x.expires))]++});Object.keys(counts).forEach(k=>el(`timeline${k[0].toUpperCase()+k.slice(1)}`).textContent=counts[k]);}
+function renderItem(item,today){
+ const duplicateNote=item.sourceRows>1?` • ${item.sourceRows} source rows consolidated`:'';
+ if(!item.expires)return `<div class="timeline-row" data-snapshot-key="${safe(`${item.category}|${item.number}|${item.supplier}`.toLowerCase())}"><div class="timeline-select-cell"><input class="timeline-row-check" type="checkbox" aria-label="Select ${safe(item.number)} for snapshot"></div><div class="timeline-contract"><span class="timeline-contract-number" title="${safe(item.number)}">${safe(item.number)}</span><span class="timeline-supplier" title="${safe(item.supplier)}">${safe(item.supplier)}</span></div><div class="timeline-lifetime"><div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>Not provided</strong></span></div><div class="timeline-track"><div class="timeline-track-background"></div></div><div class="timeline-duration-info">Expiration date required${safe(duplicateNote)}</div></div><div class="timeline-alert warning"><strong>N/A</strong></div></div>`;
+ const days=dayDiff(today,item.expires),status=level(days),pos=position(item.created,item.expires,today),duration=item.created?dayDiff(item.created,item.expires):null;
+ const info=duration===null?'Start date not provided':duration<0?'Invalid dates: expiration precedes start':'';
+ return `<div class="timeline-row" data-snapshot-key="${safe(`${item.category}|${item.number}|${item.supplier}`.toLowerCase())}"><div class="timeline-select-cell"><input class="timeline-row-check" type="checkbox" aria-label="Select ${safe(item.number)} for snapshot"></div><div class="timeline-contract"><span class="timeline-contract-number" title="${safe(item.number)}">${safe(item.number)}</span><span class="timeline-supplier" title="${safe(item.supplier)}">${safe(item.supplier)}</span>${item.project?`<span class="timeline-supplier" title="${safe(item.project)}">${safe(item.project)}</span>`:''}</div><div class="timeline-lifetime"><div class="timeline-track-dates"><span>Start: <strong>${safe(dateText(item.created))}</strong></span><span>Expiration: <strong>${safe(dateText(item.expires))}</strong></span></div><div class="timeline-track"><div class="timeline-track-background"><div class="timeline-elapsed ${pos.cssClass}" style="width:${pos.width}%"></div></div><span class="timeline-today-marker" style="left:${pos.today}%"></span><span class="timeline-expiry-marker" style="left:98.5%"></span></div>${info?`<div class="timeline-duration-info">${safe(info)}</div>`:''}</div><div class="timeline-alert ${status}"><strong>${safe(alertText(days))}</strong></div></div>`;
+}
+function renderTimeline(){const body=el('timelineBody');if(!body)return;const today=dayStart(),all=consolidatedItems();populateFilters(all);const base=baseFiltered(all);updateSummary(base,today);const items=sorted(periodFiltered(base,today));if(!items.length){body.innerHTML='<div class="timeline-empty">No contracts found for the selected filters.</div>';return;}body.innerHTML=categories.filter(c=>items.some(x=>x.category===c)).map(c=>{const list=items.filter(x=>x.category===c);return `<div class="timeline-category-header ${c}"><span>${safe(labels[c])}</span><span class="timeline-category-count">${list.length} contract${list.length===1?'':'s'}</span></div>`+list.map(x=>renderItem(x,today)).join('')}).join('');window.timelineSnapshotSelection?.refresh();}
+function dashboardNodes(){return[document.querySelector('.top'),document.querySelector('.section-head'),document.querySelector('.kpis'),document.querySelector('.table-section')].filter(Boolean)}
+function showTimeline(){dashboardNodes().forEach(n=>n.hidden=true);el('timelineView').classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));el('timelineTab').classList.add('active');renderTimeline();}
+function showDashboard(){dashboardNodes().forEach(n=>n.hidden=false);el('timelineView').classList.remove('active');el('timelineTab').classList.remove('active');}
+el('timelineTab')?.addEventListener('click',showTimeline);document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',showDashboard));
+el('timelineCategory')?.addEventListener('change',()=>{populateFilters();renderTimeline()});el('timelineSupplier')?.addEventListener('change',()=>{populateFilters();renderTimeline()});['timelineContract','timelinePeriod','timelineSort'].forEach(id=>el(id)?.addEventListener('change',renderTimeline));el('timelineSearch')?.addEventListener('input',renderTimeline);
+window.timelineSnapshotAPI={items:consolidatedItems,dayStart,dayDiff,level,position,dateText,alertText,categories,labels};
+window.renderContractTimeline=renderTimeline;
+})();
+
+</script>
+
+<script id="supply-export-script">
+(function(){
+'use strict';
+const button=document.getElementById('exportSupplyXlsx');
+function updateSupplyExportButton(){if(button)button.hidden=window.state?.active!=='fornecimento'||document.getElementById('timelineView')?.classList.contains('active');}
+function excelValue(value,column){
+ const text=window.norm?window.norm(value):String(value??'').trim();
+ if(!text)return'';
+ if(column.includes('Date')){const date=window.parseDate?window.parseDate(text):null;return date&&!Number.isNaN(date.getTime())?date:text;}
+ if(column==='Overall Progression'){const number=Number(String(text).replace('%','').replace(',','.'));return Number.isFinite(number)?number:text;}
+ return text;
+}
+function exportSupplyAgreements(){
+ if(!window.XLSX){window.toast?.('Excel export library is still loading. Try again in a moment.');return;}
+ if(window.state?.active!=='fornecimento'){window.toast?.('Open Supply Agreements to export the data.');return;}
+ const schema=window.schemas?.fornecimento;
+ const rows=Array.isArray(window.state?.filtered)?window.state.filtered:[];
+ if(!schema||!rows.length){window.toast?.('No Supply Agreements found for the current filters.');return;}
+ const columns=schema.fields.map(field=>field[0]);
+ const data=rows.map(row=>{const output={};columns.forEach(column=>output[column]=excelValue(row[column],column));return output;});
+ const sheet=window.XLSX.utils.json_to_sheet(data,{header:columns,dateNF:'yyyy-mm-dd'});
+ sheet['!autofilter']={ref:sheet['!ref']};
+ sheet['!freeze']={xSplit:0,ySplit:1};
+ sheet['!cols']=columns.map(column=>({wch:Math.min(45,Math.max(14,column.length+2,...data.map(row=>String(row[column]??'').length+2)))}));
+ columns.forEach((column,index)=>{if(!column.includes('Date'))return;for(let row=2;row<=data.length+1;row++){const cell=sheet[window.XLSX.utils.encode_cell({r:row-1,c:index})];if(cell&&cell.v instanceof Date){cell.t='d';cell.z='yyyy-mm-dd';}}});
+ const book=window.XLSX.utils.book_new();
+ book.Props={Title:'Supply Agreements',Subject:'Filtered Supply Agreements export',Author:'Contract Management'};
+ window.XLSX.utils.book_append_sheet(book,sheet,'Supply Agreements');
+ const date=new Date().toISOString().slice(0,10);
+ window.XLSX.writeFile(book,`Supply_Agreements_${date}.xlsx`,{compression:true});
+ window.toast?.(`${data.length} Supply Agreement${data.length===1?'':'s'} exported to Excel.`);
+}
+button?.addEventListener('click',exportSupplyAgreements);
+document.querySelectorAll('.nav button').forEach(item=>item.addEventListener('click',()=>setTimeout(updateSupplyExportButton,0)));
+document.getElementById('timelineTab')?.addEventListener('click',()=>setTimeout(updateSupplyExportButton,0));
+window.addEventListener('load',updateSupplyExportButton);
+window.updateSupplyExportButton=updateSupplyExportButton;
+})();
+</script>
+<script id="expiration-snapshot-script">
+(function(){
+'use strict';
+const el=id=>document.getElementById(id), selected=new Set();let selectionMode=false,lastBlob=null,lastUrl='';
+function visibleRows(){return [...document.querySelectorAll('#timelineBody .timeline-row[data-snapshot-key]')];}
+function refreshSelectionUI(){
+ const rows=visibleRows();rows.forEach(row=>{const checked=selected.has(row.dataset.snapshotKey);row.classList.toggle('selected',checked);const box=row.querySelector('.timeline-row-check');if(box)box.checked=checked;});
+ const count=rows.filter(r=>selected.has(r.dataset.snapshotKey)).length;el('timelineSelectCount').textContent=`${count} of ${rows.length} visible contracts selected`;el('generateSnapshot').disabled=count===0;
+}
+function startSelection(){selectionMode=true;selected.clear();el('timelineView').classList.add('timeline-selection-mode');el('timelineSelectBar').classList.add('active');el('snapshotModeButton').textContent='Cancel snapshot';window.renderContractTimeline?.();}
+function stopSelection(){selectionMode=false;selected.clear();el('timelineView').classList.remove('timeline-selection-mode');el('timelineSelectBar').classList.remove('active');el('snapshotModeButton').textContent='Snapshot';refreshSelectionUI();}
+function toggleMode(){selectionMode?stopSelection():startSelection();}
+function selectVisible(value){visibleRows().forEach(r=>value?selected.add(r.dataset.snapshotKey):selected.delete(r.dataset.snapshotKey));refreshSelectionUI();}
+function key(item){return `${item.category}|${item.number}|${item.supplier}`.toLowerCase();}
+function compactRow(item,today){
+ const days=item.expires?window.timelineSnapshotAPI.dayDiff(today,item.expires):null,status=days===null?'warning':window.timelineSnapshotAPI.level(days),pos=item.expires?window.timelineSnapshotAPI.position(item.created,item.expires,today):{today:1.5,width:0};
+ return `<div class="snapshot-row"><div class="snapshot-contract"><strong>${window.esc(item.number)}</strong><span>${window.esc(item.supplier)}${item.project?' • '+window.esc(item.project):''}</span></div><div class="snapshot-life"><div class="snapshot-dates"><span>Start: <b>${window.esc(window.timelineSnapshotAPI.dateText(item.created))}</b></span><span>Expiration: <b>${window.esc(window.timelineSnapshotAPI.dateText(item.expires))}</b></span></div><div class="snapshot-track"><div class="snapshot-fill" style="width:${pos.width}%"></div>${item.expires?`<i class="snapshot-today" style="left:${pos.today}%"></i><i class="snapshot-expiry"></i>`:''}</div></div><div class="snapshot-alert ${status}">${days===null?'N/A':window.esc(window.timelineSnapshotAPI.alertText(days))}</div></div>`;
+}
+async function generate(){
+ if(!window.html2canvas){window.toast?.('Snapshot library is still loading. Try again in a moment.');return;}
+ const all=window.timelineSnapshotAPI.items(),chosen=all.filter(x=>selected.has(key(x)));if(!chosen.length){window.toast?.('Select at least one contract.');return;}
+ const today=window.timelineSnapshotAPI.dayStart(),groups=window.timelineSnapshotAPI.categories.filter(c=>chosen.some(x=>x.category===c));
+ const stamp=new Intl.DateTimeFormat('en-US',{dateStyle:'medium',timeStyle:'short'}).format(new Date());
+ el('snapshotCanvas').innerHTML=`<div class="snapshot-brand"><div><h2>Expiration Timelines</h2><p>Selected contract expiration overview</p></div><div class="snapshot-generated">Generated ${window.esc(stamp)} • ${chosen.length} contract${chosen.length===1?'':'s'}</div></div><div class="snapshot-table-head"><div>Contract</div><div>Contract lifetime</div><div>Expiration alert</div></div>${groups.map(c=>`<div class="snapshot-group">${window.esc(window.timelineSnapshotAPI.labels[c])}</div>${chosen.filter(x=>x.category===c).map(x=>compactRow(x,today)).join('')}`).join('')}`;
+ const canvas=await window.html2canvas(el('snapshotCanvas'),{backgroundColor:'#ffffff',scale:2,useCORS:true,logging:false,width:1120,windowWidth:1120});
+ canvas.toBlob(blob=>{if(!blob)return;lastBlob=blob;if(lastUrl)URL.revokeObjectURL(lastUrl);lastUrl=URL.createObjectURL(blob);el('snapshotPreview').src=lastUrl;el('snapshotDialogInfo').textContent=`Compact PNG with ${chosen.length} selected contract${chosen.length===1?'':'s'}.`;el('snapshotOverlay').classList.remove('hidden');},'image/png');
+}
+async function copyImage(){if(!lastBlob)return;try{if(!navigator.clipboard||!window.ClipboardItem)throw new Error('Clipboard image API unavailable');await navigator.clipboard.write([new ClipboardItem({'image/png':lastBlob})]);window.toast?.('Snapshot image copied.');}catch(e){console.error(e);window.toast?.('Direct image copy is not supported here. Use Download PNG.');}}
+function download(){if(!lastUrl)return;const a=document.createElement('a');a.href=lastUrl;a.download=`expiration-timeline-${new Date().toISOString().slice(0,10)}.png`;a.click();}
+function close(){el('snapshotOverlay').classList.add('hidden');}
+el('snapshotModeButton')?.addEventListener('click',toggleMode);el('selectAllTimeline')?.addEventListener('click',()=>selectVisible(true));el('clearTimelineSelection')?.addEventListener('click',()=>selectVisible(false));el('generateSnapshot')?.addEventListener('click',generate);el('cancelTimelineSelection')?.addEventListener('click',stopSelection);el('copySnapshot')?.addEventListener('click',copyImage);el('downloadSnapshot')?.addEventListener('click',download);el('closeSnapshot')?.addEventListener('click',close);el('snapshotOverlay')?.addEventListener('click',e=>{if(e.target===el('snapshotOverlay'))close();});
+document.addEventListener('change',e=>{if(!e.target.classList.contains('timeline-row-check'))return;const row=e.target.closest('[data-snapshot-key]');if(!row)return;e.target.checked?selected.add(row.dataset.snapshotKey):selected.delete(row.dataset.snapshotKey);refreshSelectionUI();});
+window.timelineSnapshotSelection={active:()=>selectionMode,has:k=>selected.has(k),refresh:refreshSelectionUI,key};
+})();
+
+</script>
+</body>
+</html>
