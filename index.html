@@ -659,6 +659,9 @@
 
   .podium-source{margin:-4px 0 9px;font-size:10px;font-weight:750;letter-spacing:.04em;text-transform:uppercase;color:var(--text-soft)}
 
+
+  .supabase-sync-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text-soft);font-size:12px;font-weight:700}
+  .supabase-sync-pill i{width:8px;height:8px;border-radius:50%;background:#d99016}.supabase-sync-pill.online i{background:#4f9d30}.supabase-sync-pill.error i{background:#c8102e}
 </style>
 </head>
 <body>
@@ -674,6 +677,7 @@
 <main id="view"><div class="empty">Loading…</div></main>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
 'use strict';
@@ -686,7 +690,8 @@
                           for the expected endpoints and record shape)
    ===================================================================== */
 const APP_CONFIG = Object.assign({
-  dataSource: 'local',
+  dataSource: 'supabase',
+  supabase: { url: 'https://vrcylvpudnhdplpdohml.supabase.co', publishableKey: 'sb_publishable_CeG6_XWzmWhaetSRpgFQXw_AjylU7ho' },
   rest: { baseUrl: '/api', headers: {} },   // e.g. { Authorization: 'Bearer …' }
   currency: 'BRL',
   locale: 'en-US'
@@ -891,7 +896,90 @@ class RestAdapter {
   async saveSettings(s) { return this._req('PUT', '/scoring-settings', s); }
 }
 
-const store = APP_CONFIG.dataSource === 'rest' ? new RestAdapter(APP_CONFIG.rest) : new LocalAdapter();
+class SupabaseAdapter {
+  constructor(cfg) {
+    if (!window.supabase?.createClient) throw new Error('Supabase SDK not loaded');
+    if (!cfg?.url || !cfg?.publishableKey) throw new Error('Supabase URL or publishable key missing');
+    this.client = window.supabase.createClient(cfg.url, cfg.publishableKey);
+    window.supplierSupabaseClient = this.client;
+    this.local = new LocalAdapter();
+  }
+  fromDb(row) {
+    return normalizeRecord({
+      id: row.supplier_id,
+      supplierId: row.supplier_id,
+      sapId: row.sap_id,
+      jdeId: row.jde_id,
+      fantasyName: row.fantasy_name,
+      name: row.legal_name,
+      taxId: row.tax_id,
+      contactName: row.contact_name,
+      contactInfo: row.contact_info || row.email || '',
+      address: row.address,
+      city: row.city,
+      milkRun: row.milk_run,
+      status: row.status,
+      createdAt: row.created_at
+    });
+  }
+  toDb(rec) {
+    const r=normalizeRecord(rec);
+    const email=(String(r.contactInfo||'').match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[''])[0];
+    return {
+      supplier_id:r.supplierId,
+      sap_id:r.sapId || null,
+      jde_id:r.jdeId || null,
+      fantasy_name:r.fantasyName || null,
+      legal_name:r.name,
+      tax_id:r.taxId || null,
+      contact_name:r.contactName || null,
+      email:email || null,
+      contact_info:r.contactInfo || null,
+      address:r.address || null,
+      city:r.city || null,
+      milk_run:r.milkRun || 'No',
+      status:r.status || 'Active'
+    };
+  }
+  async list() {
+    const {data,error}=await this.client.from('suppliers').select('*').order('supplier_id',{ascending:true});
+    if(error) throw error;
+    return (data||[]).map(row=>this.fromDb(row));
+  }
+  async create(rec) {
+    const payload=this.toDb(rec);
+    const {data,error}=await this.client.from('suppliers').insert(payload).select().single();
+    if(error) throw error;
+    return this.fromDb(data);
+  }
+  async update(id,rec) {
+    const payload=this.toDb(rec);
+    const oldId=String(id||'');
+    const newId=payload.supplier_id;
+    const {data,error}=await this.client.from('suppliers').update(payload).eq('supplier_id',oldId).select().single();
+    if(error) throw error;
+    return this.fromDb(data);
+  }
+  async remove(id) {
+    const {error}=await this.client.from('suppliers').delete().eq('supplier_id',String(id));
+    if(error) throw error;
+  }
+  async replaceAll(rows) {
+    const {error:deleteError}=await this.client.from('suppliers').delete().neq('supplier_id','');
+    if(deleteError) throw deleteError;
+    if(!rows.length) return [];
+    const {data,error}=await this.client.from('suppliers').insert(rows.map(r=>this.toDb(r))).select();
+    if(error) throw error;
+    return (data||[]).map(r=>this.fromDb(r));
+  }
+  async getSettings(){ return this.local.getSettings(); }
+  async saveSettings(settings){ return this.local.saveSettings(settings); }
+}
+const store = APP_CONFIG.dataSource === 'supabase'
+  ? new SupabaseAdapter(APP_CONFIG.supabase)
+  : APP_CONFIG.dataSource === 'rest'
+    ? new RestAdapter(APP_CONFIG.rest)
+    : new LocalAdapter();
 
 /* =====================================================================
    6. SCORING ENGINE  —  pure functions, no DOM, no storage.
@@ -1455,7 +1543,7 @@ async function saveRow(tr) {
     state.records[idx] = normalizeRecord(saved);
     // keep supplier master data consistent across all contracts of the same ID
     renderSuppliersBody(); toast('Row saved.');
-  } catch (e) { toast('Could not save: ' + e.message); }
+  } catch (e) { setSupplierSync('error','Supabase error'); toast('Could not save to Supabase: ' + e.message); }
 }
 
 $('#view').addEventListener('input', e => {
@@ -1497,7 +1585,7 @@ $('#view').addEventListener('click', async e => {
   if (btn.dataset.act === 'del') {
     if (!confirm(`Delete ${rec.supplierId} — ${rec.name} (${rec.contractId || 'no contract'})?`)) return;
     try { await store.remove(id); state.records = state.records.filter(r => r.id !== id); state.sup.editing.delete(id); renderSuppliersBody(); toast('Row deleted.'); }
-    catch (err) { toast('Could not delete: ' + err.message); }
+    catch (err) { setSupplierSync('error','Supabase error'); toast('Could not delete from Supabase: ' + err.message); }
   }
 });
 
@@ -1696,7 +1784,7 @@ function renderSettings() {
         <h3>Data &amp; integration</h3>
         <p class="desc">Use the XLSX template to prepare a supplier base and load it into the application.</p>
         <dl class="kv">
-          <dt>Data source</dt><dd>${APP_CONFIG.dataSource === 'rest' ? 'REST API · <code>' + esc(APP_CONFIG.rest.baseUrl) + '</code>' : 'Browser storage (demo data)'}</dd>
+          <dt>Data source</dt><dd>${APP_CONFIG.dataSource === 'supabase' ? 'Supabase · <code>public.suppliers</code>' : APP_CONFIG.dataSource === 'rest' ? 'REST API · <code>' + esc(APP_CONFIG.rest.baseUrl) + '</code>' : 'Browser storage (demo data)'}</dd>
           <dt>Records</dt><dd>${state.records.length} contracts</dd>
         </dl>
         <div class="btn-row" style="margin-top:12px">
@@ -1891,7 +1979,7 @@ rowEdit = function(r) {
 };
 
 renderSuppliers = function() {
-  $('#view').innerHTML = `<div class="toolbar"><div class="search">${ICON.search}<input id="q" placeholder="Search supplier records..." value="${esc(state.sup.q)}"></div><span class="count" id="count"></span><button class="btn btn-tonal" id="btnExpandAll" title="Expand all supplier RFQ rows">Expand all</button><button class="btn btn-tonal" id="btnCollapseAll" title="Collapse all supplier RFQ rows">Collapse all</button><button class="btn btn-tonal" id="btnXlsx">${ICON.down} Export XLSX</button><button class="btn btn-primary" id="btnAdd">${ICON.plus} Add supplier</button></div>
+  $('#view').innerHTML = `<div class="toolbar"><div class="search">${ICON.search}<input id="q" placeholder="Search supplier records..." value="${esc(state.sup.q)}"></div><span class="count" id="count"></span><span class="supabase-sync-pill" id="supplierSync"><i></i><span>Supabase</span></span><button class="btn btn-tonal" id="btnExpandAll" title="Expand all supplier RFQ rows">Expand all</button><button class="btn btn-tonal" id="btnCollapseAll" title="Collapse all supplier RFQ rows">Collapse all</button><button class="btn btn-tonal" id="btnXlsx">${ICON.down} Export XLSX</button><button class="btn btn-primary" id="btnAdd">${ICON.plus} Add supplier</button></div>
   <div class="panel table-panel"><div class="table-wrap"><table class="data supplier-registration"><thead><tr><th>Supplier ID</th><th>SAP ID</th><th>JDE ID</th><th>Fantasy Name</th><th>Legal Name</th><th>Tax ID</th><th>Contact</th><th>Adress</th><th>City</th><th>Milk Run</th><th>Status</th><th class="sticky-r">Actions</th></tr></thead><tbody id="tbody"></tbody></table><div class="empty" id="empty" hidden>No suppliers found.</div></div></div>`;
   renderSuppliersBody();
 };
@@ -2115,6 +2203,13 @@ function activateTableSort(header) {
 }
 document.addEventListener('click',e=>{ const th=e.target.closest('.sortable-header'); if(th) activateTableSort(th); });
 document.addEventListener('keydown',e=>{ const th=e.target.closest('.sortable-header'); if(th && (e.key==='Enter'||e.key===' ')){e.preventDefault();activateTableSort(th);} });
+
+
+function setSupplierSync(status,text){
+  const pill=document.getElementById('supplierSync'); if(!pill) return;
+  pill.classList.remove('online','error'); if(status) pill.classList.add(status);
+  const label=pill.querySelector('span'); if(label) label.textContent=text;
+}
 
 /* =====================================================================
    12. INIT
