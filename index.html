@@ -2169,9 +2169,50 @@ document.addEventListener('click',e=>{
 /* Financial Assessment, linked to Supplier Registration by Supplier ID */
 const FINANCIAL_STORAGE_KEY = 'supplierManagement.financialAssessment.v1';
 let financialAssessments = (() => { try { return JSON.parse(localStorage.getItem(FINANCIAL_STORAGE_KEY) || '{}'); } catch { return {}; } })();
+let financialAssessmentsLoaded = false;
 const saveFinancialAssessments = () => localStorage.setItem(FINANCIAL_STORAGE_KEY, JSON.stringify(financialAssessments));
 const financialDefaults = () => ({ source:'Serasa', negativeEquity:'No', fgts:'OK', federalRevenue:'OK', serasaIssues:0, assessmentDate:'', balanceAssessed:'', score:0, status:'Meets Without Restrictions', followUp:'Annual' });
 function financialRecord(supplierId) { return financialAssessments[supplierId] || (financialAssessments[supplierId] = financialDefaults()); }
+function financialFromDb(row) {
+  return {
+    source:row.source || 'Serasa', negativeEquity:row.negative_equity || 'No',
+    fgts:row.fgts || 'OK', federalRevenue:row.federal_revenue || 'OK',
+    serasaIssues:Number(row.serasa_issue_count || 0), assessmentDate:row.assessment_date || '',
+    balanceAssessed:row.balance_assessed || '', score:Number(row.score || 0),
+    status:row.status || 'Meets Without Restrictions', followUp:row.follow_up || 'Annual'
+  };
+}
+function financialToDb(supplierId,rec) {
+  return { supplier_id:supplierId, source:rec.source, negative_equity:rec.negativeEquity,
+    fgts:rec.fgts, federal_revenue:rec.federalRevenue, serasa_issue_count:Number(rec.serasaIssues||0),
+    assessment_date:rec.assessmentDate || null, balance_assessed:rec.balanceAssessed || null,
+    score:Number(rec.score||0), status:rec.status, follow_up:rec.followUp };
+}
+async function loadFinancialAssessmentsFromSupabase() {
+  if(APP_CONFIG.dataSource!=='supabase' || !window.supplierSupabaseClient) return;
+  const client=window.supplierSupabaseClient;
+  const {data,error}=await client.from('financial_assessments').select('*');
+  if(error) throw error;
+  const remote={}; (data||[]).forEach(row=>remote[String(row.supplier_id).trim()]=financialFromDb(row));
+  const local=financialAssessments || {};
+  const missing=Object.entries(local).filter(([id])=>id && !remote[String(id).trim()]);
+  if(missing.length){
+    const validIds=new Set(state.records.map(r=>String(r.supplierId||'').trim()));
+    const payload=missing.filter(([id])=>validIds.has(String(id).trim())).map(([id,rec])=>financialToDb(String(id).trim(),rec));
+    if(payload.length){ const {error:migrationError}=await client.from('financial_assessments').upsert(payload,{onConflict:'supplier_id'}); if(migrationError) throw migrationError;
+      payload.forEach(row=>remote[row.supplier_id]=financialFromDb(row));
+    }
+  }
+  financialAssessments=remote; financialAssessmentsLoaded=true; saveFinancialAssessments();
+}
+async function saveFinancialAssessmentToSupabase(supplierId,rec) {
+  saveFinancialAssessments();
+  if(APP_CONFIG.dataSource!=='supabase' || !window.supplierSupabaseClient) return;
+  const {data,error}=await window.supplierSupabaseClient.from('financial_assessments')
+    .upsert(financialToDb(supplierId,rec),{onConflict:'supplier_id'}).select().single();
+  if(error) throw error;
+  financialAssessments[supplierId]=financialFromDb(data); saveFinancialAssessments();
+}
 const financialSelect = (field, value, options, supplierId) => `<select data-fin-field="${field}" data-supplier-id="${esc(supplierId)}">${options.map(([v,l])=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(l)}</option>`).join('')}</select>`;
 
 function financialStatusClass(status) {
@@ -2210,13 +2251,14 @@ function renderFinancialAssessment() {
       <td class="fin-overall-score ${statusClass}" data-overall-score="${overall.score}">${overall.score}</td>
       <td class="fin-overall-cell ${statusClass}"><span class="fin-overall-badge">${esc(overall.label)}</span></td></tr>`;
   }).join('');
-  $('#view').innerHTML = `<div class="panel table-panel"><div class="table-wrap"><table class="data financial-table"><thead><tr><th>Supplier ID</th><th>Fantasy Name</th><th>Source</th><th>Negative Equity</th><th>FGTS</th><th>Federal Revenue</th><th>Serasa Issue Count</th><th>Assessment Date</th><th>Balance Assessed</th><th>Score</th><th>Status</th><th>Follow-up</th><th class="fin-overall-score-header">Overall Score</th><th class="fin-overall-header">Overall Status</th></tr></thead><tbody>${rows || '<tr><td colspan="14" class="empty">No suppliers registered.</td></tr>'}</tbody></table></div></div>`;
+  $('#view').innerHTML = `<div class="toolbar"><span class="supabase-sync-pill ${financialAssessmentsLoaded?'online':''}"><i></i><span>${financialAssessmentsLoaded?'Financial data synced':'Financial data local'}</span></span></div><div class="panel table-panel"><div class="table-wrap"><table class="data financial-table"><thead><tr><th>Supplier ID</th><th>Fantasy Name</th><th>Source</th><th>Negative Equity</th><th>FGTS</th><th>Federal Revenue</th><th>Serasa Issue Count</th><th>Assessment Date</th><th>Balance Assessed</th><th>Score</th><th>Status</th><th>Follow-up</th><th class="fin-overall-score-header">Overall Score</th><th class="fin-overall-header">Overall Status</th></tr></thead><tbody>${rows || '<tr><td colspan="14" class="empty">No suppliers registered.</td></tr>'}</tbody></table></div></div>`;
 }
 
-document.addEventListener('change', e => {
+document.addEventListener('change', async e => {
   const el=e.target.closest('[data-fin-field]'); if(!el) return;
   const supplierId=el.dataset.supplierId, field=el.dataset.finField, rec=financialRecord(supplierId);
-  rec[field]=(el.type==='number' ? Number(el.value || 0) : el.value); saveFinancialAssessments();
+  rec[field]=(el.type==='number' ? Number(el.value || 0) : el.value);
+  try { await saveFinancialAssessmentToSupabase(supplierId,rec); } catch(error) { console.error(error); toast('Could not save Financial Assessment to Supabase: '+error.message); return; }
   if (field === 'status') {
     const row = el.closest('tr');
     const statusCell = row && row.querySelector('.fin-status-cell');
@@ -2334,6 +2376,8 @@ function setSupplierSync(status,text){
   try {
     const [rows, settings] = await Promise.all([store.list(), store.getSettings()]);
     state.records = rows; state.settings = normalizeSettings(settings);
+    try { await loadFinancialAssessmentsFromSupabase(); }
+    catch(financialError) { console.error(financialError); toast('Could not load Financial Assessment from Supabase: ' + financialError.message); }
   } catch (e) { toast('Could not load data: ' + e.message); }
   state.ready = true;
   const h = (location.hash || '').replace('#', '');
