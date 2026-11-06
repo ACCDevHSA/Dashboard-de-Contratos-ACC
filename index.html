@@ -1749,10 +1749,18 @@ function rfqExportMatrix() {
 }
 
 function downloadBlob(name, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
-const importHeaders = ['Supplier ID','Supplier','Tax ID','Contact name','Contact info','Contract ID','Contract link','Lead agreed','Lead actual','Price agreed','Price actual','Volume agreed','Volume actual','Warranty cases','Lead rating (1-5)','Price rating (1-5)','Volume rating (1-5)','Negotiation rating (1-5)','Warranty rating (1-5)'];
-function supplierMatrix(records = state.records.filter(r => !r._new)) { return [importHeaders, ...records.map(r => [r.supplierId,r.name,r.taxId,r.contactName,r.contactInfo,r.contractId,r.contractUrl,r.leadAgreed,r.leadActual,r.priceAgreed,r.priceActual,r.volAgreed,r.volActual,r.warrantyCases,r.ratings.leadTime,r.ratings.price,r.ratings.volume,r.ratings.negotiation,r.ratings.warranty])]; }
+const supplierImportHeaders = ['Supplier ID','SAP ID','JDE ID','Fantasy Name','Legal Name','Tax ID','Contact','Email','Address','City','Milk Run','Status'];
+function supplierImportMatrix(records = []) {
+  return [supplierImportHeaders, ...records.map(raw => {
+    const r=normalizeRecord(raw);
+    return [r.supplierId,r.sapId,r.jdeId,r.fantasyName,r.name,formatCnpj(r.taxId),r.contactName,exportedEmail(r.contactInfo),r.address,r.city,r.milkRun,r.status];
+  })];
+}
 function exportXlsx() { downloadBlob('supplier-management.xlsx', makeXlsxWorkbook([{name:'Suppliers',rows:supplierExportMatrix()},{name:'RFQ',rows:rfqExportMatrix()}]), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); }
-function downloadTemplate() { downloadBlob('supplier-import-template.xlsx', makeXlsx(supplierMatrix([]), 'Supplier import'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); }
+function downloadTemplate() {
+  const example=[normalizeRecord({supplierId:'SUP-001',sapId:'',jdeId:'',fantasyName:'Example Supplier',name:'Example Supplier Legal Name Ltda.',taxId:'12.345.678/0001-95',contactName:'Contact Name',contactInfo:'contact@example.com',address:'Street, 100',city:'Sumare',milkRun:'Yes',status:'Active'})];
+  downloadBlob('supplier-registration-template.xlsx', makeXlsx(supplierImportMatrix(example), 'Supplier Registration'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+}
 async function unzipEntry(buffer, wanted) {
   const v = new DataView(buffer); let p = buffer.byteLength - 22;
   while (p >= 0 && v.getUint32(p, true) !== 0x06054b50) p--;
@@ -1767,10 +1775,41 @@ async function readXlsx(file) {
   return Array.from(doc.querySelectorAll('sheetData > row')).map(row => Array.from(row.querySelectorAll('c')).reduce((out, c) => { const letter = (c.getAttribute('r') || 'A').replace(/\d/g, ''); let n = 0; for (const ch of letter) n = n * 26 + ch.charCodeAt(0) - 64; const raw = c.querySelector('v')?.textContent ?? c.querySelector('t')?.textContent ?? ''; out[n - 1] = c.getAttribute('t') === 's' ? (sharedText[Number(raw)] || '') : raw; return out; }, []));
 }
 async function importXlsx(file) {
-  const rows = await readXlsx(file); if (rows.length < 2) throw new Error('Add at least one supplier row to the workbook');
-  const index = Object.fromEntries(rows[0].map((h, i) => [String(h).trim().toLowerCase(), i])); const get = (r, h) => r[index[h.toLowerCase()]] ?? '';
-  if (index['supplier id'] === undefined || index['supplier'] === undefined) throw new Error('Use the downloaded XLSX template: Supplier ID and Supplier are required');
-  return rows.slice(1).filter(r => String(get(r, 'Supplier ID')).trim()).map(r => normalizeRecord({ supplierId:get(r,'Supplier ID'),name:get(r,'Supplier'),taxId:get(r,'Tax ID'),contactName:get(r,'Contact name'),contactInfo:get(r,'Contact info'),contractId:get(r,'Contract ID'),contractUrl:get(r,'Contract link'),leadAgreed:get(r,'Lead agreed'),leadActual:get(r,'Lead actual'),priceAgreed:get(r,'Price agreed'),priceActual:get(r,'Price actual'),volAgreed:get(r,'Volume agreed'),volActual:get(r,'Volume actual'),warrantyCases:get(r,'Warranty cases'),ratings:{leadTime:get(r,'Lead rating (1-5)'),price:get(r,'Price rating (1-5)'),volume:get(r,'Volume rating (1-5)'),negotiation:get(r,'Negotiation rating (1-5)'),warranty:get(r,'Warranty rating (1-5)')} }));
+  const rows=await readXlsx(file);
+  if(rows.length<2) throw new Error('Add at least one supplier row to the workbook');
+  const normalizedHeader=value=>String(value??'').trim().toLowerCase();
+  const index=Object.fromEntries(rows[0].map((header,i)=>[normalizedHeader(header),i]));
+  const required=['supplier id','legal name'];
+  const missing=required.filter(header=>index[header]===undefined);
+  if(missing.length) throw new Error('Use the downloaded Supplier Registration template. Required columns: Supplier ID and Legal Name.');
+  const get=(row,header)=>row[index[normalizedHeader(header)]]??'';
+  const seen=new Set();
+  return rows.slice(1).filter(row=>String(get(row,'Supplier ID')).trim()).map((row,rowIndex)=>{
+    const supplierId=String(get(row,'Supplier ID')).trim();
+    if(seen.has(supplierId)) throw new Error(`Duplicate Supplier ID ${supplierId} on row ${rowIndex+2}`);
+    seen.add(supplierId);
+    const taxId=formatCnpj(get(row,'Tax ID'));
+    if(taxId && !isValidCnpj(taxId)) throw new Error(`Invalid CNPJ for ${supplierId} on row ${rowIndex+2}`);
+    const milkRun=String(get(row,'Milk Run')).trim()||'No';
+    const status=String(get(row,'Status')).trim()||'Active';
+    if(!['Yes','No'].includes(milkRun)) throw new Error(`Milk Run must be Yes or No for ${supplierId}`);
+    if(!['Active','Deactive'].includes(status)) throw new Error(`Status must be Active or Deactive for ${supplierId}`);
+    const email=String(get(row,'Email')).trim();
+    return normalizeRecord({
+      supplierId,
+      sapId:get(row,'SAP ID'),
+      jdeId:get(row,'JDE ID'),
+      fantasyName:get(row,'Fantasy Name'),
+      name:get(row,'Legal Name'),
+      taxId,
+      contactName:get(row,'Contact'),
+      contactInfo:email,
+      address:get(row,'Address'),
+      city:get(row,'City'),
+      milkRun,
+      status
+    });
+  });
 }
 
 /* =====================================================================
@@ -1859,7 +1898,7 @@ function renderSettings() {
 
       <div class="panel">
         <h3>Data &amp; integration</h3>
-        <p class="desc">Use the XLSX template to prepare a supplier base and load it into the application.</p>
+        <p class="desc">Download the Supplier Registration template, fill in the same columns used by the table, and upload it to replace the supplier base.</p>
         <dl class="kv">
           <dt>Data source</dt><dd>${APP_CONFIG.dataSource === 'supabase' ? 'Supabase · <code>public.suppliers</code>' : APP_CONFIG.dataSource === 'rest' ? 'REST API · <code>' + esc(APP_CONFIG.rest.baseUrl) + '</code>' : 'Browser storage (demo data)'}</dd>
           <dt>Records</dt><dd>${state.records.length} contracts</dd>
@@ -1916,8 +1955,8 @@ $('#view').addEventListener('change', async e => {
   if (e.target.id !== 'xlsxFile' || !e.target.files[0]) return;
   try {
     const data = await importXlsx(e.target.files[0]);
-    if (!confirm(`Replace the current supplier base with ${data.length} imported contract(s)?`)) return;
-    state.records = await store.replaceAll(data); renderSettings(); toast(`Imported ${state.records.length} records.`);
+    if (!confirm(`Replace the current Supplier Registration base with ${data.length} imported supplier(s)?`)) return;
+    state.records = await store.replaceAll(data); renderSettings(); toast(`Imported ${state.records.length} suppliers.`);
   } catch (err) { toast('Import failed: ' + err.message); }
 });
 
