@@ -282,6 +282,27 @@ tbody tr:hover td{background:color-mix(in srgb,var(--primary) 3%,var(--solid))}
     .main,.app.sidebar-collapsed .main{padding:16px 12px!important}
   }
 </style>
+
+<style id="standaloneSidebarCollapsibleFix">
+  html,body{min-height:100%;margin:0}
+  body{min-height:100vh}
+  .app{min-height:100vh!important;align-items:stretch!important}
+  .side{position:sticky!important;top:0!important;height:100vh!important;min-height:100vh!important;max-height:100vh!important;overflow-y:auto!important;align-self:start!important}
+  .main{min-height:100vh!important}
+  .menu-toggle,#menuToggle{display:inline-grid!important}
+  .floating-logo{display:block!important}
+  .mobile-backdrop{display:none}
+  .app.sidebar-collapsed{grid-template-columns:0 minmax(0,1fr)!important}
+  .app.sidebar-collapsed .side{width:0!important;min-width:0!important;padding-left:0!important;padding-right:0!important;border:0!important;opacity:0!important;overflow:hidden!important;pointer-events:none!important;transform:translateX(-100%)!important}
+  .app.sidebar-collapsed .floating-logo{opacity:1!important;visibility:visible!important;transform:none!important}
+  @media(max-width:800px){
+    .app,.app.sidebar-collapsed{display:block!important}
+    .side,.app.sidebar-collapsed .side{position:fixed!important;left:0!important;top:0!important;z-index:200!important;width:min(290px,86vw)!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;padding:16px 13px!important;opacity:1!important;transform:translateX(-105%)!important;pointer-events:auto!important;overflow-y:auto!important}
+    .app.sidebar-open .side{transform:translateX(0)!important}
+    .mobile-backdrop{position:fixed!important;inset:0!important;z-index:190!important;background:rgba(2,8,20,.58)!important;backdrop-filter:blur(2px)!important}
+    .app.sidebar-open .mobile-backdrop{display:block!important}
+  }
+</style>
 </head>
 <body>
 <div class="app" id="app">
@@ -436,7 +457,7 @@ function toggleSidebar(){
 }
 function closeMobileSidebar(){if(isMobileSidebar()){appShell.classList.remove('sidebar-open');updateSidebarA11y()}}
 function initSidebar(){
- appShell.classList.remove('sidebar-collapsed');
+ if(!isMobileSidebar()&&localStorage.getItem(SIDEBAR_KEY)==='true') appShell.classList.add('sidebar-collapsed');
  appShell.classList.remove('sidebar-open');updateSidebarA11y();
 }
 menuToggle.addEventListener('click',toggleSidebar);
