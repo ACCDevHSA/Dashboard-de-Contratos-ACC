@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Supplier Management</title>
+<title>Desenvolvimento de Acessórios</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <style>
   :root {
@@ -756,13 +756,23 @@
     @keyframes groupMenuIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
     @media(max-width:800px){.tab-group-menu{position:fixed;left:12px;right:12px;top:112px;min-width:0}.tab-group-trigger{min-width:180px}}
 </style>
-</head>
+<style id="supplier-management-native-menu-fix">
+.tabs{overflow:visible!important}.tab-group.native-menu{position:relative;display:inline-flex;align-items:stretch}.tab-group.native-menu>summary{list-style:none}.tab-group.native-menu>summary::-webkit-details-marker{display:none}.tab-group.native-menu .tab-group-menu{display:none;position:absolute;left:0;top:calc(100% + 6px);z-index:9999;min-width:285px;padding:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-2)}.tab-group.native-menu[open] .tab-group-menu{display:grid;gap:4px}.tab-group.native-menu[open] .group-chevron{transform:rotate(180deg)}.top{overflow:visible!important}.tab-group-trigger{cursor:pointer;user-select:none}
+</style><style id="lateral-menu-and-bounce">
+:root{--flyout-bg:var(--surface,#fff);--flyout-line:var(--line,#e5e7eb);--flyout-text:var(--text,#1f2937);--flyout-muted:var(--muted,#778197)}
+.tabs{overflow:visible!important;display:flex;align-items:stretch;gap:4px}.lateral-menu-group{position:relative;display:inline-flex}.lateral-menu-trigger{min-width:196px;justify-content:space-between}.lateral-menu-trigger .group-label{display:inline-flex;align-items:center;gap:8px}.lateral-menu-trigger .group-chevron{font-size:23px;line-height:1;transition:transform .2s ease}.lateral-menu-group.open .group-chevron{transform:translateX(3px)}
+.lateral-submenu{display:none;position:absolute;left:calc(100% + 10px);top:0;z-index:10000;min-width:280px;padding:8px;background:var(--flyout-bg);border:1px solid var(--flyout-line);border-radius:12px;box-shadow:0 16px 38px rgba(20,28,45,.22)}.lateral-menu-group.open .lateral-submenu{display:grid;gap:4px;animation:flyoutSide .2s cubic-bezier(.2,.8,.2,1) both}.lateral-submenu:before{content:"";position:absolute;right:100%;top:15px;border:8px solid transparent;border-right-color:var(--flyout-line)}.lateral-submenu:after{content:"";position:absolute;right:100%;top:16px;border:7px solid transparent;border-right-color:var(--flyout-bg)}
+.lateral-submenu-item{display:flex;align-items:center;gap:10px;width:100%;min-height:43px;padding:9px 12px;border:0;border-radius:9px;background:transparent;color:var(--flyout-muted);font:inherit;font-weight:700;text-align:left;cursor:pointer}.lateral-submenu-item:hover{background:var(--surface-2,#f5f6f8);color:var(--flyout-text);transform:translateX(2px)}.lateral-submenu-item.active{background:var(--primary-soft,#fbe8eb);color:var(--primary-ink,#8f0f1b)}.lateral-submenu-item svg{width:18px;height:18px;flex:none}.lateral-empty{padding:14px 12px;color:var(--flyout-muted);font-size:12px;line-height:1.45}.icon-bounce{animation:iconBounce .52s cubic-bezier(.28,.84,.42,1)}
+@keyframes flyoutSide{from{opacity:0;transform:translateX(-9px) scale(.98)}to{opacity:1;transform:none}}@keyframes iconBounce{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-7px) scale(1.12)}52%{transform:translateY(2px) scale(.96)}72%{transform:translateY(-3px) scale(1.04)}100%{transform:translateY(0) scale(1)}}
+@media(max-width:900px){.lateral-submenu{position:fixed;left:12px;right:12px;top:112px;min-width:0}.lateral-submenu:before,.lateral-submenu:after{display:none}.lateral-menu-trigger{min-width:170px}}
+@media(prefers-reduced-motion:reduce){.icon-bounce,.lateral-menu-group.open .lateral-submenu{animation:none!important}}
+</style></head>
 <body>
 
 <div class="top">
   <header class="appbar">
     <div class="logo"><img src="favicon.png" alt="Supplier Management logo"></div>
-    <h1>Supplier Management</h1>
+    <h1>Desenvolvimento de Acessórios</h1>
   </header>
   <nav class="tabs" id="tabs" role="tablist"></nav>
 </div>
@@ -1266,19 +1276,23 @@ const TABS = [
 ];
 
 const SUPPLIER_MANAGEMENT_TABS = ['dashboard','supplier-registration','financial-assessment','contract-management'];
-function renderTabs() {
-  const grouped = TABS.filter(t => SUPPLIER_MANAGEMENT_TABS.includes(t.id));
-  const settings = TABS.find(t => t.id === 'settings');
-  const groupedActive = SUPPLIER_MANAGEMENT_TABS.includes(state.tab);
-  $('#tabs').innerHTML = `
-    <div class="tab-group" id="supplierManagementGroup">
-      <button class="tab tab-group-trigger ${groupedActive ? 'active' : ''}" type="button" aria-haspopup="menu" aria-expanded="false" id="supplierManagementTrigger">
-        <span class="group-label">${ICON.people}<span>Supplier Management</span></span><span class="group-chevron">▼</span>
-      </button>
-      <div class="tab-group-menu" role="menu" aria-label="Supplier Management menus">
-        ${grouped.map(t => `<button class="tab-group-item ${t.id === state.tab ? 'active' : ''}" type="button" role="menuitem" data-tab="${t.id}">${t.icon}<span>${t.label}</span></button>`).join('')}
-      </div>
+function menuGroup(id,label,icon,items,active,emptyMessage='') {
+  return `<div class="lateral-menu-group ${active ? 'active-group' : ''}" data-menu-group="${id}">
+    <button class="tab lateral-menu-trigger ${active ? 'active' : ''}" type="button" aria-expanded="false" data-group-trigger="${id}">
+      <span class="group-label">${icon}<span>${label}</span></span><span class="group-chevron">›</span>
+    </button>
+    <div class="lateral-submenu" data-group-panel="${id}" role="menu">
+      ${items.length ? items.map(t => `<button class="lateral-submenu-item ${t.id === state.tab ? 'active' : ''}" type="button" role="menuitem" data-tab="${t.id}">${t.icon}<span>${t.label}</span></button>`).join('') : `<div class="lateral-empty">${emptyMessage}</div>`}
     </div>
+  </div>`;
+}
+function renderTabs() {
+  const supplierItems = TABS.filter(t => SUPPLIER_MANAGEMENT_TABS.includes(t.id));
+  const settings = TABS.find(t => t.id === 'settings');
+  const supplierActive = SUPPLIER_MANAGEMENT_TABS.includes(state.tab);
+  $('#tabs').innerHTML = `
+    ${menuGroup('supplier-management','Supplier Management',ICON.people,supplierItems,supplierActive)}
+    ${menuGroup('budget','Budget',ICON.document,[],false,'Budget modules will be added here.')}
     ${settings ? `<button class="tab ${settings.id === state.tab ? 'active' : ''}" role="tab" data-tab="${settings.id}">${settings.icon}${settings.label}</button>` : ''}`;
 }
 function go(id) {
@@ -1291,17 +1305,35 @@ function renderView() {
   if (!state.ready) return;
   TABS.find(t => t.id === state.tab).render();
 }
+function closeMenuGroups(except='') {
+  document.querySelectorAll('[data-menu-group]').forEach(group => {
+    if(group.dataset.menuGroup===except) return;
+    group.classList.remove('open');
+    group.querySelector('[data-group-trigger]')?.setAttribute('aria-expanded','false');
+  });
+}
+function bounceIcon(button) {
+  const icon=button?.querySelector('svg');
+  if(!icon) return;
+  icon.classList.remove('icon-bounce');
+  void icon.offsetWidth;
+  icon.classList.add('icon-bounce');
+}
 $('#tabs').addEventListener('click', e => {
-  const trigger=e.target.closest('#supplierManagementTrigger');
+  const trigger=e.target.closest('[data-group-trigger]');
   if(trigger){
-    const group=$('#supplierManagementGroup');
-    const open=group.classList.toggle('open');
-    trigger.setAttribute('aria-expanded',String(open));
+    const id=trigger.dataset.groupTrigger;
+    const group=trigger.closest('[data-menu-group]');
+    const willOpen=!group.classList.contains('open');
+    closeMenuGroups(id);
+    group.classList.toggle('open',willOpen);
+    trigger.setAttribute('aria-expanded',String(willOpen));
+    bounceIcon(trigger);
     return;
   }
   const b=e.target.closest('[data-tab]'); if(!b) return;
-  $('#supplierManagementGroup')?.classList.remove('open');
-  $('#supplierManagementTrigger')?.setAttribute('aria-expanded','false');
+  bounceIcon(b);
+  closeMenuGroups();
   if(b.dataset.tab==='contract-management'){
     e.preventDefault();
     window.open('contract-management.html','_blank','noopener,noreferrer');
@@ -1310,18 +1342,9 @@ $('#tabs').addEventListener('click', e => {
   go(b.dataset.tab);
 });
 document.addEventListener('click',e=>{
-  const group=$('#supplierManagementGroup');
-  if(group && !group.contains(e.target)){
-    group.classList.remove('open');
-    $('#supplierManagementTrigger')?.setAttribute('aria-expanded','false');
-  }
+  if(!e.target.closest('#tabs')) closeMenuGroups();
 });
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    $('#supplierManagementGroup')?.classList.remove('open');
-    $('#supplierManagementTrigger')?.setAttribute('aria-expanded','false');
-  }
-});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenuGroups()});
 
 /* =====================================================================
    9. DASHBOARD
