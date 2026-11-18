@@ -739,6 +739,22 @@
     .supplier-podium .podium-rank-1 .podium-medal{font-size:25px!important}
   }
 
+
+    /* Supplier Management grouped navigation */
+    .tab-group{position:relative;display:inline-flex;align-items:stretch}
+    .tab-group-trigger{min-width:190px;justify-content:space-between}
+    .tab-group-trigger .group-label{display:inline-flex;align-items:center;gap:8px}
+    .tab-group-trigger .group-chevron{font-size:12px;transition:transform .2s ease}
+    .tab-group.open .group-chevron{transform:rotate(180deg)}
+    .tab-group-menu{position:absolute;left:0;top:calc(100% + 6px);z-index:80;display:none;min-width:270px;padding:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-2)}
+    .tab-group.open .tab-group-menu{display:grid;gap:4px;animation:groupMenuIn .16s ease both}
+    .tab-group-item{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:9px 12px;border:0;border-radius:9px;background:transparent;color:var(--text-soft);font:inherit;font-weight:700;text-align:left;cursor:pointer}
+    .tab-group-item:hover{background:var(--surface-2);color:var(--text)}
+    .tab-group-item.active{background:var(--primary-soft);color:var(--primary-ink)}
+    .tab-group-item svg{width:18px;height:18px;flex:none}
+    .tabs>.tab[data-tab="settings"]{margin-left:4px}
+    @keyframes groupMenuIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+    @media(max-width:800px){.tab-group-menu{position:fixed;left:12px;right:12px;top:112px;min-width:0}.tab-group-trigger{min-width:180px}}
 </style>
 </head>
 <body>
@@ -1249,8 +1265,21 @@ const TABS = [
   { id: 'settings',  label: 'Settings',  icon: ICON.gear,  render: renderSettings }
 ];
 
+const SUPPLIER_MANAGEMENT_TABS = ['dashboard','supplier-registration','financial-assessment','contract-management'];
 function renderTabs() {
-  $('#tabs').innerHTML = TABS.map(t => `<button class="tab ${t.id === state.tab ? 'active' : ''}" role="tab" data-tab="${t.id}">${t.icon}${t.label}</button>`).join('');
+  const grouped = TABS.filter(t => SUPPLIER_MANAGEMENT_TABS.includes(t.id));
+  const settings = TABS.find(t => t.id === 'settings');
+  const groupedActive = SUPPLIER_MANAGEMENT_TABS.includes(state.tab);
+  $('#tabs').innerHTML = `
+    <div class="tab-group" id="supplierManagementGroup">
+      <button class="tab tab-group-trigger ${groupedActive ? 'active' : ''}" type="button" aria-haspopup="menu" aria-expanded="false" id="supplierManagementTrigger">
+        <span class="group-label">${ICON.people}<span>Supplier Management</span></span><span class="group-chevron">▼</span>
+      </button>
+      <div class="tab-group-menu" role="menu" aria-label="Supplier Management menus">
+        ${grouped.map(t => `<button class="tab-group-item ${t.id === state.tab ? 'active' : ''}" type="button" role="menuitem" data-tab="${t.id}">${t.icon}<span>${t.label}</span></button>`).join('')}
+      </div>
+    </div>
+    ${settings ? `<button class="tab ${settings.id === state.tab ? 'active' : ''}" role="tab" data-tab="${settings.id}">${settings.icon}${settings.label}</button>` : ''}`;
 }
 function go(id) {
   if (!TABS.some(t => t.id === id)) id = 'dashboard';
@@ -1263,13 +1292,35 @@ function renderView() {
   TABS.find(t => t.id === state.tab).render();
 }
 $('#tabs').addEventListener('click', e => {
+  const trigger=e.target.closest('#supplierManagementTrigger');
+  if(trigger){
+    const group=$('#supplierManagementGroup');
+    const open=group.classList.toggle('open');
+    trigger.setAttribute('aria-expanded',String(open));
+    return;
+  }
   const b=e.target.closest('[data-tab]'); if(!b) return;
+  $('#supplierManagementGroup')?.classList.remove('open');
+  $('#supplierManagementTrigger')?.setAttribute('aria-expanded','false');
   if(b.dataset.tab==='contract-management'){
     e.preventDefault();
     window.open('contract-management.html','_blank','noopener,noreferrer');
     return;
   }
   go(b.dataset.tab);
+});
+document.addEventListener('click',e=>{
+  const group=$('#supplierManagementGroup');
+  if(group && !group.contains(e.target)){
+    group.classList.remove('open');
+    $('#supplierManagementTrigger')?.setAttribute('aria-expanded','false');
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    $('#supplierManagementGroup')?.classList.remove('open');
+    $('#supplierManagementTrigger')?.setAttribute('aria-expanded','false');
+  }
 });
 
 /* =====================================================================
