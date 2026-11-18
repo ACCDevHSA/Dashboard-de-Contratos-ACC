@@ -739,34 +739,8 @@
     .supplier-podium .podium-rank-1 .podium-medal{font-size:25px!important}
   }
 
-
-    /* Supplier Management grouped navigation */
-    .tab-group{position:relative;display:inline-flex;align-items:stretch}
-    .tab-group-trigger{min-width:190px;justify-content:space-between}
-    .tab-group-trigger .group-label{display:inline-flex;align-items:center;gap:8px}
-    .tab-group-trigger .group-chevron{font-size:12px;transition:transform .2s ease}
-    .tab-group.open .group-chevron{transform:rotate(180deg)}
-    .tab-group-menu{position:absolute;left:0;top:calc(100% + 6px);z-index:80;display:none;min-width:270px;padding:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-2)}
-    .tab-group.open .tab-group-menu{display:grid;gap:4px;animation:groupMenuIn .16s ease both}
-    .tab-group-item{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:9px 12px;border:0;border-radius:9px;background:transparent;color:var(--text-soft);font:inherit;font-weight:700;text-align:left;cursor:pointer}
-    .tab-group-item:hover{background:var(--surface-2);color:var(--text)}
-    .tab-group-item.active{background:var(--primary-soft);color:var(--primary-ink)}
-    .tab-group-item svg{width:18px;height:18px;flex:none}
-    .tabs>.tab[data-tab="settings"]{margin-left:4px}
-    @keyframes groupMenuIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
-    @media(max-width:800px){.tab-group-menu{position:fixed;left:12px;right:12px;top:112px;min-width:0}.tab-group-trigger{min-width:180px}}
 </style>
-<style id="supplier-management-native-menu-fix">
-.tabs{overflow:visible!important}.tab-group.native-menu{position:relative;display:inline-flex;align-items:stretch}.tab-group.native-menu>summary{list-style:none}.tab-group.native-menu>summary::-webkit-details-marker{display:none}.tab-group.native-menu .tab-group-menu{display:none;position:absolute;left:0;top:calc(100% + 6px);z-index:9999;min-width:285px;padding:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-2)}.tab-group.native-menu[open] .tab-group-menu{display:grid;gap:4px}.tab-group.native-menu[open] .group-chevron{transform:rotate(180deg)}.top{overflow:visible!important}.tab-group-trigger{cursor:pointer;user-select:none}
-</style><style id="lateral-menu-and-bounce">
-:root{--flyout-bg:var(--surface,#fff);--flyout-line:var(--line,#e5e7eb);--flyout-text:var(--text,#1f2937);--flyout-muted:var(--muted,#778197)}
-.tabs{overflow:visible!important;display:flex;align-items:stretch;gap:4px}.lateral-menu-group{position:relative;display:inline-flex}.lateral-menu-trigger{min-width:196px;justify-content:space-between}.lateral-menu-trigger .group-label{display:inline-flex;align-items:center;gap:8px}.lateral-menu-trigger .group-chevron{font-size:23px;line-height:1;transition:transform .2s ease}.lateral-menu-group.open .group-chevron{transform:translateX(3px)}
-.lateral-submenu{display:none;position:absolute;left:calc(100% + 10px);top:0;z-index:10000;min-width:280px;padding:8px;background:var(--flyout-bg);border:1px solid var(--flyout-line);border-radius:12px;box-shadow:0 16px 38px rgba(20,28,45,.22)}.lateral-menu-group.open .lateral-submenu{display:grid;gap:4px;animation:flyoutSide .2s cubic-bezier(.2,.8,.2,1) both}.lateral-submenu:before{content:"";position:absolute;right:100%;top:15px;border:8px solid transparent;border-right-color:var(--flyout-line)}.lateral-submenu:after{content:"";position:absolute;right:100%;top:16px;border:7px solid transparent;border-right-color:var(--flyout-bg)}
-.lateral-submenu-item{display:flex;align-items:center;gap:10px;width:100%;min-height:43px;padding:9px 12px;border:0;border-radius:9px;background:transparent;color:var(--flyout-muted);font:inherit;font-weight:700;text-align:left;cursor:pointer}.lateral-submenu-item:hover{background:var(--surface-2,#f5f6f8);color:var(--flyout-text);transform:translateX(2px)}.lateral-submenu-item.active{background:var(--primary-soft,#fbe8eb);color:var(--primary-ink,#8f0f1b)}.lateral-submenu-item svg{width:18px;height:18px;flex:none}.lateral-empty{padding:14px 12px;color:var(--flyout-muted);font-size:12px;line-height:1.45}.icon-bounce{animation:iconBounce .52s cubic-bezier(.28,.84,.42,1)}
-@keyframes flyoutSide{from{opacity:0;transform:translateX(-9px) scale(.98)}to{opacity:1;transform:none}}@keyframes iconBounce{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-7px) scale(1.12)}52%{transform:translateY(2px) scale(.96)}72%{transform:translateY(-3px) scale(1.04)}100%{transform:translateY(0) scale(1)}}
-@media(max-width:900px){.lateral-submenu{position:fixed;left:12px;right:12px;top:112px;min-width:0}.lateral-submenu:before,.lateral-submenu:after{display:none}.lateral-menu-trigger{min-width:170px}}
-@media(prefers-reduced-motion:reduce){.icon-bounce,.lateral-menu-group.open .lateral-submenu{animation:none!important}}
-</style></head>
+<style id="mother-menu-ui">.tabs{overflow:visible!important;display:flex;align-items:flex-start;gap:4px}.lateral-menu-group{position:relative;display:inline-flex;align-items:flex-start}.mother-menu-stack{display:flex;flex-direction:column;min-width:196px}.lateral-menu-trigger{min-width:196px;justify-content:space-between}.group-label{display:inline-flex;align-items:center;gap:8px}.group-chevron{font-size:23px}.current-child-menu{display:flex;align-items:center;gap:7px;min-height:22px;margin:2px 10px 0 15px;color:var(--muted,#778197);font-size:11px;font-weight:700;white-space:nowrap}.current-child-menu.visible{color:var(--primary-ink,#8f0f1b)}.current-child-line{width:16px;height:1px;background:currentColor;position:relative}.current-child-line:before{content:"";position:absolute;left:0;top:-2px;width:5px;height:5px;border-radius:50%;background:currentColor}.current-child-name{max-width:158px;overflow:hidden;text-overflow:ellipsis}.current-child-placeholder{font-weight:500;font-style:italic}.lateral-submenu{display:none;position:absolute;left:calc(100% + 10px);top:0;z-index:10000;min-width:280px;padding:8px;background:var(--surface,#fff);border:1px solid var(--line,#e5e7eb);border-radius:12px;box-shadow:0 16px 38px #141c2d38}.lateral-menu-group.open .lateral-submenu{display:grid;gap:4px;animation:flyoutSide .2s ease}.lateral-submenu-item{display:flex;align-items:center;gap:10px;min-height:43px;padding:9px 12px;border:0;border-radius:9px;background:transparent;color:var(--muted);font:inherit;font-weight:700;text-align:left;cursor:pointer}.lateral-submenu-item:hover{background:var(--surface-2);transform:translateX(2px)}.lateral-submenu-item.active{background:var(--primary-soft);color:var(--primary-ink)}.lateral-empty{padding:14px 12px;color:var(--muted);font-size:12px}.icon-bounce{animation:iconBounce .52s cubic-bezier(.28,.84,.42,1)}@keyframes flyoutSide{from{opacity:0;transform:translateX(-9px)}to{opacity:1;transform:none}}@keyframes iconBounce{0%{transform:none}28%{transform:translateY(-7px) scale(1.12)}52%{transform:translateY(2px) scale(.96)}72%{transform:translateY(-3px) scale(1.04)}100%{transform:none}}@media(max-width:900px){.lateral-submenu{position:fixed;left:12px;right:12px;top:112px}.mother-menu-stack,.lateral-menu-trigger{min-width:170px}.current-child-name{max-width:132px}}</style><style id="budget-planning-v2">.bp-head{display:flex;justify-content:space-between;align-items:start;margin-bottom:18px}.bp-head h2{margin:0 0 5px}.bp-list{display:grid;gap:12px}.bp-account{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-1);overflow:hidden}.bp-account summary{list-style:none;display:grid;grid-template-columns:34px 140px 1fr auto;gap:10px;align-items:center;padding:13px 16px;cursor:pointer;border-left:4px solid var(--primary);background:linear-gradient(90deg,#fff,var(--surface-2))}.bp-account summary::-webkit-details-marker{display:none}.bp-arrow{font-size:22px;color:var(--primary-ink);transition:.2s}.bp-account[open] .bp-arrow{transform:rotate(90deg)}.bp-code{font-weight:800;color:var(--primary-ink)}.bp-name{font-weight:750}.bp-type{font-size:11px;color:var(--text-soft);background:var(--bg);padding:5px 9px;border-radius:99px}.bp-scroll{overflow:auto;padding:14px}.bp-table{border-collapse:separate;border-spacing:0;min-width:1280px;width:100%}.bp-table th,.bp-table td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:7px}.bp-table th:first-child,.bp-table td:first-child{border-left:1px solid var(--line)}.bp-table th{background:#272d3e;color:#fff;text-align:center;font-size:11px}.bp-table th:nth-child(-n+2){background:#fff200;color:#111}.bp-table td:first-child{width:130px;color:var(--text-soft)}.bp-table td:nth-child(2){min-width:270px}.bp-table input{width:100%;border:1px solid transparent;border-radius:6px;padding:6px;background:transparent}.bp-table input:focus{outline:0;border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px #c8102e16}.bp-money{text-align:right;min-width:80px}.bp-total td{font-weight:800;background:#fffbd1;border-top:2px solid #a9961d}.bp-actions{display:flex;justify-content:flex-end;padding:0 14px 14px}.bp-add{border:1.5px dashed #8f0f1b70;background:transparent;color:var(--primary-ink);border-radius:9px;padding:9px 13px;font-weight:700;cursor:pointer}.bp-remove{border:0;background:transparent;color:var(--bad-ink);font-weight:700;cursor:pointer}.bp-empty{text-align:center;color:var(--text-soft);padding:22px!important}.budget-menu-active{background:var(--primary-soft)!important;color:var(--primary-ink)!important}@media(max-width:800px){.bp-account summary{grid-template-columns:30px 1fr}.bp-code,.bp-name{grid-column:2}.bp-type{display:none}}</style></head>
 <body>
 
 <div class="top">
@@ -1277,23 +1251,18 @@ const TABS = [
 
 const SUPPLIER_MANAGEMENT_TABS = ['dashboard','supplier-registration','financial-assessment','contract-management'];
 function menuGroup(id,label,icon,items,active,emptyMessage='') {
-  return `<div class="lateral-menu-group ${active ? 'active-group' : ''}" data-menu-group="${id}">
-    <button class="tab lateral-menu-trigger ${active ? 'active' : ''}" type="button" aria-expanded="false" data-group-trigger="${id}">
-      <span class="group-label">${icon}<span>${label}</span></span><span class="group-chevron">›</span>
-    </button>
-    <div class="lateral-submenu" data-group-panel="${id}" role="menu">
-      ${items.length ? items.map(t => `<button class="lateral-submenu-item ${t.id === state.tab ? 'active' : ''}" type="button" role="menuitem" data-tab="${t.id}">${t.icon}<span>${t.label}</span></button>`).join('') : `<div class="lateral-empty">${emptyMessage}</div>`}
+  const activeItem=items.find(t=>t.id===state.tab);
+  return `<div class="lateral-menu-group ${active?'active-group':''}" data-menu-group="${id}">
+    <div class="mother-menu-stack">
+      <button class="tab lateral-menu-trigger ${active?'active':''}" type="button" aria-expanded="false" data-group-trigger="${id}"><span class="group-label">${icon}<span>${label}</span></span><span class="group-chevron">›</span></button>
+      <div class="current-child-menu ${activeItem?'visible':''}" aria-live="polite">${activeItem?`<span class="current-child-line"></span><span class="current-child-name">${activeItem.label}</span>`:`<span class="current-child-placeholder"></span>`}</div>
     </div>
+    <div class="lateral-submenu" data-group-panel="${id}" role="menu">${items.length?items.map(t=>`<button class="lateral-submenu-item ${t.id===state.tab?'active':''}" type="button" role="menuitem" data-tab="${t.id}">${t.icon}<span>${t.label}</span></button>`).join(''):`<div class="lateral-empty">${emptyMessage}</div>`}</div>
   </div>`;
 }
-function renderTabs() {
-  const supplierItems = TABS.filter(t => SUPPLIER_MANAGEMENT_TABS.includes(t.id));
-  const settings = TABS.find(t => t.id === 'settings');
-  const supplierActive = SUPPLIER_MANAGEMENT_TABS.includes(state.tab);
-  $('#tabs').innerHTML = `
-    ${menuGroup('supplier-management','Supplier Management',ICON.people,supplierItems,supplierActive)}
-    ${menuGroup('budget','Budget',ICON.document,[],false,'Budget modules will be added here.')}
-    ${settings ? `<button class="tab ${settings.id === state.tab ? 'active' : ''}" role="tab" data-tab="${settings.id}">${settings.icon}${settings.label}</button>` : ''}`;
+function renderTabs(){
+ const supplierItems=TABS.filter(t=>SUPPLIER_MANAGEMENT_TABS.includes(t.id)),settings=TABS.find(t=>t.id==='settings'),supplierActive=SUPPLIER_MANAGEMENT_TABS.includes(state.tab);
+ $('#tabs').innerHTML=`${menuGroup('supplier-management','Supplier Management',ICON.people,supplierItems,supplierActive)}${menuGroup('budget','Budget',ICON.document,[],false,'Budget modules will be added here.')}${settings?`<button class="tab ${settings.id===state.tab?'active':''}" role="tab" data-tab="${settings.id}">${settings.icon}${settings.label}</button>`:''}`;
 }
 function go(id) {
   if (!TABS.some(t => t.id === id)) id = 'dashboard';
@@ -1305,46 +1274,10 @@ function renderView() {
   if (!state.ready) return;
   TABS.find(t => t.id === state.tab).render();
 }
-function closeMenuGroups(except='') {
-  document.querySelectorAll('[data-menu-group]').forEach(group => {
-    if(group.dataset.menuGroup===except) return;
-    group.classList.remove('open');
-    group.querySelector('[data-group-trigger]')?.setAttribute('aria-expanded','false');
-  });
-}
-function bounceIcon(button) {
-  const icon=button?.querySelector('svg');
-  if(!icon) return;
-  icon.classList.remove('icon-bounce');
-  void icon.offsetWidth;
-  icon.classList.add('icon-bounce');
-}
-$('#tabs').addEventListener('click', e => {
-  const trigger=e.target.closest('[data-group-trigger]');
-  if(trigger){
-    const id=trigger.dataset.groupTrigger;
-    const group=trigger.closest('[data-menu-group]');
-    const willOpen=!group.classList.contains('open');
-    closeMenuGroups(id);
-    group.classList.toggle('open',willOpen);
-    trigger.setAttribute('aria-expanded',String(willOpen));
-    bounceIcon(trigger);
-    return;
-  }
-  const b=e.target.closest('[data-tab]'); if(!b) return;
-  bounceIcon(b);
-  closeMenuGroups();
-  if(b.dataset.tab==='contract-management'){
-    e.preventDefault();
-    window.open('contract-management.html','_blank','noopener,noreferrer');
-    return;
-  }
-  go(b.dataset.tab);
-});
-document.addEventListener('click',e=>{
-  if(!e.target.closest('#tabs')) closeMenuGroups();
-});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenuGroups()});
+function closeMenuGroups(except=''){document.querySelectorAll('[data-menu-group]').forEach(g=>{if(g.dataset.menuGroup===except)return;g.classList.remove('open');g.querySelector('[data-group-trigger]')?.setAttribute('aria-expanded','false')})}
+function bounceIcon(b){const i=b?.querySelector('svg');if(!i)return;i.classList.remove('icon-bounce');void i.offsetWidth;i.classList.add('icon-bounce')}
+$('#tabs').addEventListener('click',e=>{const trigger=e.target.closest('[data-group-trigger]');if(trigger){const id=trigger.dataset.groupTrigger,g=trigger.closest('[data-menu-group]'),open=!g.classList.contains('open');closeMenuGroups(id);g.classList.toggle('open',open);trigger.setAttribute('aria-expanded',String(open));bounceIcon(trigger);return}const b=e.target.closest('[data-tab]');if(!b)return;bounceIcon(b);closeMenuGroups();if(b.dataset.tab==='contract-management'){e.preventDefault();window.open('contract-management.html','_blank','noopener,noreferrer');return}go(b.dataset.tab)});
+document.addEventListener('click',e=>{if(!e.target.closest('#tabs'))closeMenuGroups()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenuGroups()});
 
 /* =====================================================================
    9. DASHBOARD
@@ -2461,5 +2394,5 @@ function setSupplierSync(status,text){
 
 })();
 </script>
-</body>
+<script id="budget-account-planning-module">(()=>{'use strict';const MONTHS=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'],SEED=[{"code":"3332201003","name":"Servs Terc DTI - PJ","type":"Operacional","rows":[{"name":"Licence (Catia, Adobe, Edbase, PowerBI)","values":[870,870,905,905,32655,7805,39882,3005,905,905,905,933]}]},{"code":"3341241007","name":"Pesquisa e Testes","type":"Operacional","rows":[]},{"code":"3332201001","name":"Servico-PJ","type":"Operacional","rows":[{"name":"General I/I Translation","values":[0,0,0,0,0,0,0,0,0,20000,0,0]},{"name":"General Outsourcing","values":[2070,2070,2070,3219,6133,118193,8969,2684,3219,3939,3219,2070]},{"name":"Manpower","values":[14588,14588,14588,14588,14588,14588,14588,14588,14588,14588,14588,14588]},{"name":"Others","values":[0,0,0,0,0,0,0,0,0,0,18000,0]}]},{"code":"3341121001","name":"Viagens e representacoes internacional","type":"Operacional","rows":[]},{"code":"3341111001","name":"Viagens e representacoes Nacional","type":"Operacional","rows":[]},{"code":"1231101012","name":"Equipamentos Tecnologia Informacao e Comunicacao","type":"Investimentos","rows":[]},{"code":"3341241003","name":"Despesas com meio de transporte(conducao)","type":"Operacional","rows":[]},{"code":"3341141001","name":"Despesas c/ veiculos","type":"Operacional","rows":[]},{"code":"3341141004","name":"Desp. c/ Veiculos Designados","type":"Operacional","rows":[]},{"code":"3341131002","name":"Materiais de Expediente","type":"Operacional","rows":[]},{"code":"3331101005","name":"Manutencao Veiculos","type":"Operacional","rows":[]},{"code":"3341131004","name":"Material de Informatica","type":"Operacional","rows":[]},{"code":"3332201008","name":"Tratamento e Efluentes-PJ","type":"Operacional","rows":[]},{"code":"3341251002","name":"Telefones","type":"Operacional","rows":[]},{"code":"3341241001","name":"Refeicoes e Lanches","type":"Operacional","rows":[]},{"code":"3341251001","name":"Correios","type":"Operacional","rows":[]},{"code":"3341191003","name":"Outras Locacoes","type":"Operacional","rows":[]},{"code":"3341241005","name":"Bens de Natureza Permanente","type":"Operacional","rows":[]}],KEY='accessories:budget:account-planning:v2',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),brl=v=>(Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});let accounts;try{accounts=JSON.parse(localStorage.getItem(KEY))||structuredClone(SEED)}catch{accounts=structuredClone(SEED)}const save=()=>localStorage.setItem(KEY,JSON.stringify(accounts));function install(){const group=document.querySelector('[data-menu-group="budget"]'),panel=group?.querySelector('.lateral-submenu');if(!panel)return;if(!panel.querySelector('[data-budget-page]'))panel.innerHTML='<button class="lateral-submenu-item" type="button" data-budget-page="account-planning"><span style="font-size:18px">▤</span><span>Account Planning</span></button>';const placeholder=group.querySelector('.current-child-placeholder');if(placeholder)placeholder.remove()}function render(){document.querySelectorAll('.lateral-submenu-item,.tab').forEach(x=>x.classList.remove('budget-menu-active'));document.querySelector('[data-budget-page]')?.classList.add('budget-menu-active');const current=document.querySelector('[data-menu-group="budget"] .current-child-menu');if(current){current.classList.add('visible');current.innerHTML='<span class="current-child-line"></span><span class="current-child-name">Account Planning</span>'}const v=document.getElementById('view');v.innerHTML=`<div class="bp-head"><div><h2>Account Planning</h2><div class="muted">Abra uma conta para incluir e distribuir os gastos entre Apr e Mar.</div></div><button class="btn btn-primary" id="bpExpand">Expand all</button></div><div class="bp-list">${accounts.map((a,ai)=>{const totals=MONTHS.map((_,mi)=>a.rows.reduce((s,r)=>s+(Number(r.values?.[mi])||0),0));return `<details class="bp-account" data-code="${esc(a.code)}"><summary><span class="bp-arrow">›</span><span class="bp-code">${esc(a.code)}</span><span class="bp-name">${esc(a.name)}</span><span class="bp-type">${esc(a.type)}</span></summary><div class="bp-scroll"><table class="bp-table"><thead><tr><th>Account</th><th>Expense description</th>${MONTHS.map(m=>`<th>${m}</th>`).join('')}<th>Action</th></tr></thead><tbody>${a.rows.length?a.rows.map((r,ri)=>`<tr><td>${esc(a.code)}</td><td><input data-bp-name data-a="${ai}" data-r="${ri}" value="${esc(r.name)}" placeholder="Expense description"></td>${MONTHS.map((m,mi)=>`<td><input class="bp-money" type="number" step="0.01" data-bp-value data-a="${ai}" data-r="${ri}" data-m="${mi}" value="${Number(r.values?.[mi])||0}"></td>`).join('')}<td><button class="bp-remove" data-bp-remove data-a="${ai}" data-r="${ri}">Remove</button></td></tr>`).join(''):`<tr><td class="bp-empty" colspan="15">No expense lines. Use Add expense line.</td></tr>`}<tr class="bp-total"><td colspan="2">TOTAL</td>${totals.map(v=>`<td>${brl(v)}</td>`).join('')}<td></td></tr></tbody></table></div><div class="bp-actions"><button class="bp-add" data-bp-add data-a="${ai}">＋ Add expense line</button></div></details>`}).join('')}</div>`}new MutationObserver(install).observe(document.getElementById('tabs'),{childList:true,subtree:true});install();document.addEventListener('click',e=>{if(e.target.closest('[data-budget-page]')){e.preventDefault();e.stopPropagation();document.querySelector('[data-menu-group="budget"]')?.classList.remove('open');render();return}const add=e.target.closest('[data-bp-add]');if(add){const a=accounts[+add.dataset.a];a.rows.push({name:'',values:Array(12).fill(0)});save();render();document.querySelector(`[data-code="${CSS.escape(a.code)}"]`).open=true;return}const rem=e.target.closest('[data-bp-remove]');if(rem&&confirm('Remove this expense line?')){const a=accounts[+rem.dataset.a];a.rows.splice(+rem.dataset.r,1);save();render();document.querySelector(`[data-code="${CSS.escape(a.code)}"]`).open=true;return}if(e.target.closest('#bpExpand')){const all=[...document.querySelectorAll('.bp-account')],open=all.some(x=>!x.open);all.forEach(x=>x.open=open);e.target.closest('#bpExpand').textContent=open?'Collapse all':'Expand all'}});document.addEventListener('change',e=>{const n=e.target.closest('[data-bp-name]'),x=e.target.closest('[data-bp-value]');if(n){accounts[+n.dataset.a].rows[+n.dataset.r].name=n.value;save()}if(x){const a=accounts[+x.dataset.a];a.rows[+x.dataset.r].values[+x.dataset.m]=Number(x.value)||0;save();const code=a.code;render();document.querySelector(`[data-code="${CSS.escape(code)}"]`).open=true}})})();</script></body>
 </html>
